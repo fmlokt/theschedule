@@ -1,7 +1,16 @@
-import webapp2
+import os
 import datetime
 
+import webapp2
+import jinja2
+
 from pair import *
+
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape']
+)
+
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -11,12 +20,11 @@ class MainPage(webapp2.RequestHandler):
 class ShowPairs(webapp2.RequestHandler):
 	def get(self):
 		pairs_qry = ScheduledPair.query().order(ScheduledPair.date, ScheduledPair.date)
-		self.response.write('<html>\n<head>\n<title>Scheduled pairs</title>\n</head>\n<body>\n')
-		self.response.write('<table border=3 column=3>\n')
-		self.response.write('<caption>Schedule</caption>')
+		template = JINJA_ENVIRONMENT.get_template('templates/pair.html')
+		render_data = { 'pairs' : []}
 		for pair in pairs_qry:
-			self.response.write('<tr><td>{}</td><td>{}</td><td>{}</td></tr>\n'.format(pair.classname, str(pair.date), str(pair.start_time)))
-		self.response.write('</table>\n</body>\n</html>\n')
+			render_data['pairs'].append(pair)
+		self.response.write(template.render(render_data))
 	
 	def post(self):
 		classname = self.request.get('classname')
