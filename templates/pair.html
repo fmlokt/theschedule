@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>Scheduled pairs</title>
+</head>
+<body>
+<table border=3 column=3>
+{% for pair in pairs %}
+	<tr>
+		<td>{{ pair.classname }}</td>
+		<td>{{ pair.date }} </td>
+		<td>{{ pair.time }}</td>
+	</tr>
+{% endfor %}
+</table>
+</body>
+</html>
