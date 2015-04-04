@@ -28,7 +28,14 @@ class ShowPairs(webapp2.RequestHandler):
 		hour = int(self.request.get('hour'))
 		minute = int(self.request.get('minute'))
 		task = self.request.get('task')
-		pair = ScheduledPair(classname=classname, date=datetime.date(year, month, day), start_time=datetime.time(hour, minute), task=task)
+		url_key = self.request.get('key')
+		key = ndb.Key(urlsafe=url_key)
+		pair = key.get()
+		pair.classname = classname
+		pair.date = datetime.date(year, month, day)
+		pair.start_time = datetime.time(hour, minute)
+		pair.task = task
+		#pair = ScheduledPair(classname=classname, date=datetime.date(year, month, day), start_time=datetime.time(hour, minute), task=task)
 		pair.put()
 		self.redirect('/pairs')
 
@@ -44,9 +51,8 @@ class NewPair(webapp2.RequestHandler):
 class EditPair(webapp2.RequestHandler):
 	def get(self):
 		url_key = self.request.get('key')
-		print url_key
 		key = ndb.Key(urlsafe=url_key)
 		pair = key.get()
 		template = JINJA_ENVIRONMENT.get_template('templates/editpair.html')
-		render_data = { 'pair' : pair }
+		render_data = { 'pair' : pair, 'key_urlsafe' : url_key }
 		self.response.write(template.render(render_data))
