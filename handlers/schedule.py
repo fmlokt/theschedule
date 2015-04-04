@@ -16,7 +16,7 @@ class ShowSchedule(webapp2.RequestHandler):
 			today = datetime.date.today()
 			thatday = today + datetime.timedelta(days=day)
 			pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).order(ScheduledPair.start_time)
-			render_day = {'week_day' : thatday.strftime('%A'), 'pairs' : [], 'date' : thatday }
+			render_day = {'week_day' : thatday.strftime('%A'), 'pairs' : [], 'date' : thatday.strftime('%d %B') }
 			for pair in pairs_qry:
 				render_day['pairs'].append(pair)
 

@@ -8,7 +8,7 @@
 	{% for day in days %}
 	<td>
 	<table border=3>
-	<caption>{{day.week_day}}, {{day.date}}</caption>
+	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
 		<tr>
 			<td>{{ pair.classname }}</td>
