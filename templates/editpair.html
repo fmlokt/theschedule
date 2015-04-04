@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Добавить занятие</title>
+</head>
+<body>
+	<form method="post" action="/pairs"> 
+		<br/>Classname <input type="text" name="classname"  value={{ pair.classname }}>
+		<br/>Year <input type="int" name="year" value={{ pair.date.year }}>
+		<br/>Month <input type="int" name="month" value={{ pair.date.month }}>
+		<br/>Day <input type="int" name="day" value={{ pair.date.day }}>
+		<br/>Hour <input type="int" name="hour" value={{ pair.start_time.hour}}>
+		<br/>Minute <input type="int" name="minute" value={{ pair.start_time.minute }}>
+		<br/>Tasks<br/> <textarea name="task" value="" rows="10" cols="80"></textarea> 
+		<br/><input class="btn" type="submit" value="Сохранить"/> 
+
+	</form>
+</body>
+</html>
