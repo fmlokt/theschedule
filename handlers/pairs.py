@@ -22,5 +22,6 @@ class ShowPairs(webapp2.RequestHandler):
 		date = int(self.request.get('date'))
 		hour = int(self.request.get('hour'))
 		minute = int(self.request.get('minute'))
-		pair = ScheduledPair(classname=classname, date=datetime.date(year, month, date), start_time=datetime.time(hour, minute))
+		task = self.request.get('task')
+		pair = ScheduledPair(classname=classname, date=datetime.date(year, month, date), start_time=datetime.time(hour, minute), task=task)
 		pair.put()
