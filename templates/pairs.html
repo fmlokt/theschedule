@@ -3,7 +3,7 @@
 <title>Расписание</title>
 </head>
 <body>
-<table border=3 column=4>
+<table border=3 column=5>
 <caption>Расписание пар</caption>
 {% for pair in pairs %}
 	<tr>
@@ -11,6 +11,7 @@
 		<td>{{ pair.date }} </td>
 		<td>{{ pair.start_time }}</td>
 		<td>{{ pair.task }}</td>
+		<td><a href={{ pair.edit_link }}>Редактировать</a></td>
 	</tr>
 {% endfor %}
 </table>
