@@ -29,13 +29,15 @@ class ShowPairs(webapp2.RequestHandler):
 		minute = int(self.request.get('minute'))
 		task = self.request.get('task')
 		url_key = self.request.get('key')
-		key = ndb.Key(urlsafe=url_key)
-		pair = key.get()
-		pair.classname = classname
-		pair.date = datetime.date(year, month, day)
-		pair.start_time = datetime.time(hour, minute)
-		pair.task = task
-		#pair = ScheduledPair(classname=classname, date=datetime.date(year, month, day), start_time=datetime.time(hour, minute), task=task)
+		if url_key != '':
+			key = ndb.Key(urlsafe=url_key)
+			pair = key.get()
+			pair.classname = classname
+			pair.date = datetime.date(year, month, day)
+			pair.start_time = datetime.time(hour, minute)
+			pair.task = task
+		else:
+			pair = ScheduledPair(classname=classname, date=datetime.date(year, month, day), start_time=datetime.time(hour, minute), task=task)
 		pair.put()
 		self.redirect('/pairs')
 
