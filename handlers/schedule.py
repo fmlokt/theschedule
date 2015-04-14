@@ -12,8 +12,8 @@ from environment import JINJA_ENVIRONMENT
 
 class ShowDefaultSchedule(webapp2.RequestHandler):
     def get(self):
-        template = JINJA_ENVIRONMENT.get_template('templates/'\
-            'default_schedule.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'default_schedule.html')
         render_data = {'days': [None] * 7}
         for day in xrange(7):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
@@ -29,8 +29,8 @@ class ShowDefaultPairs(webapp2.RequestHandler):
     def get(self):
         pairs_qry = DefaultPair.query().order(DefaultPair.week_day,
                                               DefaultPair.start_time)
-        template = JINJA_ENVIRONMENT.get_template('templates/'\
-            'default_pairs.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'default_pairs.html')
         render_data = {'pairs': []}
         for pair in pairs_qry:
             pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
@@ -61,8 +61,8 @@ class ShowDefaultPairs(webapp2.RequestHandler):
 class NewDefaultPair(webapp2.RequestHandler):
     def get(self):
         pair = DefaultPair(classname='classname', week_day=0)
-        template = JINJA_ENVIRONMENT.get_template('templates/'\
-            'edit_default_pair.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'edit_default_pair.html')
         render_data = {'pair': pair}
         self.response.write(template.render(render_data))
 
@@ -72,7 +72,7 @@ class EditDefaultPair(webapp2.RequestHandler):
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
-        template = JINJA_ENVIRONMENT.get_template('templates/'\
-            'edit_default_pair.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'edit_default_pair.html')
         render_data = {'pair': pair, 'key_urlsafe': url_key}
         self.response.write(template.render(render_data))
