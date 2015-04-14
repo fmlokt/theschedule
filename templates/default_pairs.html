@@ -1,10 +1,10 @@
 <html>
 <head>
-<title>Расписание</title>
+<title>Расписание по умолчанию</title>
 </head>
 <body>
 <table border=3 column=5>
-<caption>Расписание пар</caption>
+<caption>Расписание пар по умолчанию</caption>
 {% for pair in pairs %}
 	<tr>
 		<td>{{ pair.classname }}</td>
@@ -14,5 +14,6 @@
 	</tr>
 {% endfor %}
 </table>
+<a href="/new_default_pair">Добавить новую стандартную пару</a>
 </body>
 </html>
