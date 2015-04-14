@@ -9,6 +9,21 @@ from objects.pair import *
 from environment import JINJA_ENVIRONMENT
 
 
+class ShowSchedule(webapp2.RequestHandler):
+	def get(self):
+		template = JINJA_ENVIRONMENT.get_template('templates/schedule.html')
+		render_data = { 'days' : [None]*7}
+		for day in xrange(7):
+			today = datetime.date.today()
+			thatday = today + datetime.timedelta(days=day)
+			pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).order(ScheduledPair.start_time)
+			render_day = {'week_day' : thatday.strftime('%A'), 'pairs' : [], 'date' : thatday.strftime('%d %B'), 'is_current' : (today == thatday)}
+			for pair in pairs_qry:
+				render_day['pairs'].append(pair)
+			render_data['days'][thatday.weekday()] = render_day
+		self.response.write(template.render(render_data))
+
+
 class ShowPairs(webapp2.RequestHandler):
 	def get(self):
 		pairs_qry = ScheduledPair.query().order(ScheduledPair.date, ScheduledPair.start_time)
@@ -20,7 +35,6 @@ class ShowPairs(webapp2.RequestHandler):
 		self.response.write(template.render(render_data))
 	
 	def post(self):
-		print self.request
 		classname = self.request.get('classname')
 		year = int(self.request.get('year'))
 		month = int(self.request.get('month'))
@@ -45,7 +59,7 @@ class ShowPairs(webapp2.RequestHandler):
 class NewPair(webapp2.RequestHandler):
 	def get(self):
 		pair = ScheduledPair(classname='classname', date=datetime.date.today(), start_time=datetime.time(9, 10), task='f')
-		template = JINJA_ENVIRONMENT.get_template('templates/editpair.html')
+		template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
 		render_data = { 'pair' : pair }
 		self.response.write(template.render(render_data))
 
@@ -55,6 +69,6 @@ class EditPair(webapp2.RequestHandler):
 		url_key = self.request.get('key')
 		key = ndb.Key(urlsafe=url_key)
 		pair = key.get()
-		template = JINJA_ENVIRONMENT.get_template('templates/editpair.html')
+		template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
 		render_data = { 'pair' : pair, 'key_urlsafe' : url_key }
 		self.response.write(template.render(render_data))

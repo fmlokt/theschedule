@@ -1,0 +1,18 @@
+<html>
+<head>
+<title>Расписание</title>
+</head>
+<body>
+<table border=3 column=5>
+<caption>Расписание пар</caption>
+{% for pair in pairs %}
+	<tr>
+		<td>{{ pair.classname }}</td>
+		<td>{{ pair.week_day }} </td>
+		<td>{{ pair.start_time }}</td>
+		<td><a href={{ pair.edit_link }}>Редактировать</a></td>
+	</tr>
+{% endfor %}
+</table>
+</body>
+</html>

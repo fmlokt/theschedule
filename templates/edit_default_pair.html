@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Добавить занятие</title>
+</head>
+<body>
+	<form method="post" action="/default_pairs"> 
+		<br/>Classname <input type="text" name="classname"  value={{ pair.classname }}>
+		<br/>Weekday <input type="int" name="week_day" value={{ pair.week_day }}>
+		<br/>Hour <input type="int" name="hour" value={{ pair.start_time.hour}}>
+		<br/>Minute <input type="int" name="minute" value={{ pair.start_time.minute }}>
+		<br/><input class="btn" type="submit" value="Сохранить"/> 
+		<input type="hidden" name="key" value={{ key_urlsafe }}>
+	</form>
+</body>
+</html>

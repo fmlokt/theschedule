@@ -8,12 +8,11 @@
 	{% for day in days %}
 	<td>
 	<table border=3>
-	<caption><font {% if day.is_current %}color="green"{% else %}color="black"{% endif %}>{{day.date}}, {{day.week_day}}</font></caption>
+	<caption>{{day.week_day}}</caption>
 	{% for pair in day.pairs %}
 		<tr>
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
-			<td>{{ pair.task }}</td>
 		</tr>
 	{% endfor %}
 	</table>
