@@ -18,5 +18,6 @@ application = webapp2.WSGIApplication([
     ('/schedule', schedule.ShowDefaultSchedule),
     ('/default_pairs', schedule.ShowDefaultPairs),
     ('/edit_default_pair', schedule.EditDefaultPair),
-    ('/new_default_pair', schedule.NewDefaultPair)
+    ('/new_default_pair', schedule.NewDefaultPair),
+    ('/delete_pair', pairs.DeletePair) 
 ], debug=True)

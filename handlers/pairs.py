@@ -31,6 +31,7 @@ class ShowPairs(webapp2.RequestHandler):
 		render_data = { 'pairs' : []}
 		for pair in pairs_qry:
 			pair.edit_link = '/edit_pair?key=' + pair.key.urlsafe()
+			pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() + '&return_url=/pairs'
 			render_data['pairs'].append(pair)
 		self.response.write(template.render(render_data))
 	
@@ -72,3 +73,13 @@ class EditPair(webapp2.RequestHandler):
 		template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
 		render_data = { 'pair' : pair, 'key_urlsafe' : url_key }
 		self.response.write(template.render(render_data))
+
+
+class DeletePair(webapp2.RequestHandler):
+	def get(self):
+		url_key = self.request.get('key')
+		return_url = self.request.get('return_url')
+		key = ndb.Key(urlsafe=url_key)
+		key.delete()
+		self.redirect(return_url)
+

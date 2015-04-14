@@ -28,6 +28,7 @@ class ShowDefaultPairs(webapp2.RequestHandler):
 		render_data = { 'pairs' : []}
 		for pair in pairs_qry:
 			pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
+			pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() + '&return_url=/default_pairs' 
 			render_data['pairs'].append(pair)
 		self.response.write(template.render(render_data))
 	
