@@ -80,6 +80,34 @@ class PairsTest(unittest2.TestCase):
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
 
+    def test_show_pairs(self):
+        response = PairsTest.make_request('/pairs', 'GET')
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.body.count('<tr>'), 0)
+        pair1 = ScheduledPair(classname='Math1',
+                             date=datetime.date(2015, 4, 14),
+                             start_time=datetime.time(10, 40),
+                             task='some_task')
+        pair2 = ScheduledPair(classname='Math2',
+                              date=datetime.date(2015, 4, 15),
+                              start_time=datetime.time(9, 40),
+                              task='some_task')
+        pair3 = ScheduledPair(classname='Math3',
+                              date=datetime.date(2015, 4, 15),
+                              start_time=datetime.time(10, 40),
+                              task='some_task')
+        PairsTest.post_pair(pair2)
+        PairsTest.post_pair(pair3)
+        PairsTest.post_pair(pair1)
+        response = PairsTest.make_request('/pairs', 'GET')
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.body.count('<tr>'), 3)
+        self.assertNotEqual(response.body.find('Math1'), -1)
+        self.assertNotEqual(response.body.find('Math2'), -1)
+        self.assertNotEqual(response.body.find('Math3'), -1)
+        self.assertLess(response.body.find('Math1'), response.body.find('Math2'))
+        self.assertLess(response.body.find('Math2'), response.body.find('Math3'))
+
     def tearDown(self):
         self.testbed.deactivate()
 
