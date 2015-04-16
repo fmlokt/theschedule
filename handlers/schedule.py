@@ -8,6 +8,7 @@ import webapp2
 
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
+from objects.pair import *
 
 
 class ShowDefaultSchedule(webapp2.RequestHandler):
@@ -76,3 +77,23 @@ class EditDefaultPair(webapp2.RequestHandler):
                                                   'edit_default_pair.html')
         render_data = {'pair': pair, 'key_urlsafe': url_key}
         self.response.write(template.render(render_data))
+
+class CopyFromDefault(webapp2.RequestHandler):
+	def get(self):
+		year_start = int(self.request.get('year_start'))
+		month_start = int(self.request.get('month_start'))
+		day_start = int(self.request.get('day_start'))
+		year_end = int(self.request.get('year_end'))
+		month_end = int(self.request.get('month_end'))
+		day_end = int(self.request.get('day_end'))
+
+		date_start = datetime.date(year_start, month_start, day_start)
+		date_end = datetime.date(year_end, month_end, day_end)
+
+		while date_start <= date_end:
+			weekday = date_start.weekday()
+			pairs_qry = DefaultPair.query(DefaultPair.week_day == weekday)
+			for pair in pairs_qry:
+				new_pair = ScheduledPair(classname=pair.classname, date=date_start, start_time=pair.start_time, task='')
+				new_pair.put()
+			date_start += datetime.timedelta(days=1)
