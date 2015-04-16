@@ -51,7 +51,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(pair1.start_time, pair2.start_time)
         self.assertEqual(pair1.task,       pair2.task)
 
-    def check_default_pair_fields(self, pair1, pair2):
+    def check_scheduled_to_default_fields(self, pair1, pair2):
         self.assertEqual(pair1.classname,     pair2.classname)
         self.assertEqual(pair1.start_time,    pair2.start_time)
         self.assertEqual(pair1.date.weekday(),  pair2.week_day)
@@ -214,7 +214,7 @@ class PairsTest(unittest2.TestCase):
         pairs_list = ScheduledPair.query().fetch(2)
         self.assertEqual(len(pairs_list), 1)
         added_pair = pairs_list[0]
-        self.check_default_pair_fields(added_pair, pair)
+        self.check_scheduled_to_default_fields(added_pair, pair)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
 
