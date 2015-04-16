@@ -147,7 +147,7 @@ class PairsTest(unittest2.TestCase):
         self.assertLess(response.body.find('Math1'), response.body.find('Math2'))
         self.assertLess(response.body.find('Math2'), response.body.find('Math3'))
 
-    def test_show_pairs(self):
+    def test_show_schedule(self):
         response = PairsTest.make_request('/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 1)
