@@ -8,6 +8,7 @@ from google.appengine.ext import testbed
 
 import main
 from objects.pair import ScheduledPair
+from objects.schedule import DefaultPair
 
 
 class PairsTest(unittest2.TestCase):
@@ -35,11 +36,25 @@ class PairsTest(unittest2.TestCase):
             '&key=' + key
         return PairsTest.make_request('/pairs', 'POST', body)
 
+    @staticmethod
+    def post_default_pair(pair, key=''):
+        body = 'classname=' + pair.classname +\
+            '&week_day=' + str(pair.week_day) +\
+            '&hour=' + str(pair.start_time.hour) +\
+            '&minute=' + str(pair.start_time.minute) +\
+            '&key=' + key
+        return PairsTest.make_request('/default_pairs', 'POST', body)
+
     def check_pair_fields(self, pair1, pair2):
         self.assertEqual(pair1.classname,  pair2.classname)
         self.assertEqual(pair1.date,       pair2.date)
         self.assertEqual(pair1.start_time, pair2.start_time)
         self.assertEqual(pair1.task,       pair2.task)
+
+    def check_default_pair_fields(self, pair1, pair2):
+        self.assertEqual(pair1.classname,     pair2.classname)
+        self.assertEqual(pair1.start_time,    pair2.start_time)
+        self.assertEqual(pair1.date.weekday(),  pair2.week_day)
 
     def test_create_pair(self):
         response = PairsTest.make_request('/new_pair', 'GET')
@@ -144,8 +159,10 @@ class PairsTest(unittest2.TestCase):
         self.assertNotEqual(response.body.find('Math1'), -1)
         self.assertNotEqual(response.body.find('Math2'), -1)
         self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'), response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'), response.body.find('Math3'))
+        self.assertLess(response.body.find('Math1'),
+                        response.body.find('Math2'))
+        self.assertLess(response.body.find('Math2'),
+                        response.body.find('Math3'))
 
     def test_show_schedule(self):
         response = PairsTest.make_request('/', 'GET')
@@ -173,8 +190,33 @@ class PairsTest(unittest2.TestCase):
         self.assertNotEqual(response.body.find('Math1'), -1)
         self.assertNotEqual(response.body.find('Math2'), -1)
         self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'), response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'), response.body.find('Math3'))
+        self.assertLess(response.body.find('Math1'),
+                        response.body.find('Math2'))
+        self.assertLess(response.body.find('Math2'),
+                        response.body.find('Math3'))
+
+    def test_copy_from_default(self):
+        today = datetime.date.today()
+        shift = datetime.date.today() + datetime.timedelta(days=6)
+        pair = DefaultPair(classname='Math1',
+                           start_time=datetime.time(9, 10),
+                           week_day=0)
+        response = PairsTest.post_default_pair(pair)
+        response = PairsTest.make_request('/copy_from_default?' +
+                                          'year_start=' + str(today.year) +
+                                          '&month_start=' + str(today.month) +
+                                          '&day_start=' + str(today.day) +
+                                          '&year_end=' + str(shift.year) +
+                                          '&month_end=' + str(shift.month) +
+                                          '&day_end=' + str(shift.day),
+                                          'GET')
+        self.assertEqual(response.status_int, 200)
+        pairs_list = ScheduledPair.query().fetch(2)
+        self.assertEqual(len(pairs_list), 1)
+        added_pair = pairs_list[0]
+        self.check_default_pair_fields(added_pair, pair)
+        response = PairsTest.make_request('/pairs', 'GET')
+        self.assertEqual(response.status_int, 200)
 
     def tearDown(self):
         self.testbed.deactivate()
