@@ -51,11 +51,6 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(pair1.start_time, pair2.start_time)
         self.assertEqual(pair1.task,       pair2.task)
 
-    def check_scheduled_to_default_fields(self, pair1, pair2):
-        self.assertEqual(pair1.classname,     pair2.classname)
-        self.assertEqual(pair1.start_time,    pair2.start_time)
-        self.assertEqual(pair1.date.weekday(),  pair2.week_day)
-
     def test_create_pair(self):
         response = PairsTest.make_request('/new_pair', 'GET')
         self.assertEqual(response.status_int, 200)
@@ -196,12 +191,32 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math3'))
 
     def test_copy_from_default(self):
-        today = datetime.date.today()
-        shift = datetime.date.today() + datetime.timedelta(days=6)
-        pair = DefaultPair(classname='Math1',
-                           start_time=datetime.time(9, 10),
-                           week_day=0)
-        response = PairsTest.post_default_pair(pair)
+        today = datetime.date(2015, 1, 5)
+        shift = today + datetime.timedelta(days=6)
+        pair1 = DefaultPair(classname='Math1',
+                            start_time=datetime.time(9, 10),
+                            week_day=0)
+        pair2 = DefaultPair(classname='Math2',
+                            start_time=datetime.time(10, 40),
+                            week_day=1)
+        pair3 = DefaultPair(classname='Math3',
+                            start_time=datetime.time(13, 00),
+                            week_day=2)
+        standard_pair1 = ScheduledPair(classname=pair1.classname,
+                                       date=today,
+                                       start_time=pair1.start_time,
+                                       task='')
+        standard_pair2 = ScheduledPair(classname=pair2.classname,
+                                       date=today + datetime.timedelta(days=1),
+                                       start_time=pair2.start_time,
+                                       task='')
+        standard_pair3 = ScheduledPair(classname=pair3.classname,
+                                       date=today + datetime.timedelta(days=2),
+                                       start_time=pair3.start_time,
+                                       task='')
+        PairsTest.post_default_pair(pair1)
+        PairsTest.post_default_pair(pair2)
+        PairsTest.post_default_pair(pair3)
         response = PairsTest.make_request('/copy_from_default?' +
                                           'year_start=' + str(today.year) +
                                           '&month_start=' + str(today.month) +
@@ -211,10 +226,32 @@ class PairsTest(unittest2.TestCase):
                                           '&day_end=' + str(shift.day),
                                           'GET')
         self.assertEqual(response.status_int, 200)
-        pairs_list = ScheduledPair.query().fetch(2)
-        self.assertEqual(len(pairs_list), 1)
-        added_pair = pairs_list[0]
-        self.check_scheduled_to_default_fields(added_pair, pair)
+        pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(4)
+        self.assertEqual(len(pairs_list), 3)
+        added_pair1 = pairs_list[0]
+        added_pair2 = pairs_list[1]
+        added_pair3 = pairs_list[2]
+        self.check_pair_fields(added_pair1, standard_pair1)
+        self.check_pair_fields(added_pair2, standard_pair2)
+        self.check_pair_fields(added_pair3, standard_pair3)
+        pair4 = DefaultPair(classname='Math4',
+                            start_time=datetime.time(12, 00),
+                            week_day=3)
+        standard_pair4 = ScheduledPair(classname=pair3.classname,
+                                       date=today + datetime.timedelta(days=3),
+                                       start_time=pair3.start_time,
+                                       task='')
+        PairsTest.post_pair(standard_pair4)
+        PairsTest.post_default_pair(pair4)
+        response = PairsTest.make_request('/copy_from_default?' +
+                                          'year_start=' + str(today.year) +
+                                          '&month_start=' + str(today.month) +
+                                          '&day_start=' + str(today.day) +
+                                          '&year_end=' + str(shift.year) +
+                                          '&month_end=' + str(shift.month) +
+                                          '&day_end=' + str(shift.day),
+                                          'GET')
+        self.assertEqual(response.status_int, 403)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
 

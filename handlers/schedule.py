@@ -105,4 +105,7 @@ class CopyFromDefault(webapp2.RequestHandler):
                                              start_time=pair.start_time,
                                              task='')
                     new_pair.put()
+            else:
+            	self.response.write('Schedule for this period is already exists')
+            	self.response.status = 403
             date_start += datetime.timedelta(days=1)
