@@ -191,8 +191,11 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math3'))
 
     def test_copy_from_default(self):
+        response = PairsTest.make_request('/copy_from_default', 'GET')
+        self.assertEqual(response.status_int, 200)
         today = datetime.date(2015, 1, 5)
         shift = today + datetime.timedelta(days=6)
+        shift_out = today + datetime.timedelta(days=190)
         pair1 = DefaultPair(classname='Math1',
                             start_time=datetime.time(9, 10),
                             week_day=0)
@@ -224,7 +227,7 @@ class PairsTest(unittest2.TestCase):
                                           '&year_end=' + str(shift.year) +
                                           '&month_end=' + str(shift.month) +
                                           '&day_end=' + str(shift.day),
-                                          'GET')
+                                          'POST')
         self.assertEqual(response.status_int, 200)
         pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(4)
         self.assertEqual(len(pairs_list), 3)
@@ -234,6 +237,9 @@ class PairsTest(unittest2.TestCase):
         self.check_pair_fields(added_pair1, standard_pair1)
         self.check_pair_fields(added_pair2, standard_pair2)
         self.check_pair_fields(added_pair3, standard_pair3)
+        added_pair1.key.delete()
+        added_pair2.key.delete()
+        added_pair3.key.delete()
         pair4 = DefaultPair(classname='Math4',
                             start_time=datetime.time(12, 00),
                             week_day=3)
@@ -250,10 +256,33 @@ class PairsTest(unittest2.TestCase):
                                           '&year_end=' + str(shift.year) +
                                           '&month_end=' + str(shift.month) +
                                           '&day_end=' + str(shift.day),
-                                          'GET')
-        self.assertEqual(response.status_int, 403)
+                                          'POST')
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.body, 'Schedule for ' +
+                         str(today + datetime.timedelta(days=3)) +
+                         ' already exists\n')
+        pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(5)
+        self.assertEqual(len(pairs_list), 4)
+        added_pair1 = pairs_list[0]
+        added_pair2 = pairs_list[1]
+        added_pair3 = pairs_list[2]
+        added_pair4 = pairs_list[3]
+        self.check_pair_fields(added_pair1, standard_pair1)
+        self.check_pair_fields(added_pair2, standard_pair2)
+        self.check_pair_fields(added_pair3, standard_pair3)
+        self.check_pair_fields(added_pair4, standard_pair4)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
+        response = PairsTest.make_request('/copy_from_default?' +
+                                          'year_start=' + str(today.year) +
+                                          '&month_start=' + str(today.month) +
+                                          '&day_start=' + str(today.day) +
+                                          '&year_end=' + str(shift_out.year) +
+                                          '&month_end=' +
+                                          str(shift_out.month) +
+                                          '&day_end=' + str(shift_out.day),
+                                          'POST')
+        self.assertEqual(response.status_int, 422)
 
     def tearDown(self):
         self.testbed.deactivate()

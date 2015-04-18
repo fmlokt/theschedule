@@ -80,7 +80,7 @@ class EditDefaultPair(webapp2.RequestHandler):
 
 
 class CopyFromDefault(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         year_start = int(self.request.get('year_start'))
         month_start = int(self.request.get('month_start'))
         day_start = int(self.request.get('day_start'))
@@ -92,7 +92,7 @@ class CopyFromDefault(webapp2.RequestHandler):
         date_end = datetime.date(year_end, month_end, day_end)
         if (date_end - date_start) > 180*datetime.timedelta(days=1):
             self.response.write('Too many days to copy')
-            self.response.status = 400
+            self.response.status = 422
             return
         while date_start <= date_end:
             if len(ScheduledPair.query(ScheduledPair.date ==
@@ -106,7 +106,14 @@ class CopyFromDefault(webapp2.RequestHandler):
                                              task='')
                     new_pair.put()
             else:
-                self.response.write('Schedule for this period'
-                                    'is already exists')
-                self.response.status = 403
+                self.response.write('Schedule for ' + str(date_start) +
+                                    ' already exists\n')
             date_start += datetime.timedelta(days=1)
+
+    def get(self):
+        date_start = datetime.date.today()
+        date_end = datetime.date.today() + datetime.timedelta(days=6)
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'copy_from_default.html')
+        render_data = {'date_start': date_start, 'date_end': date_end}
+        self.response.write(template.render(render_data))
