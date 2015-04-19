@@ -119,5 +119,6 @@ class CopyFromDefault(webapp2.RequestHandler):
         date_end = datetime.date.today() + datetime.timedelta(days=6)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'copy_from_default.html')
-        render_data = {'date_begin': str(date_begin), 'date_end': str(date_end)}
+        render_data = {'date_begin': str(date_begin),
+                       'date_end': str(date_end)}
         self.response.write(template.render(render_data))
