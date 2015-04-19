@@ -4,12 +4,8 @@
 </head>
 <body>
 	<form method="post" action="/copy_from_default"> 
-		<br/>Year start<input type="int" name="year_start" value={{ date_start.year }}>
-		<br/>Month start<input type="int" name="month_start" value={{ date_start.month }}>
-		<br/>Day start<input type="int" name="day_start" value={{ date_start.day }}>
-		<br/>Year end<input type="int" name="year_end" value={{ date_end.year }}>
-		<br/>Month end<input type="int" name="month_end" value={{ date_end.month }}>
-		<br/>Day end<input type="int" name="day_end" value={{ date_end.day }}>
+		<br/>Date start <input type="date" name="date_start" value={{ date_begin }}>
+		<br/>Date end <input type="date" name="date_end" value={{ date_end }}>
 		<br/><input class="btn" type="submit" value="Сгенерировать"/>
 	</form>
 </body>

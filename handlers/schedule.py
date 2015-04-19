@@ -5,6 +5,7 @@ import datetime
 import calendar
 
 import webapp2
+import re
 
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
@@ -81,39 +82,42 @@ class EditDefaultPair(webapp2.RequestHandler):
 
 class CopyFromDefault(webapp2.RequestHandler):
     def post(self):
-        year_start = int(self.request.get('year_start'))
-        month_start = int(self.request.get('month_start'))
-        day_start = int(self.request.get('day_start'))
-        year_end = int(self.request.get('year_end'))
-        month_end = int(self.request.get('month_end'))
-        day_end = int(self.request.get('day_end'))
+        date_start = str(self.request.get('date_start'))
+        date_finish = str(self.request.get('date_end'))
+        reg = '(\d\d\d\d)-(\d\d)-(\d\d)'
+        year_start = int(re.match(reg, date_start).group(1))
+        month_start = int(re.match(reg, date_start).group(2))
+        day_start = int(re.match(reg, date_start).group(3))
+        year_end = int(re.match(reg, date_finish).group(1))
+        month_end = int(re.match(reg, date_finish).group(2))
+        day_end = int(re.match(reg, date_finish).group(3))
 
-        date_start = datetime.date(year_start, month_start, day_start)
+        date_begin = datetime.date(year_start, month_start, day_start)
         date_end = datetime.date(year_end, month_end, day_end)
-        if (date_end - date_start) > 180*datetime.timedelta(days=1):
+        if (date_end - date_begin) > 180*datetime.timedelta(days=1):
             self.response.write('Too many days to copy')
             self.response.status = 422
             return
-        while date_start <= date_end:
+        while date_begin <= date_end:
             if len(ScheduledPair.query(ScheduledPair.date ==
-                   date_start).fetch(1)) == 0:
-                weekday = date_start.weekday()
+                   date_begin).fetch(1)) == 0:
+                weekday = date_begin.weekday()
                 pairs_qry = DefaultPair.query(DefaultPair.week_day == weekday)
                 for pair in pairs_qry:
                     new_pair = ScheduledPair(classname=pair.classname,
-                                             date=date_start,
+                                             date=date_begin,
                                              start_time=pair.start_time,
                                              task='')
                     new_pair.put()
             else:
-                self.response.write('Schedule for ' + str(date_start) +
+                self.response.write('Schedule for ' + str(date_begin) +
                                     ' already exists\n')
-            date_start += datetime.timedelta(days=1)
+            date_begin += datetime.timedelta(days=1)
 
     def get(self):
-        date_start = datetime.date.today()
+        date_begin = datetime.date.today()
         date_end = datetime.date.today() + datetime.timedelta(days=6)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'copy_from_default.html')
-        render_data = {'date_start': date_start, 'date_end': date_end}
+        render_data = {'date_begin': str(date_begin), 'date_end': str(date_end)}
         self.response.write(template.render(render_data))
