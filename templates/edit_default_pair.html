@@ -4,7 +4,11 @@
 </head>
 <body>
 	<form method="post" action="/default_pairs"> 
-		<br/>Предмет <input type="text" name="classname"  value={{ pair.classname }}>
+{% if pair.classname == 'classname' %}
+        <br/>Предмет  <input type="text" name="classname"  placeholder={{ pair.classname }}>
+{% else %}
+        <br/>Предмет  <input type="text" name="classname"  value={{ pair.classname }}>
+{% endif %}
         <br/>День недели <select size="1" name="week_day">
                 <option disabled>День недели</option>
                 <option value="0">Понедельник</option>
