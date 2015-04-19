@@ -28,8 +28,8 @@ class DefaultPairsTest(unittest2.TestCase):
     def post_default_pair(pair, key=''):
         body = 'classname=' + pair.classname +\
             '&week_day=' + str(pair.week_day) +\
-            '&hour=' + str(pair.start_time.hour) +\
-            '&minute=' + str(pair.start_time.minute) +\
+            '&time=' + str(pair.start_time.hour).zfill(2) +\
+            ':' + str(pair.start_time.minute).zfill(2) +\
             '&key=' + key
         return DefaultPairsTest.make_request('/default_pairs', 'POST', body)
 

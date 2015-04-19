@@ -44,8 +44,10 @@ class ShowDefaultPairs(webapp2.RequestHandler):
     def post(self):
         classname = self.request.get('classname')
         week_day = int(self.request.get('week_day'))
-        hour = int(self.request.get('hour'))
-        minute = int(self.request.get('minute'))
+        time = str(self.request.get('time'))
+        reg_time = '(\d\d):(\d\d)'
+        hour = int(re.match(reg_time, time).group(1))
+        minute = int(re.match(reg_time, time).group(2))
         url_key = self.request.get('key')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)

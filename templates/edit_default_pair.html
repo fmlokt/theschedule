@@ -4,10 +4,18 @@
 </head>
 <body>
 	<form method="post" action="/default_pairs"> 
-		<br/>Classname <input type="text" name="classname"  value={{ pair.classname }}>
-		<br/>Weekday <input type="int" name="week_day" value={{ pair.week_day }}>
-		<br/>Hour <input type="int" name="hour" value={{ pair.start_time.hour}}>
-		<br/>Minute <input type="int" name="minute" value={{ pair.start_time.minute }}>
+		<br/>Предмет <input type="text" name="classname"  value={{ pair.classname }}>
+        <br/>День недели <select size="1" name="week_day">
+                <option disabled>День недели</option>
+                <option value="0">Понедельник</option>
+                <option value="1">Вторник</option>
+                <option value="2">Среда</option>
+                <option value="3">Четверг</option>
+                <option value="4">Пятница</option>
+                <option value="5">Суббота</option>
+                <option value="6">Воскресение</option>
+             </select>
+		<br/>Время <input type="time" name="time" value={{ pair.start_time}}>
 		<br/><input class="btn" type="submit" value="Сохранить"/> 
 		<input type="hidden" name="key" value={{ key_urlsafe }}>
 	</form>

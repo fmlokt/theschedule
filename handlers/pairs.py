@@ -4,6 +4,7 @@ import os
 import datetime
 
 import webapp2
+import re
 
 from objects.pair import *
 from environment import JINJA_ENVIRONMENT
@@ -42,11 +43,15 @@ class ShowPairs(webapp2.RequestHandler):
 
     def post(self):
         classname = self.request.get('classname')
-        year = int(self.request.get('year'))
-        month = int(self.request.get('month'))
-        day = int(self.request.get('day'))
-        hour = int(self.request.get('hour'))
-        minute = int(self.request.get('minute'))
+        date = str(self.request.get('date'))
+        reg_date = '(\d\d\d\d)-(\d\d)-(\d\d)'
+        year = int(re.match(reg_date, date).group(1))
+        month = int(re.match(reg_date, date).group(2))
+        day = int(re.match(reg_date, date).group(3))
+        time = str(self.request.get('time'))
+        reg_time = '(\d\d):(\d\d)'
+        hour = int(re.match(reg_time, time).group(1))
+        minute = int(re.match(reg_time, time).group(2))
         task = self.request.get('task')
         url_key = self.request.get('key')
         if url_key != '':

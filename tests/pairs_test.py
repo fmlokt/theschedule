@@ -28,20 +28,20 @@ class PairsTest(unittest2.TestCase):
     @staticmethod
     def post_pair(pair, key=''):
         body = 'classname=' + pair.classname +\
-            '&year=' + str(pair.date.year) +\
-            '&month=' + str(pair.date.month) +\
-            '&day=' + str(pair.date.day) +\
-            '&hour=' + str(pair.start_time.hour) +\
-            '&minute=' + str(pair.start_time.minute) + '&task=' + pair.task +\
-            '&key=' + key
+            '&date=' + str(pair.date.year) +\
+            '-' + str(pair.date.month).zfill(2) +\
+            '-' + str(pair.date.day).zfill(2) +\
+            '&time=' + str(pair.start_time.hour).zfill(2) +\
+            ':' + str(pair.start_time.minute).zfill(2) + '&task=' +\
+            pair.task + '&key=' + key
         return PairsTest.make_request('/pairs', 'POST', body)
 
     @staticmethod
     def post_default_pair(pair, key=''):
         body = 'classname=' + pair.classname +\
             '&week_day=' + str(pair.week_day) +\
-            '&hour=' + str(pair.start_time.hour) +\
-            '&minute=' + str(pair.start_time.minute) +\
+            '&time=' + str(pair.start_time.hour).zfill(2) +\
+            ':' + str(pair.start_time.minute).zfill(2) +\
             '&key=' + key
         return PairsTest.make_request('/default_pairs', 'POST', body)
 
