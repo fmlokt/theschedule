@@ -1,12 +1,9 @@
-<html>
-<head>
-<title>Сгенерировать расписание</title>
-</head>
-<body>
+{% extends "templates/base.html" %}
+{% block title %}Сгенерировать Расписание{% endblock %}
+{% block content %}
 	<form method="post" action="/copy_from_default"> 
 		<br/>С <input type="date" name="date_start" value={{ date_begin }}>
 		<br/>По <input type="date" name="date_end" value={{ date_end }}>
 		<br/><input class="btn" type="submit" value="Сгенерировать"/>
 	</form>
-</body>
-</html>
+{% endblock %}

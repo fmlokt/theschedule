@@ -1,20 +1,17 @@
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="style.css">
-<title>Расписание</title>
-</head>
-<bodky>
+{% extends "templates/base.html" %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
 <table border=3>
 	<tr>
 	{% for day in days %}
-	<td>
+	<td {% if day.is_current %}bgcolor="#B19A67"{% endif %}>
 	<table border=3>
-	<caption><font {% if day.is_current %}color="green"{% else %}color="black"{% endif %}>{{day.date}}, {{day.week_day}}</font></caption>
+	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr>
+		<tr onclick="test({{ pair.task }})">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
-			<td>{{ pair.task }}</td>
+			<!-- <td>{{ pair.task }}</td> -->
 		</tr>
 	{% endfor %}
 	</table>
@@ -22,5 +19,10 @@
 	{% endfor %}
 	</tr>
 </table>
-</body>
-</html>
+<div id="task"></div>
+<script>
+function test(task){
+	document.getElementById("task").innerHTML=task;
+}
+</script>
+{% endblock %}

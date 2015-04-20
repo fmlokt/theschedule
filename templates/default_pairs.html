@@ -1,8 +1,6 @@
-<html>
-<head>
-<title>Расписание по умолчанию</title>
-</head>
-<body>
+{% extends "templates/base.html" %}
+{% block title %}Расписание по умолчанию{% endblock %}
+{% block content %}
 <table border=3 column=5>
 <caption>Расписание пар по умолчанию</caption>
 {% for pair in pairs %}
@@ -16,5 +14,4 @@
 {% endfor %}
 </table>
 <a href="/new_default_pair">Добавить новую стандартную пару</a>
-</body>
-</html>
+{% endblock %}

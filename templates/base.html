@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC>
+{% autoescape true %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+<title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<center><h1>Расписание ВШОПФ</h1>
+{% block content %}
+{% endblock %}
+</center>
+</body>
+</html>
+{% endautoescape %}

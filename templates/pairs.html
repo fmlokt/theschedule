@@ -1,8 +1,6 @@
-<html>
-<head>
-<title>Расписание</title>
-</head>
-<body>
+{% extends "templates/base.html" %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
 <table border=3 column=5>
 <caption>Расписание пар</caption>
 {% for pair in pairs %}
@@ -17,5 +15,4 @@
 {% endfor %}
 </table>
 <a href="/new_pair">Добавить пару</a>
-</body>
-</html>
+{% endblock %}

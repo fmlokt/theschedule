@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url:/back\.jpg
+  static_files: /templates/back.jpg
+  upload: /templates/back.jpg
 - url: /style\.css
   static_files: templates/style.css
   upload: /templates/style.css

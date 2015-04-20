@@ -1,8 +1,6 @@
-<html>
-<head>
-<title>Расписание</title>
-</head>
-<body>
+{% extends "templates/base.html" %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
 <table border=3>
 	<tr>
 	{% for day in days %}
@@ -20,5 +18,4 @@
 	{% endfor %}
 	</tr>
 </table>
-</body>
-</html>
+{% endblock %}

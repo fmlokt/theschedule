@@ -1,8 +1,6 @@
-<html>
-<head>
-<title>Добавить занятие</title>
-</head>
-<body>
+{% extends "templates/base.html" %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
 	<form method="post" action="/pairs">
 {% if pair.classname == 'classname' %}
 		<br/>Предмет  <input type="text" name="classname"  placeholder={{ pair.classname }}>
@@ -15,5 +13,4 @@
 		<br/><input class="btn" type="submit" value="Сохранить"/> 
 		<input type="hidden" name="key" value={{ key_urlsafe }}>
 	</form>
-</body>
-</html>
+{% endblock %}
