@@ -17,6 +17,7 @@ class PairsTest(unittest2.TestCase):
         self.testbed.activate()
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
+        self.testbed.init_user_stub()
 
     @staticmethod
     def make_request(url, method, body=''):
@@ -162,7 +163,7 @@ class PairsTest(unittest2.TestCase):
     def test_show_schedule(self):
         response = PairsTest.make_request('/', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 1)
+        self.assertEqual(response.body.count('</tr>'), 1)
         if datetime.date.today().weekday() == 6:
             today = datetime.date.today() + datetime.timedelta(days=1)
         else:
@@ -185,7 +186,7 @@ class PairsTest(unittest2.TestCase):
         PairsTest.post_pair(pair1)
         response = PairsTest.make_request('/', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 4)
+        self.assertEqual(response.body.count('</tr>'), 4)
         self.assertNotEqual(response.body.find('Math1'), -1)
         self.assertNotEqual(response.body.find('Math2'), -1)
         self.assertNotEqual(response.body.find('Math3'), -1)

@@ -10,36 +10,39 @@ import re
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
+from handlers.basehandler import BaseHandler
 
 
-class ShowDefaultSchedule(webapp2.RequestHandler):
+class ShowDefaultSchedule(BaseHandler):
     def get(self):
+        super(ShowDefaultSchedule, self).get()
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_schedule.html')
-        render_data = {'days': [None] * 7}
+        self.render_data['days'] = [None] * 7
         for day in xrange(7):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
             render_day = {'week_day': calendar.day_name[day], 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
-            render_data['days'][day] = render_day
-        self.response.write(template.render(render_data))
+            self.render_data['days'][day] = render_day
+        self.response.write(template.render(self.render_data))
 
 
-class ShowDefaultPairs(webapp2.RequestHandler):
+class ShowDefaultPairs(BaseHandler):
     def get(self):
+        super(ShowDefaultPairs, self).get()
         pairs_qry = DefaultPair.query().order(DefaultPair.week_day,
                                               DefaultPair.start_time)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_pairs.html')
-        render_data = {'pairs': []}
+        self.render_data['pairs'] = []
         for pair in pairs_qry:
             pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
             pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
                 '&return_url=/default_pairs'
-            render_data['pairs'].append(pair)
-        self.response.write(template.render(render_data))
+            self.render_data['pairs'].append(pair)
+        self.response.write(template.render(self.render_data))
 
     def post(self):
         classname = self.request.get('classname')
@@ -62,27 +65,30 @@ class ShowDefaultPairs(webapp2.RequestHandler):
         self.redirect('/default_pairs')
 
 
-class NewDefaultPair(webapp2.RequestHandler):
+class NewDefaultPair(BaseHandler):
     def get(self):
+        super(NewDefaultPair, self).get()
         pair = DefaultPair(classname='classname', week_day=0)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
-        render_data = {'pair': pair}
-        self.response.write(template.render(render_data))
+        self.render_data['pair'] = pair
+        self.response.write(template.render(self.render_data))
 
 
-class EditDefaultPair(webapp2.RequestHandler):
+class EditDefaultPair(BaseHandler):
     def get(self):
+        super(EditDefaultPair, self).get()
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
-        render_data = {'pair': pair, 'key_urlsafe': url_key}
-        self.response.write(template.render(render_data))
+        self.render_data['pair'] = pair
+        self.render_data['key_urlsafe'] = url_key
+        self.response.write(template.render(self.render_data))
 
 
-class CopyFromDefault(webapp2.RequestHandler):
+class CopyFromDefault(BaseHandler):
     def post(self):
         date_start = str(self.request.get('date_start'))
         date_finish = str(self.request.get('date_end'))
@@ -117,10 +123,11 @@ class CopyFromDefault(webapp2.RequestHandler):
             date_begin += datetime.timedelta(days=1)
 
     def get(self):
+        super(CopyFromDefault, self).get()
         date_begin = datetime.date.today()
         date_end = datetime.date.today() + datetime.timedelta(days=6)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'copy_from_default.html')
-        render_data = {'date_begin': str(date_begin),
-                       'date_end': str(date_end)}
-        self.response.write(template.render(render_data))
+        self.render_data['date_begin'] = str(date_begin)
+        self.render_data['date_end'] = str(date_end)
+        self.response.write(template.render(self.render_data))
