@@ -8,7 +8,7 @@
 	<table border=3>
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="test({{ pair.task }})">
+		<tr onclick="test('{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
 			<!-- <td>{{ pair.task }}</td> -->
