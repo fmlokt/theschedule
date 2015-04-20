@@ -98,3 +98,10 @@ class DeletePair(webapp2.RequestHandler):
         key = ndb.Key(urlsafe=url_key)
         key.delete()
         self.redirect(return_url)
+
+
+class UseStyle(webapp2.RequestHandler):
+    def get(self):
+        with open('./templates/style.css', 'r') as content_file:
+            content = content_file.read()
+        self.response.write(content)
