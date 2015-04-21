@@ -58,7 +58,7 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(9, 40),
-                              task='some_task')
+                              task='some task')
         response = PairsTest.post_pair(pair1)
         self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().fetch(2)
@@ -67,10 +67,10 @@ class PairsTest(unittest2.TestCase):
         self.check_pair_fields(added_pair, pair1)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        pair2 = ScheduledPair(classname='Math2',
+        pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
-                              task='some_task')
+                              task='some task')
         response = PairsTest.post_pair(pair2)
         self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().fetch(3)
@@ -94,10 +94,10 @@ class PairsTest(unittest2.TestCase):
         response = PairsTest.make_request('/edit_pair?key=' +
                                           added_pair.key.urlsafe(), 'GET')
         self.assertEqual(response.status_int, 200)
-        pair = ScheduledPair(classname='Math1',
+        pair = ScheduledPair(classname='Math 1',
                              date=datetime.date(2016, 5, 15),
                              start_time=datetime.time(10, 41),
-                             task='some_task1')
+                             task='some task\n1')
         response = PairsTest.post_pair(pair, added_pair.key.urlsafe())
         self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().fetch(2)
@@ -108,14 +108,14 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_delete_pair(self):
-        pair1 = ScheduledPair(classname='Math1',
+        pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
                               task='some_task')
-        pair2 = ScheduledPair(classname='Math2',
+        pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
-                              task='some_task')
+                              task='some task')
         PairsTest.post_pair(pair1)
         PairsTest.post_pair(pair2)
         pairs_list = ScheduledPair.query().fetch(2)
@@ -134,31 +134,31 @@ class PairsTest(unittest2.TestCase):
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 0)
-        pair1 = ScheduledPair(classname='Math1',
+        pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
-                              task='some_task')
-        pair2 = ScheduledPair(classname='Math2',
+                              task='some task')
+        pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
-                              task='some_task')
-        pair3 = ScheduledPair(classname='Math3',
+                              task='some task')
+        pair3 = ScheduledPair(classname='Math 3',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(10, 40),
-                              task='some_task')
+                              task='some task')
         PairsTest.post_pair(pair2)
         PairsTest.post_pair(pair3)
         PairsTest.post_pair(pair1)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 3)
-        self.assertNotEqual(response.body.find('Math1'), -1)
-        self.assertNotEqual(response.body.find('Math2'), -1)
-        self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'),
-                        response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'),
-                        response.body.find('Math3'))
+        self.assertNotEqual(response.body.find('Math 1'), -1)
+        self.assertNotEqual(response.body.find('Math 2'), -1)
+        self.assertNotEqual(response.body.find('Math 3'), -1)
+        self.assertLess(response.body.find('Math 1'),
+                        response.body.find('Math 2'))
+        self.assertLess(response.body.find('Math 2'),
+                        response.body.find('Math 3'))
 
     def test_show_schedule(self):
         response = PairsTest.make_request('/', 'GET')
@@ -168,32 +168,32 @@ class PairsTest(unittest2.TestCase):
             today = datetime.date.today() + datetime.timedelta(days=1)
         else:
             today = datetime.date.today()
-        pair1 = ScheduledPair(classname='Math1',
+        pair1 = ScheduledPair(classname='Math 1',
                               date=today,
                               start_time=datetime.time(9, 10),
-                              task='some_task')
-        pair2 = ScheduledPair(classname='Math2',
+                              task='some task')
+        pair2 = ScheduledPair(classname='Math 2',
                               date=today,
                               start_time=datetime.time(10, 40),
-                              task='some_task')
-        pair3 = ScheduledPair(classname='Math3',
+                              task='some task')
+        pair3 = ScheduledPair(classname='Math 3',
                               date=today +
                               datetime.timedelta(days=1),
                               start_time=datetime.time(9, 40),
-                              task='some_task')
+                              task='some task')
         PairsTest.post_pair(pair2)
         PairsTest.post_pair(pair3)
         PairsTest.post_pair(pair1)
         response = PairsTest.make_request('/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('</tr>'), 4)
-        self.assertNotEqual(response.body.find('Math1'), -1)
-        self.assertNotEqual(response.body.find('Math2'), -1)
-        self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'),
-                        response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'),
-                        response.body.find('Math3'))
+        self.assertNotEqual(response.body.find('Math 1'), -1)
+        self.assertNotEqual(response.body.find('Math 2'), -1)
+        self.assertNotEqual(response.body.find('Math 3'), -1)
+        self.assertLess(response.body.find('Math 1'),
+                        response.body.find('Math 2'))
+        self.assertLess(response.body.find('Math 2'),
+                        response.body.find('Math 3'))
 
     def test_copy_from_default(self):
         response = PairsTest.make_request('/copy_from_default', 'GET')
@@ -201,13 +201,13 @@ class PairsTest(unittest2.TestCase):
         today = datetime.date(2015, 01, 05)
         shift = today + datetime.timedelta(days=6)
         shift_out = today + datetime.timedelta(days=190)
-        pair1 = DefaultPair(classname='Math1',
+        pair1 = DefaultPair(classname='Math 1',
                             start_time=datetime.time(9, 10),
                             week_day=0)
-        pair2 = DefaultPair(classname='Math2',
+        pair2 = DefaultPair(classname='Math 2',
                             start_time=datetime.time(10, 40),
                             week_day=1)
-        pair3 = DefaultPair(classname='Math3',
+        pair3 = DefaultPair(classname='Math 3',
                             start_time=datetime.time(13, 00),
                             week_day=2)
         standard_pair1 = ScheduledPair(classname=pair1.classname,
@@ -245,7 +245,7 @@ class PairsTest(unittest2.TestCase):
         added_pair1.key.delete()
         added_pair2.key.delete()
         added_pair3.key.delete()
-        pair4 = DefaultPair(classname='Math4',
+        pair4 = DefaultPair(classname='Math 4',
                             start_time=datetime.time(12, 00),
                             week_day=3)
         standard_pair4 = ScheduledPair(classname=pair3.classname,

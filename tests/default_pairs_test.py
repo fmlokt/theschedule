@@ -53,7 +53,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.check_default_pair_fields(added_pair, pair1)
         response = DefaultPairsTest.make_request('/default_pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        pair2 = DefaultPair(classname='Math2',
+        pair2 = DefaultPair(classname='Math 2',
                             week_day=4,
                             start_time=datetime.time(9, 40))
         response = DefaultPairsTest.post_default_pair(pair2)
@@ -79,7 +79,7 @@ class DefaultPairsTest(unittest2.TestCase):
                                                  added_pair.key.urlsafe(),
                                                  'GET')
         self.assertEqual(response.status_int, 200)
-        pair = DefaultPair(classname='Math1',
+        pair = DefaultPair(classname='Math 1',
                            week_day=4,
                            start_time=datetime.time(10, 41))
         response = DefaultPairsTest.post_default_pair(pair,
@@ -93,10 +93,10 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_delete_default_pair(self):
-        pair1 = DefaultPair(classname='Math1',
+        pair1 = DefaultPair(classname='Math 1',
                             week_day=3,
                             start_time=datetime.time(10, 40))
-        pair2 = DefaultPair(classname='Math2',
+        pair2 = DefaultPair(classname='Math 2',
                             week_day=3,
                             start_time=datetime.time(9, 40))
         DefaultPairsTest.post_default_pair(pair1)
@@ -118,13 +118,13 @@ class DefaultPairsTest(unittest2.TestCase):
         response = DefaultPairsTest.make_request('/default_pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 0)
-        pair1 = DefaultPair(classname='Math1',
+        pair1 = DefaultPair(classname='Math 1',
                             week_day=3,
                             start_time=datetime.time(10, 40))
-        pair2 = DefaultPair(classname='Math2',
+        pair2 = DefaultPair(classname='Math 2',
                             week_day=4,
                             start_time=datetime.time(9, 40))
-        pair3 = DefaultPair(classname='Math3',
+        pair3 = DefaultPair(classname='Math 3',
                             week_day=4,
                             start_time=datetime.time(10, 40))
         DefaultPairsTest.post_default_pair(pair2)
@@ -133,25 +133,25 @@ class DefaultPairsTest(unittest2.TestCase):
         response = DefaultPairsTest.make_request('/default_pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 3)
-        self.assertNotEqual(response.body.find('Math1'), -1)
-        self.assertNotEqual(response.body.find('Math2'), -1)
-        self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'),
-                        response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'),
-                        response.body.find('Math3'))
+        self.assertNotEqual(response.body.find('Math 1'), -1)
+        self.assertNotEqual(response.body.find('Math 2'), -1)
+        self.assertNotEqual(response.body.find('Math 3'), -1)
+        self.assertLess(response.body.find('Math 1'),
+                        response.body.find('Math 2'))
+        self.assertLess(response.body.find('Math 2'),
+                        response.body.find('Math 3'))
 
     def test_show_default_schedule(self):
         response = DefaultPairsTest.make_request('/schedule', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 1)
-        pair1 = DefaultPair(classname='Math1',
+        pair1 = DefaultPair(classname='Math 1',
                             week_day=3,
                             start_time=datetime.time(10, 40))
-        pair2 = DefaultPair(classname='Math2',
+        pair2 = DefaultPair(classname='Math 2',
                             week_day=4,
                             start_time=datetime.time(9, 40))
-        pair3 = DefaultPair(classname='Math3',
+        pair3 = DefaultPair(classname='Math 3',
                             week_day=4,
                             start_time=datetime.time(10, 40))
         DefaultPairsTest.post_default_pair(pair2)
@@ -160,13 +160,13 @@ class DefaultPairsTest(unittest2.TestCase):
         response = DefaultPairsTest.make_request('/schedule', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 4)
-        self.assertNotEqual(response.body.find('Math1'), -1)
-        self.assertNotEqual(response.body.find('Math2'), -1)
-        self.assertNotEqual(response.body.find('Math3'), -1)
-        self.assertLess(response.body.find('Math1'),
-                        response.body.find('Math2'))
-        self.assertLess(response.body.find('Math2'),
-                        response.body.find('Math3'))
+        self.assertNotEqual(response.body.find('Math 1'), -1)
+        self.assertNotEqual(response.body.find('Math 2'), -1)
+        self.assertNotEqual(response.body.find('Math 3'), -1)
+        self.assertLess(response.body.find('Math 1'),
+                        response.body.find('Math 2'))
+        self.assertLess(response.body.find('Math 2'),
+                        response.body.find('Math 3'))
 
     def tearDown(self):
         self.testbed.deactivate()
