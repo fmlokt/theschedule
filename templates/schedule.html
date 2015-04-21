@@ -8,7 +8,7 @@
 	<table border=3>
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="test('{{ pair.task }}')">
+		<tr onclick="test('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
 			<!-- <td>{{ pair.task }}</td> -->
@@ -19,10 +19,18 @@
 	{% endfor %}
 	</tr>
 </table>
-<div id="task"></div>
+<div id="message"></div>
 <script>
-function test(task){
-	document.getElementById("task").innerHTML=task;
+function test(classname,weekday,date,time,task){
+	window.alert("Предмет: " + classname + "\n" +
+				 "Дата: " + date + " , " + weekday + "\n" +
+				 "Время: " + time + "\n" +
+				 "Задание: " + task);
+	message = ("Предмет: " + classname + "\n" +
+				 "Дата: " + date + " , " + weekday + "\n" +
+				 "Время: " + time + "\n" +
+				 "Задание: " + task);
+	document.getElementById('message').innerHTML = message;
 }
 </script>
 {% endblock %}
