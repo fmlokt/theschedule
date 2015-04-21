@@ -3,9 +3,9 @@
 {% block content %}
 	<form method="post" action="/pairs">
 {% if pair.classname == 'classname' %}
-		<br/>Предмет  <input type="text" name="classname"  placeholder={{ pair.classname }}>
+		<br/>Предмет  <input type="text" name="classname"  placeholder='{{ pair.classname }}'>
 {% else %}
-        <br/>Предмет  <input type="text" name="classname"  value={{ pair.classname }}>
+        <br/>Предмет  <input type="text" name="classname"  value='{{ pair.classname }}'>
 {% endif %}
 		<br/>Дата  <input type="date" name="date" value={{ pair.date }}>
 		<br/>Время  <input type="time" name="time" value={{ pair.start_time }}>
