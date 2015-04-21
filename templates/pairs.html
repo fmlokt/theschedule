@@ -9,8 +9,8 @@
 		<td>{{ pair.date }} </td>
 		<td>{{ pair.start_time }}</td>
 		<td>{{ pair.task }}</td>
-		<td><a href={{ pair.edit_link }}>Редактировать</a></td>
-		<td><a href={{ pair.delete_link }}>Удалить</a></td>
+		<td><a href='{{ pair.edit_link }}'>Редактировать</a></td>
+		<td><a href='{{ pair.delete_link }}'>Удалить</a></td>
 	</tr>
 {% endfor %}
 </table>

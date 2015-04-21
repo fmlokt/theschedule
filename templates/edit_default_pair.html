@@ -17,8 +17,8 @@
                 <option value="5">Суббота</option>
                 <option value="6">Воскресение</option>
              </select>
-		<br/>Время <input type="time" name="time" value={{ pair.start_time}}>
+		<br/>Время <input type="time" name="time" value='{{ pair.start_time}}'>
 		<br/><input class="btn" type="submit" value="Сохранить"/> 
-		<input type="hidden" name="key" value={{ key_urlsafe }}>
+		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
 	</form>
 {% endblock %}
