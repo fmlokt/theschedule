@@ -4,11 +4,11 @@
 <table border=3>
 	<tr>
 	{% for day in days %}
-	<td {% if day.is_current %}bgcolor="#B19A67"{% endif %}>
+	<td {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
 	<table border=3>
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="test('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
+		<tr onclick="popup('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
 			<!-- <td>{{ pair.task }}</td> -->
@@ -21,16 +21,11 @@
 </table>
 <div id="message"></div>
 <script>
-function test(classname,weekday,date,time,task){
+function popup(classname,weekday,date,time,task){
 	window.alert("Предмет: " + classname + "\n" +
 				 "Дата: " + date + " , " + weekday + "\n" +
 				 "Время: " + time + "\n" +
 				 "Задание: " + task);
-	message = ("Предмет: " + classname + "\n" +
-				 "Дата: " + date + " , " + weekday + "\n" +
-				 "Время: " + time + "\n" +
-				 "Задание: " + task);
-	document.getElementById('message').innerHTML = message;
 }
 </script>
 {% endblock %}
