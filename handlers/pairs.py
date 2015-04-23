@@ -15,10 +15,12 @@ class ShowSchedule(BaseHandler):
     def get(self):
         super(ShowSchedule, self).get()
         template = JINJA_ENVIRONMENT.get_template('templates/schedule.html')
-        self.render_data['days'] = [None] * 7
+        self.render_data['days'] = [None] * 6
         for day in xrange(7):
             today = datetime.date.today()
             thatday = today + datetime.timedelta(days=day)
+            if thatday.weekday()==6:
+                continue
             pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).\
                 order(ScheduledPair.start_time)
             render_day = {'week_day': thatday.strftime('%A'), 'pairs': [],
@@ -57,6 +59,7 @@ class ShowPairs(BaseHandler):
         minute = int(re.match(reg_time, time).group(2))
         task = self.request.get('task')
         url_key = self.request.get('key')
+        replace = bool(self.request.get('replace'))
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             pair = key.get()
@@ -64,11 +67,13 @@ class ShowPairs(BaseHandler):
             pair.date = datetime.date(year, month, day)
             pair.start_time = datetime.time(hour, minute)
             pair.task = task
+            pair.replace = replace
         else:
             pair = ScheduledPair(classname=classname,
                                  date=datetime.date(year, month, day),
                                  start_time=datetime.time(hour, minute),
-                                 task=task)
+                                 task=task,
+                                 replace=replace)
         pair.put()
         self.redirect('/pairs')
 

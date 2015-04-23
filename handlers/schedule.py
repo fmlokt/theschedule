@@ -18,8 +18,8 @@ class ShowDefaultSchedule(BaseHandler):
         super(ShowDefaultSchedule, self).get()
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_schedule.html')
-        self.render_data['days'] = [None] * 7
-        for day in xrange(7):
+        self.render_data['days'] = [None] * 6
+        for day in xrange(6):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
             render_day = {'week_day': calendar.day_name[day], 'pairs': []}

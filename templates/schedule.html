@@ -11,7 +11,8 @@
 		<tr onclick="popup('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
-			{% if pair.task=='ЗАМЕНА' %}<td bgcolor=green >R</td>{% elif pair.task %}<td bgcolor=red >T</td>{% endif %}
+			{% if pair.replace==True %}<td bgcolor=green >R</td>{% endif %}
+			{% if pair.task %}<td bgcolor=red >T</td>{% endif %}
 		</tr>
 	{% endfor %}
 	</table>
