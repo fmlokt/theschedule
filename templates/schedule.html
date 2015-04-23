@@ -8,7 +8,7 @@
 	<table border=3>
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="popup('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
+		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
 			{% if pair.replace==True %}<td bgcolor=green >R</td>{% endif %}
@@ -20,13 +20,17 @@
 	{% endfor %}
 	</tr>
 </table>
-<div id="message"></div>
+<div id="classname"></div>
+<div id="date"></div>
+<div id="time"></div>
+<div id="task"></div>
 <script>
-function popup(classname,weekday,date,time,task){
-	window.alert("Предмет: " + classname + "\n" +
-				 "Дата: " + date + " , " + weekday + "\n" +
-				 "Время: " + time + "\n" +
-				 "Задание: " + task);
+function desc(classname,weekday,date,time,task){
+	document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
+	document.getElementById("date").innerHTML ="<b>Дата:</b> " + date + " , " + weekday
+	document.getElementById("time").innerHTML ="<b>Время:</b> " + time
+	document.getElementById("task").innerHTML ="<b>Задание:</b> " + task
+
 }
 </script>
 {% endblock %}
