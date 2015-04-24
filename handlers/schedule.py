@@ -133,7 +133,7 @@ class CopyFromDefault(BaseAdminHandler):
         if not super(CopyFromDefault, self).get():
             return
         date_begin = datetime.date.today()
-        date_end = datetime.date.today() + datetime.timedelta(days=6)
+        date_end = datetime.date.today() + datetime.timedelta(days=13)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'copy_from_default.html')
         self.render_data['date_begin'] = str(date_begin)
