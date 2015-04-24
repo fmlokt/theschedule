@@ -19,6 +19,13 @@ class PairsTest(unittest2.TestCase):
         self.testbed.init_memcache_stub()
         self.testbed.init_user_stub()
 
+    def simulate_login(self, user_email='', user_id='', is_admin=False):
+        self.testbed.setup_env(
+            user_email=user_email,
+            user_id=user_id,
+            user_is_admin='1' if is_admin else '0',
+            overwrite=True)
+
     @staticmethod
     def make_request(url, method, body=''):
         request = webapp2.Request.blank(url)
@@ -53,6 +60,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(pair1.task,       pair2.task)
 
     def test_create_pair(self):
+        self.simulate_login('a@b.com', '123', True)
         response = PairsTest.make_request('/new_pair', 'GET')
         self.assertEqual(response.status_int, 200)
         pair1 = ScheduledPair(classname='Math',
@@ -85,6 +93,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_edit_pair(self):
+        self.simulate_login('a@b.com', '123', True)
         pair = ScheduledPair(classname='Math',
                              date=datetime.date(2015, 4, 14),
                              start_time=datetime.time(9, 40),
@@ -108,6 +117,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_delete_pair(self):
+        self.simulate_login('a@b.com', '123', True)
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
@@ -131,6 +141,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(remained_pair, added_pair2)
 
     def test_show_pairs(self):
+        self.simulate_login('a@b.com', '123', True)
         response = PairsTest.make_request('/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 0)
@@ -181,9 +192,11 @@ class PairsTest(unittest2.TestCase):
                               datetime.timedelta(days=1),
                               start_time=datetime.time(9, 40),
                               task='some task')
+        self.simulate_login('a@b.com', '123', True)
         PairsTest.post_pair(pair2)
         PairsTest.post_pair(pair3)
         PairsTest.post_pair(pair1)
+        self.simulate_login()
         response = PairsTest.make_request('/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('</tr>'), 4)
@@ -196,6 +209,7 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_copy_from_default(self):
+        self.simulate_login('a@b.com', '123', True)
         response = PairsTest.make_request('/copy_from_default', 'GET')
         self.assertEqual(response.status_int, 200)
         today = datetime.date(2015, 01, 05)
@@ -287,6 +301,85 @@ class PairsTest(unittest2.TestCase):
                                           '-' + str(shift_out.day).zfill(2),
                                           'POST')
         self.assertEqual(response.status_int, 422)
+
+    def test_all_unauth(self):
+        today = datetime.date(2015, 01, 05)
+        shift = today + datetime.timedelta(days=6)
+        response = PairsTest.make_request('/copy_from_default?' +
+                                          'date_start=' + str(today.year) +
+                                          '-' + str(today.month).zfill(2) +
+                                          '-' + str(today.day).zfill(2) +
+                                          '&date_end=' + str(shift.year) +
+                                          '-' + str(shift.month).zfill(2) +
+                                          '-' + str(shift.day).zfill(2),
+                                          'POST')
+        self.assertEqual(response.status_int, 403)
+        response = PairsTest.make_request('/', 'GET')
+        self.assertEqual(response.status_int, 200)
+        response = PairsTest.make_request('/pairs', 'GET')
+        self.assertEqual(response.status_int, 302)
+        self.simulate_login('a@b.com', '123', True)
+        pair1 = ScheduledPair(classname='Math 1',
+                              date=datetime.date(2015, 4, 14),
+                              start_time=datetime.time(10, 40),
+                              task='some_task')
+        PairsTest.post_pair(pair1)
+        pairs_list = ScheduledPair.query().fetch(2)
+        added_pair1 = pairs_list[0]
+        self.simulate_login()
+        response = PairsTest.make_request('/delete_pair?key=' +
+                                          added_pair1.key.urlsafe() +
+                                          '&return_url=/pairs', 'GET')
+        self.assertEqual(response.status_int, 302)
+        pairs_list = ScheduledPair.query().fetch(2)
+        self.assertEqual(len(pairs_list), 1)
+        response = PairsTest.make_request('/edit_pair?key=' +
+                                          added_pair1.key.urlsafe(), 'GET')
+        self.assertEqual(response.status_int, 302)
+        response = PairsTest.make_request('/new_pair', 'GET')
+        self.assertEqual(response.status_int, 302)
+        response = PairsTest.post_pair(pair1)
+        self.assertEqual(response.status_int, 403)
+
+    def test_all_no_admin(self):
+        self.simulate_login('c@b.com', '124', False)
+        today = datetime.date(2015, 01, 05)
+        shift = today + datetime.timedelta(days=6)
+        response = PairsTest.make_request('/copy_from_default?' +
+                                          'date_start=' + str(today.year) +
+                                          '-' + str(today.month).zfill(2) +
+                                          '-' + str(today.day).zfill(2) +
+                                          '&date_end=' + str(shift.year) +
+                                          '-' + str(shift.month).zfill(2) +
+                                          '-' + str(shift.day).zfill(2),
+                                          'POST')
+        self.assertEqual(response.status_int, 403)
+        response = PairsTest.make_request('/', 'GET')
+        self.assertEqual(response.status_int, 200)
+        response = PairsTest.make_request('/pairs', 'GET')
+        self.assertEqual(response.status_int, 403)
+        self.simulate_login('a@b.com', '123', True)
+        pair1 = ScheduledPair(classname='Math 1',
+                              date=datetime.date(2015, 4, 14),
+                              start_time=datetime.time(10, 40),
+                              task='some_task')
+        PairsTest.post_pair(pair1)
+        pairs_list = ScheduledPair.query().fetch(2)
+        added_pair1 = pairs_list[0]
+        self.simulate_login('c@b.com', '124', False)
+        response = PairsTest.make_request('/delete_pair?key=' +
+                                          added_pair1.key.urlsafe() +
+                                          '&return_url=/pairs', 'GET')
+        self.assertEqual(response.status_int, 403)
+        pairs_list = ScheduledPair.query().fetch(2)
+        self.assertEqual(len(pairs_list), 1)
+        response = PairsTest.make_request('/edit_pair?key=' +
+                                          added_pair1.key.urlsafe(), 'GET')
+        self.assertEqual(response.status_int, 403)
+        response = PairsTest.make_request('/new_pair', 'GET')
+        self.assertEqual(response.status_int, 403)
+        response = PairsTest.post_pair(pair1)
+        self.assertEqual(response.status_int, 403)
 
     def tearDown(self):
         self.testbed.deactivate()

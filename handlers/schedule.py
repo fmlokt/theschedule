@@ -10,7 +10,7 @@ import re
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
-from handlers.basehandler import BaseHandler
+from handlers.basehandler import *
 
 
 class ShowDefaultSchedule(BaseHandler):
@@ -29,9 +29,10 @@ class ShowDefaultSchedule(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class ShowDefaultPairs(BaseHandler):
+class ShowDefaultPairs(BaseAdminHandler):
     def get(self):
-        super(ShowDefaultPairs, self).get()
+        if not super(ShowDefaultPairs, self).get():
+            return
         pairs_qry = DefaultPair.query().order(DefaultPair.week_day,
                                               DefaultPair.start_time)
         template = JINJA_ENVIRONMENT.get_template('templates/'
@@ -45,6 +46,8 @@ class ShowDefaultPairs(BaseHandler):
         self.response.write(template.render(self.render_data))
 
     def post(self):
+        if not super(ShowDefaultPairs, self).post():
+            return
         classname = self.request.get('classname')
         week_day = int(self.request.get('week_day'))
         time = str(self.request.get('time'))
@@ -65,9 +68,10 @@ class ShowDefaultPairs(BaseHandler):
         self.redirect('/default_pairs')
 
 
-class NewDefaultPair(BaseHandler):
+class NewDefaultPair(BaseAdminHandler):
     def get(self):
-        super(NewDefaultPair, self).get()
+        if not super(NewDefaultPair, self).get():
+            return
         pair = DefaultPair(classname='classname', week_day=0)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
@@ -75,9 +79,10 @@ class NewDefaultPair(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class EditDefaultPair(BaseHandler):
+class EditDefaultPair(BaseAdminHandler):
     def get(self):
-        super(EditDefaultPair, self).get()
+        if not super(EditDefaultPair, self).get():
+            return
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
@@ -88,8 +93,10 @@ class EditDefaultPair(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class CopyFromDefault(BaseHandler):
+class CopyFromDefault(BaseAdminHandler):
     def post(self):
+        if not super(CopyFromDefault, self).post():
+            return
         date_start = str(self.request.get('date_start'))
         date_finish = str(self.request.get('date_end'))
         reg = '(\d\d\d\d)-(\d\d)-(\d\d)'
@@ -123,7 +130,8 @@ class CopyFromDefault(BaseHandler):
             date_begin += datetime.timedelta(days=1)
 
     def get(self):
-        super(CopyFromDefault, self).get()
+        if not super(CopyFromDefault, self).get():
+            return
         date_begin = datetime.date.today()
         date_end = datetime.date.today() + datetime.timedelta(days=6)
         template = JINJA_ENVIRONMENT.get_template('templates/'
