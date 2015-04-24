@@ -8,3 +8,4 @@ class ScheduledPair(ndb.Model):
     date = ndb.DateProperty()
     start_time = ndb.TimeProperty()
     task = ndb.StringProperty()
+    replace = ndb.BooleanProperty()

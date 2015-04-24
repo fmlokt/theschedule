@@ -4,14 +4,15 @@
 <table border=3>
 	<tr>
 	{% for day in days %}
-	<td {% if day.is_current %}bgcolor="#B19A67"{% endif %}>
+	<td {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
 	<table border=3>
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="test('{{ pair.task }}')">
+		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time }}</td>
-			<!-- <td>{{ pair.task }}</td> -->
+			{% if pair.replace==True %}<td bgcolor=green >R</td>{% endif %}
+			{% if pair.task %}<td bgcolor=red >T</td>{% endif %}
 		</tr>
 	{% endfor %}
 	</table>
@@ -19,10 +20,17 @@
 	{% endfor %}
 	</tr>
 </table>
+<div id="classname"></div>
+<div id="date"></div>
+<div id="time"></div>
 <div id="task"></div>
 <script>
-function test(task){
-	document.getElementById("task").innerHTML=task;
+function desc(classname,weekday,date,time,task){
+	document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
+	document.getElementById("date").innerHTML ="<b>Дата:</b> " + date + " , " + weekday
+	document.getElementById("time").innerHTML ="<b>Время:</b> " + time
+	document.getElementById("task").innerHTML ="<b>Задание:</b> " + task
+
 }
 </script>
 {% endblock %}

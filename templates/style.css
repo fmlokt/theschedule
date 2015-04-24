@@ -1,8 +1,14 @@
 body {
-    background-color: #179E56;
+    background-color:#dddddd;
+    font-family: Tahoma, Verdana, Times New Roman, Arial;
 }
 
 h1 {
-    color: #064930;
     margin-left: 40px;
+}
+table{
+    border: 1px solid #444488;
+    font-family: Arial Narrow;
+    padding-left:2px;
+    background: #ccddff;
 }
