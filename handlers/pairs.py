@@ -8,7 +8,7 @@ import webapp2
 
 from objects.pair import *
 from environment import JINJA_ENVIRONMENT
-from handlers.basehandler import BaseHandler
+from handlers.basehandler import *
 
 
 class ShowSchedule(BaseHandler):
@@ -19,7 +19,7 @@ class ShowSchedule(BaseHandler):
         for day in xrange(7):
             today = datetime.date.today()
             thatday = today + datetime.timedelta(days=day)
-            if thatday.weekday()==6:
+            if thatday.weekday() == 6:
                 continue
             pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).\
                 order(ScheduledPair.start_time)
@@ -32,9 +32,10 @@ class ShowSchedule(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class ShowPairs(BaseHandler):
+class ShowPairs(BaseAdminHandler):
     def get(self):
-        super(ShowPairs, self).get()
+        if not super(ShowPairs, self).get():
+            return
         pairs_qry = ScheduledPair.query().order(ScheduledPair.date,
                                                 ScheduledPair.start_time)
         template = JINJA_ENVIRONMENT.get_template('templates/pairs.html')
@@ -47,6 +48,8 @@ class ShowPairs(BaseHandler):
         self.response.write(template.render(self.render_data))
 
     def post(self):
+        if not super(ShowPairs, self).post():
+            return
         classname = self.request.get('classname')
         date = str(self.request.get('date'))
         reg_date = '(\d\d\d\d)-(\d\d)-(\d\d)'
@@ -78,9 +81,10 @@ class ShowPairs(BaseHandler):
         self.redirect('/pairs')
 
 
-class NewPair(BaseHandler):
+class NewPair(BaseAdminHandler):
     def get(self):
-        super(NewPair, self).get()
+        if not super(NewPair, self).get():
+            return
         pair = ScheduledPair(classname='classname',
                              date=datetime.date.today(),
                              start_time=datetime.time(9, 10),
@@ -90,9 +94,10 @@ class NewPair(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class EditPair(BaseHandler):
+class EditPair(BaseAdminHandler):
     def get(self):
-        super(EditPair, self).get()
+        if not super(EditPair, self).get():
+            return
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
@@ -102,8 +107,10 @@ class EditPair(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class DeletePair(webapp2.RequestHandler):
+class DeletePair(BaseAdminHandler):
     def get(self):
+        if not super(DeletePair, self).get():
+            return
         url_key = self.request.get('key')
         return_url = self.request.get('return_url')
         key = ndb.Key(urlsafe=url_key)
