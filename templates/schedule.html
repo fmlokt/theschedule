@@ -11,8 +11,8 @@
 		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ day.date }}','{{ pair.start_time.strftime('%H:%M') }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time.strftime('%H:%M') }}</td>
-			{% if pair.replace==True %}<td bgcolor=green >R</td>{% endif %}
-			{% if pair.task %}<td bgcolor=red >T</td>{% endif %}
+			{% if pair.replace==True %}<td bgcolor=red >R</td>{% endif %}
+			{% if pair.task %}<td bgcolor=green >T</td>{% endif %}
 		</tr>
 	{% endfor %}
 	</table>
