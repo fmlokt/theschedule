@@ -28,7 +28,8 @@ class DefaultPairsTest(unittest2.TestCase):
     @staticmethod
     def post_default_pair(pair, key=''):
         body = 'classname=' + pair.classname +\
-            '&week_day=' + str(pair.week_day) +\
+            '&week_day=' + str(pair.week_day % 7) +\
+            '&week_parity=' + str(pair.week_day / 7) +\
             '&time=' + str(pair.start_time.hour).zfill(2) +\
             ':' + str(pair.start_time.minute).zfill(2) +\
             '&key=' + key

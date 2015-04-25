@@ -9,13 +9,18 @@
 {% endif %}
         <br/>День недели <select size="1" name="week_day" >
                 <option disabled>День недели</option>
-                <option {% if pair.week_day==0 %}selected{% endif %} value="0">Понедельник</option>
-                <option {% if pair.week_day==1 %}selected{% endif %} value="1">Вторник</option>
-                <option {% if pair.week_day==2 %}selected{% endif %} value="2">Среда</option>
-                <option {% if pair.week_day==3 %}selected{% endif %} value="3">Четверг</option>
-                <option {% if pair.week_day==4 %}selected{% endif %} value="4">Пятница</option>
-                <option {% if pair.week_day==5 %}selected{% endif %} value="5">Суббота</option>
-                <option {% if pair.week_day==6 %}selected{% endif %} value="6">Воскресение</option>
+                <option {% if pair.week_day % 7 == 0 %}selected{% endif %} value="0">Понедельник</option>
+                <option {% if pair.week_day % 7 == 1 %}selected{% endif %} value="1">Вторник</option>
+                <option {% if pair.week_day % 7 == 2 %}selected{% endif %} value="2">Среда</option>
+                <option {% if pair.week_day % 7 == 3 %}selected{% endif %} value="3">Четверг</option>
+                <option {% if pair.week_day % 7 == 4 %}selected{% endif %} value="4">Пятница</option>
+                <option {% if pair.week_day % 7 == 5 %}selected{% endif %} value="5">Суббота</option>
+                <option {% if pair.week_day % 7 == 6 %}selected{% endif %} value="6">Воскресение</option>
+             </select>
+        <br/>Неделя <select size="1" name="week_parity" >
+                <option disabled>Четность недели</option>
+                <option {% if pair.week_day < 7 %}selected{% endif %} value="0">Нечетная</option>
+                <option {% if pair.week_day >= 7 %}selected{% endif %} value="1">Четная</option>
              </select>
 		<br/>Время <input type="time" name="time" value='{{ pair.start_time}}'>
 		<br/><input class="btn" type="submit" value="Сохранить"/> 

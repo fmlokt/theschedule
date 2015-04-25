@@ -1,9 +1,12 @@
 {% extends "templates/base.html" %}
 {% block title %}Расписание{% endblock %}
 {% block content %}
+{% if double_week %}
+Нечетная неделя
+{% endif %}
 <table border=3>
 	<tr>
-	{% for day in days %}
+	{% for day in odd_days %}
 	<td>
 	<table border=3>
 	<caption>{{day.week_day}}</caption>
@@ -18,4 +21,24 @@
 	{% endfor %}
 	</tr>
 </table>
+{% if double_week %}
+Четная неделя
+<table border=3>
+    <tr>
+    {% for day in even_days %}
+    <td>
+    <table border=3>
+    <caption>{{day.week_day}}</caption>
+    {% for pair in day.pairs %}
+        <tr>
+            <td>{{ pair.classname }}</td>
+            <td>{{ pair.start_time }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    </td>
+    {% endfor %}
+    </tr>
+</table>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "templates/base.html" %}
+{% block title %}Настройки расписания{% endblock %}
+{% block content %}
+    <form method="post" action="/schedule_settings"> 
+        <br/>Двухнедельное расписание? <select size="1" name="schedule_period" >
+                <option {% if schedule_period == 7 %}selected{% endif %} value="7">Нет</option>
+                <option {% if schedule_period == 14 %}selected{% endif %} value="14">Да</option>
+             </select>
+        <br/>Начало первой недели <input type="date" name="first_week_begin" value='{{ first_week_begin }}'>
+        <br/><input class="btn" type="submit" value="Сохранить"/>
+    </form>
+{% endblock %}

@@ -13,19 +13,38 @@ from objects.pair import *
 from handlers.basehandler import *
 
 
+DEFAULT_MONDAY = datetime.date(2015, 03, 2)
+
+
 class ShowDefaultSchedule(BaseHandler):
     def get(self):
         super(ShowDefaultSchedule, self).get()
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_schedule.html')
-        self.render_data['days'] = [None] * 6
+        settings_qry = ScheduleSettings.query().fetch(1)
+        if len(settings_qry) == 0:
+            settings = ScheduleSettings(schedule_period=7,
+                                        first_week_begin=DEFAULT_MONDAY)
+            settings.put()
+        else:
+            settings = settings_qry[0]
+        self.render_data['double_week'] = settings.schedule_period == 14
+        self.render_data['odd_days'] = [None] * 6
         for day in xrange(6):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
             render_day = {'week_day': calendar.day_name[day], 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
-            self.render_data['days'][day] = render_day
+            self.render_data['odd_days'][day] = render_day
+        self.render_data['even_days'] = [None] * 6
+        for day in xrange(7, 13):
+            pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
+                DefaultPair.start_time)
+            render_day = {'week_day': calendar.day_name[day - 7], 'pairs': []}
+            for pair in pairs_qry:
+                render_day['pairs'].append(pair)
+            self.render_data['even_days'][day - 7] = render_day
         self.response.write(template.render(self.render_data))
 
 
@@ -49,7 +68,8 @@ class ShowDefaultPairs(BaseAdminHandler):
         if not super(ShowDefaultPairs, self).post():
             return
         classname = self.request.get('classname')
-        week_day = int(self.request.get('week_day'))
+        week_day = int(self.request.get('week_day')) +\
+            7 * int(self.request.get('week_parity'))
         time = str(self.request.get('time'))
         reg_time = '(\d\d):(\d\d)'
         hour = int(re.match(reg_time, time).group(1))
@@ -113,10 +133,18 @@ class CopyFromDefault(BaseAdminHandler):
             self.response.write('Too many days to copy')
             self.response.status = 422
             return
+        settings_qry = ScheduleSettings.query().fetch(1)
+        if len(settings_qry) == 0:
+            settings = ScheduleSettings(schedule_period=7,
+                                        first_week_begin=DEFAULT_MONDAY)
+            settings.put()
+        else:
+            settings = settings_qry[0]
         while date_begin <= date_end:
             if len(ScheduledPair.query(ScheduledPair.date ==
                    date_begin).fetch(1)) == 0:
-                weekday = date_begin.weekday()
+                weekday = (date_begin - settings.first_week_begin).days %\
+                    settings.schedule_period
                 pairs_qry = DefaultPair.query(DefaultPair.week_day == weekday)
                 for pair in pairs_qry:
                     new_pair = ScheduledPair(classname=pair.classname,
@@ -139,3 +167,41 @@ class CopyFromDefault(BaseAdminHandler):
         self.render_data['date_begin'] = str(date_begin)
         self.render_data['date_end'] = str(date_end)
         self.response.write(template.render(self.render_data))
+
+
+class EditSettings(BaseAdminHandler):
+    def get(self):
+        if not super(EditSettings, self).get():
+            return
+        settings_qry = ScheduleSettings.query().fetch(1)
+        if len(settings_qry) == 0:
+            settings = ScheduleSettings(schedule_period=7,
+                                        first_week_begin=DEFAULT_MONDAY)
+            settings.put()
+        else:
+            settings = settings_qry[0]
+        self.render_data['schedule_period'] = settings.schedule_period
+        self.render_data['first_week_begin'] = settings.first_week_begin
+        template = JINJA_ENVIRONMENT.get_template('templates/'
+                                                  'schedule_settings.html')
+        self.response.write(template.render(self.render_data))
+
+    def post(self):
+        if not super(EditSettings, self).post():
+            return
+        date = self.request.get('first_week_begin')
+        period = int(self.request.get('schedule_period'))
+        reg = '(\d\d\d\d)-(\d\d)-(\d\d)'
+        year = int(re.match(reg, date).group(1))
+        month = int(re.match(reg, date).group(2))
+        day = int(re.match(reg, date).group(3))
+        settings_qry = ScheduleSettings.query().fetch(1)
+        if len(settings_qry) == 0:
+            settings = ScheduleSettings(schedule_period=7,
+                                        first_week_begin=DEFAULT_MONDAY)
+        else:
+            settings = settings_qry[0]
+        settings.schedule_period = period
+        settings.first_week_begin = datetime.date(year, month, day)
+        settings.put()
+        self.redirect(self.request.uri)
