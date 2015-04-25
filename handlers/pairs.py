@@ -6,6 +6,7 @@ import re
 
 import webapp2
 
+from handlers.localization import *
 from objects.pair import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
@@ -23,8 +24,8 @@ class ShowSchedule(BaseHandler):
                 continue
             pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).\
                 order(ScheduledPair.start_time)
-            render_day = {'week_day': thatday.strftime('%A'), 'pairs': [],
-                          'date': thatday.strftime('%d %B'),
+            render_day = {'week_day': russian_week(thatday.weekday()), 'pairs': [],
+                          'date': thatday.strftime('%d') + ' ' + russian_month(thatday.month),
                           'is_current': (today == thatday)}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
