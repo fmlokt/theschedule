@@ -8,7 +8,7 @@
 	<table border=3 width="100%">
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date }}','{{ pair.start_time.strftime('%H:%M') }}','{{ pair.task }}')">
+		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ pair.date.strftime('%d %B') }}','{{ pair.start_time.strftime('%H:%M') }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time.strftime('%H:%M') }}</td>
 			{% if pair.replace==True %}<td bgcolor=green >R</td>{% endif %}
