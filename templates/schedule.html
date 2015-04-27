@@ -4,7 +4,7 @@
 <table border=3>
 	<tr>
 	{% for day in days %}
-	<td {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
+	<td valign="top" {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
 	<table border=3 width="100%">
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
