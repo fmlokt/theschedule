@@ -7,6 +7,7 @@ import calendar
 import webapp2
 import re
 
+from handlers.localization import *
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
@@ -33,7 +34,7 @@ class ShowDefaultSchedule(BaseHandler):
         for day in xrange(6):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
-            render_day = {'week_day': calendar.day_name[day], 'pairs': []}
+            render_day = {'week_day': russian_week(day), 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
@@ -41,7 +42,7 @@ class ShowDefaultSchedule(BaseHandler):
         for day in xrange(7, 13):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
-            render_day = {'week_day': calendar.day_name[day - 7], 'pairs': []}
+            render_day = {'week_day': russian_week(day - 7), 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
             self.render_data['even_days'][day - 7] = render_day
