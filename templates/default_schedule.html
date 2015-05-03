@@ -32,7 +32,7 @@
     {% for pair in day.pairs %}
         <tr>
             <td>{{ pair.classname }}</td>
-            <td>{{ pair.start_time }}</td>
+            <td>{{ pair.start_time.strftime('%H:%M') }}</td>
         </tr>
     {% endfor %}
     </table>

@@ -3,10 +3,11 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
 <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
+<div align='left'>{{ links|safe|e }}</div><div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
 <center><h1>Расписание ВШОПФ</h1>
 {% block content %}
 {% endblock %}

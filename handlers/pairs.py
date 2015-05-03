@@ -20,7 +20,7 @@ class ShowSchedule(BaseHandler):
         schedule_to_render = memcache.get("schedule_to_render")
         date_in_memcache = memcache.get("schedule_set_date")
         if (schedule_to_render is None) or (date_in_memcache is None)\
-            or (date_in_memcache != datetime.date.today):
+                or (date_in_memcache != datetime.date.today):
             schedule_to_render = [None] * 6
             for day in xrange(7):
                 today = datetime.date.today()

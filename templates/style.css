@@ -11,4 +11,8 @@ table{
     font-family: Arial;
     font-size: 11pt;
     background: #ccddff;
+    width: 100%;
+}
+tr { 
+    height: 25pt;
 }
