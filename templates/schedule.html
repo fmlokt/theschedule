@@ -8,9 +8,9 @@
 	<table border=3 width="100%">
 	<caption>{{day.date}}, {{day.week_day}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ day.date }}','{{ pair.start_time.strftime('%H:%M') }}','{{ pair.task }}')">
+		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ day.date }}','{{ pair.start_time|time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
-			<td>{{ pair.start_time.strftime('%H:%M') }}</td>
+			<td>{{ pair.start_time|time }}</td>
 			{% if pair.replace==True %}<td bgcolor=red >R</td>{% endif %}
 			{% if pair.task %}<td bgcolor=green >T</td>{% endif %}
 		</tr>
