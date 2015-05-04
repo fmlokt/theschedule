@@ -3,9 +3,10 @@
 import os
 import datetime
 import calendar
+import re
 
 import webapp2
-import re
+from google.appengine.api import memcache
 
 from handlers.localization import *
 from objects.schedule import *
@@ -141,6 +142,7 @@ class CopyFromDefault(BaseAdminHandler):
             settings.put()
         else:
             settings = settings_qry[0]
+        memcache.delete("schedule_to_render")
         while date_begin <= date_end:
             if len(ScheduledPair.query(ScheduledPair.date ==
                    date_begin).fetch(1)) == 0:

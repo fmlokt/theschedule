@@ -18,7 +18,8 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['login_link_text'] = 'Login'
             self.render_data['greeting'] = 'Hello, stranger.'
             self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/schedule">Стандартное расписание</a> '
+                                        u'<a href="/schedule">' +\
+                                        u'Стандартное расписание</a> '
 
         elif users.is_current_user_admin():
             self.render_data['login_link'] =\
@@ -27,17 +28,20 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
             self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
                                         u'<a href="/pairs">Список пар</a> ' +\
-                                        u'<a href="/schedule">Стандартное расписание</a> ' +\
-                                        u'<a href="/default_pairs">Стандартный список</a> ' +\
-                                        u'<a href="/copy_from_default">Сгенерировать расписание</a></div>'
+                                        u'<a href="/schedule">' +\
+                                        u'Стандартное расписание</a> ' +\
+                                        u'<a href="/default_pairs">' +\
+                                        u'Стандартный список</a>' +\
+                                        u'<a href="/copy_from_default">' +\
+                                        u'Сгенерировать расписание</a></div>'
         else:
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
             self.render_data['login_link_text'] = 'Logout'
             self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
             self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/schedule">Стандартное расписание</a> '
-
+                                        u'<a href="/schedule">' +\
+                                        u'Стандартное расписание</a> '
 
 
 class BaseAdminHandler(BaseHandler):
@@ -56,10 +60,13 @@ class BaseAdminHandler(BaseHandler):
         self.render_data['login_link_text'] = 'Logout'
         self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
         self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/pairs">Список пар</a> ' +\
-                                        u'<a href="/schedule">Стандартное расписание</a> ' +\
-                                        u'<a href="/default_pairs">Стандартный список</a> ' +\
-                                        u'<a href="/copy_from_default">Сгенерировать расписание</a></div>'
+                                    u'<a href="/pairs">Список пар</a> ' +\
+                                    u'<a href="/schedule">' + \
+                                    u'Стандартное расписание</a> ' +\
+                                    u'<a href="/default_pairs">' +\
+                                    u'Стандартный список</a>' +\
+                                    u'<a href="/copy_from_default">' +\
+                                    u'Сгенерировать расписание</a></div>'
         return True
 
     def post(self, *args, **kwargs):

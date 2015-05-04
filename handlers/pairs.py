@@ -5,6 +5,7 @@ import datetime
 import re
 
 import webapp2
+from google.appengine.api import memcache
 
 from handlers.localization import *
 from objects.pair import *
@@ -16,22 +17,30 @@ class ShowSchedule(BaseHandler):
     def get(self):
         super(ShowSchedule, self).get()
         template = JINJA_ENVIRONMENT.get_template('templates/schedule.html')
-        self.render_data['days'] = [None] * 6
-        for day in xrange(7):
-            today = datetime.date.today()
-            thatday = today + datetime.timedelta(days=day)
-            if thatday.weekday() == 6:
-                continue
-            pairs_qry = ScheduledPair.query(ScheduledPair.date == thatday).\
-                order(ScheduledPair.start_time)
-            render_day = {'week_day': russian_week(thatday.weekday()),
-                          'pairs': [],
-                          'date': thatday.strftime('%d') + ' ' +
-                          russian_month(thatday.month),
-                          'is_current': (today == thatday)}
-            for pair in pairs_qry:
-                render_day['pairs'].append(pair)
-            self.render_data['days'][thatday.weekday()] = render_day
+        schedule_to_render = memcache.get("schedule_to_render")
+        date_in_memcache = memcache.get("schedule_set_date")
+        if (schedule_to_render is None) or (date_in_memcache is None)\
+                or (date_in_memcache != datetime.date.today):
+            schedule_to_render = [None] * 6
+            for day in xrange(7):
+                today = datetime.date.today()
+                thatday = today + datetime.timedelta(days=day)
+                if thatday.weekday() == 6:
+                    continue
+                pairs_qry = ScheduledPair.query(ScheduledPair.date ==
+                                                thatday).\
+                    order(ScheduledPair.start_time)
+                render_day = {'week_day': russian_week(thatday.weekday()),
+                              'pairs': [],
+                              'date': thatday.strftime('%d') + ' ' +
+                              russian_month(thatday.month),
+                              'is_current': (today == thatday)}
+                for pair in pairs_qry:
+                    render_day['pairs'].append(pair)
+                schedule_to_render[thatday.weekday()] = render_day
+            memcache.set(key="schedule_to_render", value=schedule_to_render)
+            memcache.set(key="schedule_set_date", value=datetime.date.today())
+        self.render_data['days'] = schedule_to_render
         self.response.write(template.render(self.render_data))
 
 
@@ -81,6 +90,7 @@ class ShowPairs(BaseAdminHandler):
                                  task=task,
                                  replace=replace)
         pair.put()
+        memcache.delete("schedule_to_render")
         self.redirect('/pairs')
 
 
