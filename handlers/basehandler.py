@@ -28,7 +28,8 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
                                         u'<a href="/pairs">Список пар</a> ' +\
                                         u'<a href="/schedule">Стандартное расписание</a> ' +\
-                                        u'<a href="/default_pairs">Стандартный список</a></div>'
+                                        u'<a href="/default_pairs">Стандартный список</a> ' +\
+                                        u'<a href="/copy_from_default">Сгенерировать расписание</a></div>'
         else:
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
@@ -57,7 +58,8 @@ class BaseAdminHandler(BaseHandler):
         self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
                                         u'<a href="/pairs">Список пар</a> ' +\
                                         u'<a href="/schedule">Стандартное расписание</a> ' +\
-                                        u'<a href="/default_pairs">Стандартный список</a></div>'
+                                        u'<a href="/default_pairs">Стандартный список</a> ' +\
+                                        u'<a href="/copy_from_default">Сгенерировать расписание</a></div>'
         return True
 
     def post(self, *args, **kwargs):
