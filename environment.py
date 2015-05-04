@@ -10,11 +10,13 @@ from handlers.localization import *
 def format_time(value):
     return value.strftime('%H:%M')
 
+
 def format_weekday(value):
     if type(value) is int:
         return russian_week(value % 7)
     else:
         return russian_week(value.weekday())
+
 
 def format_date(value):
     return value.strftime('%d') + ' ' + russian_month(value.month)

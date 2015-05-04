@@ -1,0 +1,4 @@
+cron:
+- description: run update functions statistics
+  url: /cron/statistics/functions/update
+  schedule: every 24 hours
