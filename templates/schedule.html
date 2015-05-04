@@ -6,9 +6,9 @@
 	{% for day in days %}
 	<td valign="top" {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
 	<table border=3 width="100%">
-	<caption>{{day.date}}, {{day.week_day}}</caption>
+	<caption>{{day.date|date}}, {{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day }}','{{ day.date }}','{{ pair.start_time|time }}','{{ pair.task }}')">
+		<tr onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ day.date|date }}','{{ pair.start_time|time }}','{{ pair.task }}')">
 			<td>{{ pair.classname }}</td>
 			<td>{{ pair.start_time|time }}</td>
 			{% if pair.replace==True %}<td bgcolor=red >R</td>{% endif %}

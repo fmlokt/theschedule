@@ -9,7 +9,7 @@
 	{% for day in odd_days %}
 	<td valign="top">
 	<table border=3>
-	<caption>{{day.week_day}}</caption>
+	<caption>{{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
 		<tr>
 			<td>{{ pair.classname }}</td>
@@ -28,7 +28,7 @@
     {% for day in even_days %}
     <td valign="top">
     <table border=3>
-    <caption>{{day.week_day}}</caption>
+    <caption>{{day.week_day|weekday}}</caption>
     {% for pair in day.pairs %}
         <tr>
             <td>{{ pair.classname }}</td>
