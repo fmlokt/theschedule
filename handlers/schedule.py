@@ -157,29 +157,6 @@ class CopyFromDefault(BaseAdminHandler):
             else:
                 self.response.write('Schedule for ' + str(date_begin) +
                                     ' already exists\n')
-                weekday = (date_begin - settings.first_week_begin).days %\
-                    settings.schedule_period
-                pairs_qry = DefaultPair.query(DefaultPair.week_day ==
-                                              weekday).order(DefaultPair.start_time)
-                sched_qry = ScheduledPair.query(ScheduledPair.date ==
-                                                date_begin).order(ScheduledPair.start_time)
-                current_def_pair = 1
-                for pair in pairs_qry:
-                    if ScheduledPair.query(ScheduledPair.date ==
-                                           date_begin).fetch()[current_def_pair - 1].start_time <\
-                          pair.start_time:
-                            if ScheduledPair.query(ScheduledPair.date ==
-                                                   date_begin).count() == current_def_pair:
-                                break
-                            current_def_pair += 1
-                    if ScheduledPair.query(ScheduledPair.date ==
-                                           date_begin).fetch()[current_def_pair - 1].start_time !=\
-                            pair.start_time:
-                        new_pair = ScheduledPair(classname=pair.classname,
-                                                 date=date_begin,
-                                                 start_time=pair.start_time,
-                                                 task='')
-                        new_pair.put()
             date_begin += datetime.timedelta(days=1)
 
     def get(self):
