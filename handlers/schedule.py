@@ -158,6 +158,7 @@ class CopyFromDefault(BaseAdminHandler):
                 self.response.write('Schedule for ' + str(date_begin) +
                                     ' already exists\n')
             date_begin += datetime.timedelta(days=1)
+        self.redirect('/')
 
     def get(self):
         if not super(CopyFromDefault, self).get():

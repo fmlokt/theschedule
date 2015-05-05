@@ -34,6 +34,9 @@ class ShowSchedule(BaseHandler):
                               'date': thatday,
                               'is_current': (today == thatday)}
                 for pair in pairs_qry:
+                    pair.edit_link = '/edit_pair?key=' + pair.key.urlsafe()
+                    pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
+                        '&return_url=/'
                     render_day['pairs'].append(pair)
                 schedule_to_render[thatday.weekday()] = render_day
             memcache.set(key="schedule_to_render", value=schedule_to_render)
