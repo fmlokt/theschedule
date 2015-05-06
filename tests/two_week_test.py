@@ -46,8 +46,9 @@ class TwoWeekScheduleTest(unittest2.TestCase):
         self.assertEqual(settings.schedule_period, 7)
         self.assertEqual(settings.first_week_begin.weekday(), 0)
         need_settings = ScheduleSettings(schedule_period=14,
-                                         first_week_begin=
-                                         datetime.date(2015, 04, 20))
+                                         first_week_begin=datetime.date(2015,
+                                                                        04,
+                                                                        20))
         response = make_request('/schedule_settings', 'POST',
                                 'schedule_period=14'
                                 '&first_week_begin=2015-04-20')

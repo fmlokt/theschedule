@@ -17,29 +17,20 @@ class BaseHandler(webapp2.RequestHandler):
                 users.create_login_url(self.request.uri)
             self.render_data['login_link_text'] = 'Login'
             self.render_data['greeting'] = 'Hello, stranger.'
-            self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/schedule">' +\
-                                        u'Стандартное расписание</a> '
+            self.render_data['is_admin'] = False
 
         elif users.is_current_user_admin():
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
             self.render_data['login_link_text'] = 'Logout'
             self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-            self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/pairs">Список пар</a> ' +\
-                                        u'<a href="/schedule">' +\
-                                        u'Стандартное расписание</a> ' +\
-                                        u'<a href="/default_pairs">' +\
-                                        u'Стандартный список</a></div>'
+            self.render_data['is_admin'] = True
         else:
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
             self.render_data['login_link_text'] = 'Logout'
             self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-            self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-                                        u'<a href="/schedule">' +\
-                                        u'Стандартное расписание</a> '
+            self.render_data['is_admin'] = False
 
 
 class BaseAdminHandler(BaseHandler):
@@ -57,12 +48,7 @@ class BaseAdminHandler(BaseHandler):
             users.create_logout_url(self.request.uri)
         self.render_data['login_link_text'] = 'Logout'
         self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-        self.render_data['links'] = u'<a href="/">Расписание</a> ' +\
-            u'<a href="/pairs">Список пар</a> ' +\
-            u'<a href="/schedule">' + \
-            u'Стандартное расписание</a> ' +\
-            u'<a href="/default_pairs">' +\
-            u'Стандартный список</a></div>'
+        self.render_data['is_admin'] = True
         return True
 
     def post(self, *args, **kwargs):

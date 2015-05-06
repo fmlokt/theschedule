@@ -7,7 +7,6 @@ import re
 import webapp2
 from google.appengine.api import memcache
 
-from handlers.localization import *
 from objects.pair import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
@@ -27,15 +26,17 @@ class ShowSchedule(BaseHandler):
                 thatday = today + datetime.timedelta(days=day)
                 if thatday.weekday() == 6:
                     continue
-                pairs_qry = ScheduledPair.query(ScheduledPair.date
-                                                == thatday).\
+                pairs_qry = ScheduledPair.query(ScheduledPair.date ==
+                                                thatday).\
                     order(ScheduledPair.start_time)
-                render_day = {'week_day': russian_week(thatday.weekday()),
+                render_day = {'week_day': thatday.weekday(),
                               'pairs': [],
-                              'date': thatday.strftime('%d') + ' ' +
-                              russian_month(thatday.month),
+                              'date': thatday,
                               'is_current': (today == thatday)}
                 for pair in pairs_qry:
+                    pair.edit_link = '/edit_pair?key=' + pair.key.urlsafe()
+                    pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
+                        '&return_url=/'
                     render_day['pairs'].append(pair)
                 schedule_to_render[thatday.weekday()] = render_day
             memcache.set(key="schedule_to_render", value=schedule_to_render)

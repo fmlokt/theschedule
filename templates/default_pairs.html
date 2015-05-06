@@ -6,8 +6,8 @@
 {% for pair in pairs %}
 	<tr>
 		<td>{{ pair.classname }}</td>
-		<td>{{ pair.week_day }} </td>
-		<td>{{ pair.start_time.strftime('%H:%M') }}</td>
+		<td>{{ pair.week_day|weekday }} </td>
+		<td>{{ pair.start_time|time }}</td>
 		<td><a href='{{ pair.edit_link }}'>Редактировать</a></td>
 		<td><a href='{{ pair.delete_link }}'>Удалить</a></td>
 	</tr>

@@ -214,7 +214,7 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.month).zfill(2) +
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
-        self.assertEqual(response.status_int, 200)
+        self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(4)
         self.assertEqual(len(pairs_list), 3)
         added_pair1 = pairs_list[0]
@@ -243,10 +243,7 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.month).zfill(2) +
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
-        self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body, 'Schedule for ' +
-                         str(today + datetime.timedelta(days=3)) +
-                         ' already exists\n')
+        self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(5)
         self.assertEqual(len(pairs_list), 4)
         added_pair1 = pairs_list[0]
