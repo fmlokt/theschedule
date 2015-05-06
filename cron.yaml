@@ -1,0 +1,4 @@
+cron:
+- description: delete old pairs
+  url: /cron/delete_old
+  schedule: every 24 hours

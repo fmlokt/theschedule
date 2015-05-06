@@ -8,7 +8,6 @@ import re
 import webapp2
 from google.appengine.api import memcache
 
-from handlers.localization import *
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
@@ -35,7 +34,7 @@ class ShowDefaultSchedule(BaseHandler):
         for day in xrange(6):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
-            render_day = {'week_day': russian_week(day), 'pairs': []}
+            render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
@@ -43,7 +42,7 @@ class ShowDefaultSchedule(BaseHandler):
         for day in xrange(7, 13):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
                 DefaultPair.start_time)
-            render_day = {'week_day': russian_week(day - 7), 'pairs': []}
+            render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
             self.render_data['even_days'][day - 7] = render_day
@@ -159,6 +158,7 @@ class CopyFromDefault(BaseAdminHandler):
                 self.response.write('Schedule for ' + str(date_begin) +
                                     ' already exists\n')
             date_begin += datetime.timedelta(days=1)
+        self.redirect('/')
 
     def get(self):
         if not super(CopyFromDefault, self).get():

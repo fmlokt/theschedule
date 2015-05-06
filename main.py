@@ -9,6 +9,7 @@ import webapp2
 import environment
 from handlers import pairs
 from handlers import schedule
+from handlers import crons
 
 
 application = webapp2.WSGIApplication([
@@ -22,5 +23,6 @@ application = webapp2.WSGIApplication([
     ('/new_default_pair', schedule.NewDefaultPair),
     ('/delete_pair', pairs.DeletePair),
     ('/copy_from_default', schedule.CopyFromDefault),
-    ('/schedule_settings', schedule.EditSettings)
+    ('/schedule_settings', schedule.EditSettings),
+    ('/cron/delete_old', crons.DeleteOld)
 ], debug=True)
