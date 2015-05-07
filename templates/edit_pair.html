@@ -1,7 +1,7 @@
 {% extends "templates/base.html" %}
 {% block title %}Расписание{% endblock %}
 {% block content %}
-	<form method="post" action="/pairs">
+	<form method="post" action="/{{ group_id }}/pairs">
 {% if pair.classname == 'classname' %}
 		<br/>Предмет  <input type="text" name="classname"  required placeholder='{{ pair.classname }}'>
 {% else %}

@@ -2,22 +2,22 @@
 {% autoescape true %}
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
     <link rel="shortcut icon" href="/favicon.ico">
 <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
 <div align='left'>
-    <a href="/">Расписание</a> 
+    <a href="/{{ group_id }}/">Расписание</a>
     <a href="/schedule">Стандартное расписание</a>
 {% if is_admin %}
-    <a href="/pairs">Список пар</a> 
-    <a href="/default_pairs">Стандартный список</a> 
+    <a href="/{{ group_id }}/pairs">Список пар</a>
+    <a href="/default_pairs">Стандартный список</a>
     <a href="/copy_from_default">Сгенерировать расписание</a>
 {% endif %}
 </div>
 <div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
-<center><h1>Расписание ВШОПФ</h1>
+<center><h1>Расписание</h1>
 {% block content %}
 {% endblock %}
 </center>

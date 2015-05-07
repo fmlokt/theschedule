@@ -12,6 +12,7 @@ class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()
         self.render_data = {}
+        self.render_data['group_id'] = kwargs.get('group_id')
         if user is None:
             self.render_data['login_link'] =\
                 users.create_login_url(self.request.uri)

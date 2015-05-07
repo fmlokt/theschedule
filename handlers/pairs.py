@@ -13,11 +13,13 @@ from handlers.basehandler import *
 
 
 class ShowSchedule(BaseHandler):
-    def get(self):
-        super(ShowSchedule, self).get()
+    def get(self, *args, **kwargs):
+        super(ShowSchedule, self).get(*args, **kwargs)
+        group_id = kwargs.get('group_id')
+        self.render_data['group_id'] = group_id
         template = JINJA_ENVIRONMENT.get_template('templates/schedule.html')
-        schedule_to_render = memcache.get("schedule_to_render")
-        date_in_memcache = memcache.get("schedule_set_date")
+        schedule_to_render = memcache.get("schedule_to_render_" + group_id)
+        date_in_memcache = memcache.get("schedule_set_date_"+ group_id)
         if (schedule_to_render is None) or (date_in_memcache is None)\
                 or (date_in_memcache != datetime.date.today):
             schedule_to_render = [None] * 6
@@ -27,40 +29,42 @@ class ShowSchedule(BaseHandler):
                 if thatday.weekday() == 6:
                     continue
                 pairs_qry = ScheduledPair.query(ScheduledPair.date ==
-                                                thatday).\
+                                                thatday, ScheduledPair.group_id == group_id).\
                     order(ScheduledPair.start_time)
                 render_day = {'week_day': thatday.weekday(),
                               'pairs': [],
                               'date': thatday,
                               'is_current': (today == thatday)}
                 for pair in pairs_qry:
-                    pair.edit_link = '/edit_pair?key=' + pair.key.urlsafe()
-                    pair.delete_link = '/delete_pair?key=' +\
-                        pair.key.urlsafe() + '&return_url=/'
+                    pair.edit_link = '/' + group_id + '/edit_pair?key=' + pair.key.urlsafe()
+                    pair.delete_link = '/' + group_id +'/delete_pair?key=' +\
+                        pair.key.urlsafe() + '&return_url=/' + group_id + '/'
                     render_day['pairs'].append(pair)
                 schedule_to_render[thatday.weekday()] = render_day
-            memcache.set(key="schedule_to_render", value=schedule_to_render)
-            memcache.set(key="schedule_set_date", value=datetime.date.today())
+            memcache.set(key="schedule_to_render_" + group_id, value=schedule_to_render)
+            memcache.set(key="schedule_set_date_" + group_id, value=datetime.date.today())
         self.render_data['days'] = schedule_to_render
         self.response.write(template.render(self.render_data))
 
 
 class ShowPairs(BaseAdminHandler):
-    def get(self):
-        if not super(ShowPairs, self).get():
+    def get(self, *args, **kwargs):
+        group_id = kwargs.get('group_id')
+        if not super(ShowPairs, self).get(*args, **kwargs):
             return
-        pairs_qry = ScheduledPair.query().order(ScheduledPair.date,
+        pairs_qry = ScheduledPair.query(ScheduledPair.group_id == group_id).order(ScheduledPair.date,
                                                 ScheduledPair.start_time)
         template = JINJA_ENVIRONMENT.get_template('templates/pairs.html')
+        self.render_data['group_id'] = group_id
         self.render_data['pairs'] = []
         for pair in pairs_qry:
-            pair.edit_link = '/edit_pair?key=' + pair.key.urlsafe()
-            pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
-                '&return_url=/pairs'
+            pair.edit_link = '/' + group_id + '/edit_pair?key=' + pair.key.urlsafe()
+            pair.delete_link = '/' + group_id +'/delete_pair?key=' + pair.key.urlsafe() +\
+                '&return_url=/' + group_id + '/pairs'
             self.render_data['pairs'].append(pair)
         self.response.write(template.render(self.render_data))
 
-    def post(self):
+    def post(self, *args, **kwargs):
         if not super(ShowPairs, self).post():
             return
         classname = self.request.get('classname')
@@ -76,6 +80,7 @@ class ShowPairs(BaseAdminHandler):
         task = self.request.get('task')
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
+        group_id = kwargs.get('group_id')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             pair = key.get()
@@ -84,19 +89,21 @@ class ShowPairs(BaseAdminHandler):
             pair.start_time = datetime.time(hour, minute)
             pair.task = task
             pair.replace = replace
+            pair.group_id = group_id
         else:
             pair = ScheduledPair(classname=classname,
                                  date=datetime.date(year, month, day),
                                  start_time=datetime.time(hour, minute),
                                  task=task,
-                                 replace=replace)
+                                 replace=replace,
+                                 group_id=group_id)
         pair.put()
-        memcache.delete("schedule_to_render")
-        self.redirect('/pairs')
+        memcache.delete("schedule_to_render_" + group_id)
+        self.redirect('/' + group_id +'/pairs')
 
 
 class NewPair(BaseAdminHandler):
-    def get(self):
+    def get(self, *args, **kwargs):
         if not super(NewPair, self).get():
             return
         pair = ScheduledPair(classname='classname',
@@ -105,28 +112,32 @@ class NewPair(BaseAdminHandler):
                              task='')
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
         self.render_data['pair'] = pair
+        self.render_data['group_id'] = kwargs.get('group_id')
         self.response.write(template.render(self.render_data))
 
 
 class EditPair(BaseAdminHandler):
-    def get(self):
+    def get(self, *args, **kwargs):
         if not super(EditPair, self).get():
             return
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
+        self.render_data['group_id'] = kwargs.get('group_id')
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))
 
 
 class DeletePair(BaseAdminHandler):
-    def get(self):
+    def get(self, *args, **kwargs):
         if not super(DeletePair, self).get():
             return
         url_key = self.request.get('key')
+        group_id = kwargs.get('group_id')
         return_url = self.request.get('return_url')
         key = ndb.Key(urlsafe=url_key)
         key.delete()
+        memcache.delete("schedule_to_render_" + group_id)
         self.redirect(return_url)
