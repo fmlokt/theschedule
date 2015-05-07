@@ -3,7 +3,7 @@
 {% block content %}
 	<form method="post" action="/pairs">
 {% if pair.classname == 'classname' %}
-		<br/>Предмет  <input type="text" name="classname"  placeholder='{{ pair.classname }}'>
+		<br/>Предмет  <input type="text" name="classname"  required placeholder='{{ pair.classname }}'>
 {% else %}
         <br/>Предмет  <input type="text" name="classname"  value='{{ pair.classname }}'>
 {% endif %}
