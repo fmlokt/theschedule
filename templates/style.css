@@ -12,13 +12,30 @@ body {
     padding: 10px 5% 10px 5%;
 }
 
+#top a {
+    text-decoration: none;
+    color: #0000ff;
+    padding: 1px 5px;
+    border: 1px solid #42642A;
+    border-radius: 10px;
+}
+
+#top a:hover {
+    background-color: #A9D887;
+}
+
+#top .bottom_link_list {
+    margin: 10px 0px 0px 0px;
+}
+
+#top div.login_link {
+    font-size: 8pt;
+    color: grey;
+}
+
 div.container {
     display: flex;
     justify-content: space-between;
-}
-
-#top div {
-    display: inline;
 }
 
 h1 {
@@ -38,11 +55,27 @@ table.schedule {
     border-spacing: 30px;
 }
 
+table.list {
+    background: #ccddff;
+    padding: 5px 10px;
+}
+
+table.list th {
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
 td {
     border: 0;
     padding: 0;
     margin: 0;
     border-radius: 15px;
+}
+
+table.list td {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-radius: 0;
 }
 
 td.day {

@@ -1,14 +1,22 @@
 {% extends "templates/base.html" %}
 {% block title %}Cписок пар{% endblock %}
 {% block content %}
-<table>
+<table class="list">
 <caption>Расписание пар</caption>
+    <tr>
+        <th>Предмет</th>
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Задание</th>
+        <th></th>
+        <th></th>
+    </tr>
 {% for pair in pairs %}
 	<tr>
 		<td>{{ pair.classname }}</td>
 		<td>{{ pair.date|date }} </td>
 		<td>{{ pair.start_time|time }}</td>
-		<td>{{ pair.task }}</td>
+		<td>{{ pair.task }} </td>
 		<td><a href='{{ pair.edit_link }}'>Редактировать</a></td>
 		<td><a href='{{ pair.delete_link }}'>Удалить</a></td>
 	</tr>

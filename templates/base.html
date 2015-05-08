@@ -8,16 +8,23 @@
 </head>
 <body>
 <div class="container" id="top">
-    <div align="left">
-        <a href="/">Расписание</a> 
-        <a href="/schedule">Стандартное расписание</a>
+    <span align="left">
+        <div class="top_link_list">
+            <a href="/">Расписание</a> 
+            <a href="/schedule">Стандартное расписание</a>
+        </div>
     {% if is_admin %}
-        <a href="/pairs">Список пар</a> 
-        <a href="/default_pairs">Стандартный список</a> 
-        <a href="/copy_from_default">Сгенерировать расписание</a>
+        <div class="bottom_link_list">
+            <a href="/pairs">Список пар</a> 
+            <a href="/default_pairs">Стандартный список</a> 
+            <a href="/copy_from_default">Сгенерировать расписание</a>
+        </div>
     {% endif %}
-    </div>
-    <div align="right">{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
+    </span>
+    <span align="right">
+        <div class="top_link_list">{{greeting}}</div>
+        <div align="right" class="bottom_link_list login_link"><a href="{{login_link}}">{{login_link_text}}</a></div>
+    </span>
 </div>
 <h1>Расписание ВШОПФ</h1>
 {% block content %}

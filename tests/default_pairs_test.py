@@ -97,7 +97,7 @@ class DefaultPairsTest(unittest2.TestCase):
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/default_pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 0)
+        self.assertEqual(response.body.count('</tr>'), 1)
         pair1 = DefaultPair(classname='Math 1', week_day=3,
                             start_time=datetime.time(10, 40))
         pair2 = DefaultPair(classname='Math 2', week_day=4,
@@ -109,7 +109,7 @@ class DefaultPairsTest(unittest2.TestCase):
         post_default_pair(pair1)
         response = make_request('/default_pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 3)
+        self.assertEqual(response.body.count('</tr>'), 4)
         self.assertNotEqual(response.body.find('Math 1'), -1)
         self.assertNotEqual(response.body.find('Math 2'), -1)
         self.assertNotEqual(response.body.find('Math 3'), -1)
