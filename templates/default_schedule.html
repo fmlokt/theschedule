@@ -11,12 +11,19 @@
 	<table class="day">
 	<caption>{{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ pair.start_time|time }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
+		<tr class="pair" onclick="desc(this)">
             <td class="pair">
                 <div class="classname">{{ pair.classname }}</div>
                 <div class="container">
                     <div class="start_time">{{ pair.start_time|time }}</div>
                 </div>
+            <div class="no-task">
+                Здесь ничего нет. Куда подевалось?
+            </div>
+        {% if is_admin %}
+            <span class="edit_link"><a href='{{pair.edit_link}}'>Редактировать</a></span>
+            <span class="delete_link"><a href='{{pair.delete_link}}'>Удалить</a></span>
+        {% endif %}
 			</td>
 		</tr>
 	{% endfor %}
@@ -34,7 +41,7 @@
     <table class="day">
     <caption>{{day.week_day|weekday}}</caption>
     {% for pair in day.pairs %}
-        <tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ pair.start_time|time }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
+        <tr class="pair" onclick="desc(this)">
             <td class="pair">
                 <div class="classname">{{ pair.classname }}</div>
                 <div class="container">
@@ -49,24 +56,23 @@
     </tr>
 </table>
 {% endif %}
-<center>
-<div id="classname"></div>
-<div id="weekday"></div>
-<div id="time"></div>
-{% if is_admin %}
-<div id="edit_link"></div>
-<div id="delete_link"></div>
-{% endif %}
-</center>
 <script>
-function desc(classname,weekday,time{%if is_admin%},edit_link,delete_link{%endif%}){
-    document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
-    document.getElementById("weekday").innerHTML ="<b>День недели:</b> " + weekday
-    document.getElementById("time").innerHTML ="<b>Время:</b> " + time
-{% if is_admin %}
-    document.getElementById("edit_link").innerHTML="<a href='" + edit_link + "'>Редактировать</a>"
-    document.getElementById("delete_link").innerHTML="<a href='" + delete_link + "'>Удалить</a>"
-{% endif %}
+function desc(object){
+    if (object.getElementsByClassName("no-task")[0].style.display != 'block')
+    {
+        object.getElementsByClassName("no-task")[0].style.display = 'block';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_link")[0].style.display = 'inline';
+        object.getElementsByClassName("delete_link")[0].style.display = 'inline';
+    {% endif %}
+    } else
+    {
+        object.getElementsByClassName("no-task")[0].style.display = 'none';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_link")[0].style.display = 'none';
+        object.getElementsByClassName("delete_link")[0].style.display = 'none';
+    {% endif %}
+    }
 }
 </script>
 {% endblock %}

@@ -75,6 +75,28 @@ div.task_tag {
     color: green;
 }
 
+div.task {
+    display: none;
+}
+
+div.no-task {
+    display: none;
+    font-size: 8pt;
+    color: grey;
+}
+
+span.edit_link {
+    display: none;
+    font-size: 8pt;
+    color: grey;
+}
+
+span.delete_link {
+    display: none;
+    font-size: 8pt;
+    color: grey;
+}
+
 caption {
     padding-bottom: 10px;
 }

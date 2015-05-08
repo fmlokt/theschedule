@@ -8,7 +8,7 @@
 	<table class="day">
 	<caption>{{day.date|date}}, {{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ day.date|date }}','{{ pair.start_time|time }}','{{ pair.task }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
+		<tr class="pair" onclick="desc(this)">
 			<td class="pair">
 			<div class="classname">{{ pair.classname }}</div>
 			<div class="container">
@@ -22,6 +22,13 @@
                 {% endif %}
                 </span>
             </div>
+            <div class="task">
+                {{ pair.task }}
+            </div>
+        {% if is_admin %}
+            <span class="edit_link"><a href='{{pair.edit_link}}'>Редактировать</a></span>
+            <span class="delete_link"><a href='{{pair.delete_link}}'>Удалить</a></span>
+        {% endif %}
             </td>
 		</tr>
 	{% endfor %}
@@ -30,29 +37,23 @@
 	{% endfor %}
 	</tr>
 </table>
-<center>
-<div id="classname"></div>
-<div id="date"></div>
-<div id="time"></div>
-<div id="task"></div>
-{% if is_admin %}
-<div id="edit_link"></div>
-<div id="delete_link"></div>
-{% endif %}
-</center>
 <script>
-function desc(classname,weekday,date,time,task{%if is_admin%},edit_link,delete_link{%endif%}){
-	document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
-	document.getElementById("date").innerHTML ="<b>Дата:</b> " + date + ", " + weekday
-	document.getElementById("time").innerHTML ="<b>Время:</b> " + time
-	if (task!='')
-		{document.getElementById("task").innerHTML ="<b>Задание:</b> " + task}
-	else 
-		{document.getElementById("task").innerHTML =""}
-{% if is_admin %}
-    document.getElementById("edit_link").innerHTML="<a href='" + edit_link + "'>Редактировать</a>"
-    document.getElementById("delete_link").innerHTML="<a href='" + delete_link + "'>Удалить</a>"
-{% endif %}
+function desc(object){
+    if (object.getElementsByClassName("task")[0].style.display != 'block')
+    {
+        object.getElementsByClassName("task")[0].style.display = 'block';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_link")[0].style.display = 'inline';
+        object.getElementsByClassName("delete_link")[0].style.display = 'inline';
+    {% endif %}
+    } else
+    {
+        object.getElementsByClassName("task")[0].style.display = 'none';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_link")[0].style.display = 'none';
+        object.getElementsByClassName("delete_link")[0].style.display = 'none';
+    {% endif %}
+    }
 }
 </script>
 {% endblock %}
