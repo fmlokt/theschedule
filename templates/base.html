@@ -7,20 +7,21 @@
 <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div align='left'>
-    <a href="/">Расписание</a> 
-    <a href="/schedule">Стандартное расписание</a>
-{% if is_admin %}
-    <a href="/pairs">Список пар</a> 
-    <a href="/default_pairs">Стандартный список</a> 
-    <a href="/copy_from_default">Сгенерировать расписание</a>
-{% endif %}
+<div class="container" id="top">
+    <div align="left">
+        <a href="/">Расписание</a> 
+        <a href="/schedule">Стандартное расписание</a>
+    {% if is_admin %}
+        <a href="/pairs">Список пар</a> 
+        <a href="/default_pairs">Стандартный список</a> 
+        <a href="/copy_from_default">Сгенерировать расписание</a>
+    {% endif %}
+    </div>
+    <div align="right">{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
 </div>
-<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
-<center><h1>Расписание ВШОПФ</h1>
+<h1>Расписание ВШОПФ</h1>
 {% block content %}
 {% endblock %}
-</center>
 </body>
 </html>
 {% endautoescape %}

@@ -1,18 +1,28 @@
 {% extends "templates/base.html" %}
 {% block title %}Расписание{% endblock %}
 {% block content %}
-<table border=3>
+<table class="schedule">
 	<tr>
 	{% for day in days %}
-	<td valign="top" {% if day.is_current %}bgcolor="#F2EEB3"{% endif %}>
-	<table border=3 width="100%">
+	<td class="day" {% if day.is_current %}id="current_day"{% endif %}>
+	<table class="day">
 	<caption>{{day.date|date}}, {{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
 		<tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ day.date|date }}','{{ pair.start_time|time }}','{{ pair.task }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
-			<td>{{ pair.classname }}</td>
-			<td>{{ pair.start_time|time }}</td>
-			{% if pair.replace==True %}<td bgcolor=red >R</td>{% endif %}
-			{% if pair.task %}<td bgcolor=green >T</td>{% endif %}
+			<td class="pair">
+			<div class="classname">{{ pair.classname }}</div>
+			<div class="container">
+                <div class="start_time">{{ pair.start_time|time }}</div>
+                <span>
+                {% if pair.replace %}
+                    <div class="replace_tag">&#9679;</div>
+                {% endif %}
+                {% if pair.task %}
+                    <div class="task_tag">&#9679;</div>
+                {% endif %}
+                </span>
+            </div>
+            </td>
 		</tr>
 	{% endfor %}
 	</table>
@@ -20,11 +30,16 @@
 	{% endfor %}
 	</tr>
 </table>
+<center>
 <div id="classname"></div>
 <div id="date"></div>
 <div id="time"></div>
 <div id="task"></div>
-<div id="link"></div>
+{% if is_admin %}
+<div id="edit_link"></div>
+<div id="delete_link"></div>
+{% endif %}
+</center>
 <script>
 function desc(classname,weekday,date,time,task{%if is_admin%},edit_link,delete_link{%endif%}){
 	document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
@@ -34,8 +49,10 @@ function desc(classname,weekday,date,time,task{%if is_admin%},edit_link,delete_l
 		{document.getElementById("task").innerHTML ="<b>Задание:</b> " + task}
 	else 
 		{document.getElementById("task").innerHTML =""}
-	{%if is_admin%}document.getElementById("link").innerHTML="<a href='" + edit_link + "'>Редактировать</a> <a href='" + delete_link + "'>Удалить</a>"{%endif%}
-
+{% if is_admin %}
+    document.getElementById("edit_link").innerHTML="<a href='" + edit_link + "'>Редактировать</a>"
+    document.getElementById("delete_link").innerHTML="<a href='" + delete_link + "'>Удалить</a>"
+{% endif %}
 }
 </script>
 {% endblock %}

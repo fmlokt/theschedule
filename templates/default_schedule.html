@@ -4,16 +4,20 @@
 {% if double_week %}
 Нечетная неделя
 {% endif %}
-<table border=3>
+<table class="schedule">
 	<tr>
 	{% for day in odd_days %}
-	<td valign="top">
-	<table border=3>
+	<td class="day">
+	<table class="day">
 	<caption>{{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr>
-			<td>{{ pair.classname }}</td>
-			<td>{{ pair.start_time|time }}</td>
+		<tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ pair.start_time|time }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
+            <td class="pair">
+                <div class="classname">{{ pair.classname }}</div>
+                <div class="container">
+                    <div class="start_time">{{ pair.start_time|time }}</div>
+                </div>
+			</td>
 		</tr>
 	{% endfor %}
 	</table>
@@ -23,16 +27,20 @@
 </table>
 {% if double_week %}
 Четная неделя
-<table border=3>
+<table class="schedule">
     <tr>
     {% for day in even_days %}
-    <td valign="top">
-    <table border=3>
+    <td class="day">
+    <table class="day">
     <caption>{{day.week_day|weekday}}</caption>
     {% for pair in day.pairs %}
-        <tr>
-            <td>{{ pair.classname }}</td>
-            <td>{{ pair.start_time|time }}</td>
+        <tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ pair.start_time|time }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
+            <td class="pair">
+                <div class="classname">{{ pair.classname }}</div>
+                <div class="container">
+                    <div class="start_time">{{ pair.start_time|time }}</div>
+                </div>
+            </td>
         </tr>
     {% endfor %}
     </table>
@@ -41,4 +49,24 @@
     </tr>
 </table>
 {% endif %}
+<center>
+<div id="classname"></div>
+<div id="weekday"></div>
+<div id="time"></div>
+{% if is_admin %}
+<div id="edit_link"></div>
+<div id="delete_link"></div>
+{% endif %}
+</center>
+<script>
+function desc(classname,weekday,time{%if is_admin%},edit_link,delete_link{%endif%}){
+    document.getElementById("classname").innerHTML ="<b>Предмет:</b> " + classname
+    document.getElementById("weekday").innerHTML ="<b>День недели:</b> " + weekday
+    document.getElementById("time").innerHTML ="<b>Время:</b> " + time
+{% if is_admin %}
+    document.getElementById("edit_link").innerHTML="<a href='" + edit_link + "'>Редактировать</a>"
+    document.getElementById("delete_link").innerHTML="<a href='" + delete_link + "'>Удалить</a>"
+{% endif %}
+}
+</script>
 {% endblock %}

@@ -1,21 +1,96 @@
 body {
-    background-color:#dddddd;
+    background-color: #f7f7f7;
     font-family: Tahoma, Verdana, Times New Roman, Arial;
+    margin-top: 0px;
+}
+
+#top {
+    background-color: #84c754;
+    border-radius: 0px 0px 15px 15px;
+    margin: 0px;
+    border: 0px;
+    padding: 10px 5% 10px 5%;
+}
+
+div.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#top div {
+    display: inline;
 }
 
 h1 {
-    margin-left: 40px;
+    margin-left: 15%;
+    color: #3D0066;
 }
 
-table{
-    border: 1px solid #444488;
+table {
+    border: 0;
+    border-radius: 15px;
     font-family: Arial;
     font-size: 11pt;
-    background: #ccddff;
     width: 100%;
 }
 
-tr.pair { 
-    height: 30pt;
+table.schedule {
+    border-spacing: 30px;
+}
+
+td {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    border-radius: 15px;
+}
+
+td.day {
+    width: 10%;
+    background-color: #ddddff;
+    padding: 3px 10px 3px 10px;
+    vertical-align: top;
+}
+
+div.class_name {
+    font-size: 11pt;
+}
+
+div.start_time {
+    display: table-cell;
+    vertical-align: bottom;
+    font-size: 8pt;
+    color: grey;
+}
+
+div.replace_tag {
+    display: inline;
+    font-size: 13pt;
+    color: red;
+}
+
+div.task_tag {
+    display: inline;
+    font-size: 13pt;
+    color: green;
+}
+
+caption {
+    padding-bottom: 10px;
+}
+
+#current_day {
+    background-color: #F2EEB3;
+}
+
+td.pair {
+    padding: 3px 10px 3px 10px;
+    background-color: #ccddff;
+    height: 50pt;
     cursor: pointer;
+}
+
+td.pair:hover { 
+    background-color: #CCCCFF;
+    border-radius: 15px;
 }
