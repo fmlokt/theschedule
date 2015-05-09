@@ -28,6 +28,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(pair1.task,       pair2.task)
 
     def test_create_pair(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/asgap/new_pair', 'GET')
@@ -66,6 +70,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_edit_pair(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair = ScheduledPair(classname='Math',
@@ -95,6 +103,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
 
     def test_delete_pair(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair1 = ScheduledPair(classname='Math 1',
@@ -123,6 +135,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(remained_pair, added_pair2)
 
     def test_show_pairs(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/' + group_id + '/pairs', 'GET')
@@ -159,8 +175,9 @@ class PairsTest(unittest2.TestCase):
 
     def test_show_schedule(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
         post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
@@ -202,6 +219,10 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_copy_from_default(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/' + group_id + '/copy_from_default', 'GET')
@@ -261,11 +282,13 @@ class PairsTest(unittest2.TestCase):
         added_pair3.key.delete()
         pair4 = DefaultPair(classname='Math 4',
                             start_time=datetime.time(12, 00),
-                            week_day=3)
+                            week_day=3,
+                            group_id='asgap')
         standard_pair4 = ScheduledPair(classname=pair3.classname,
                                        date=today + datetime.timedelta(days=3),
                                        start_time=pair3.start_time,
-                                       task='')
+                                       task='',
+                                       group_id='asgap')
         post_pair(standard_pair4)
         post_default_pair(pair4)
         response = make_request('/' + group_id + '/copy_from_default?' +
@@ -346,8 +369,9 @@ class PairsTest(unittest2.TestCase):
 
     def test_all_no_admin(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
         post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         simulate_login(self.testbed, 'c@b.com', '124', False)
         today = datetime.date(2015, 01, 05)

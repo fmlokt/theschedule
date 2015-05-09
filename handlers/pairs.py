@@ -55,7 +55,7 @@ class ShowSchedule(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class ShowPairs(BaseAdminHandler):
+class ShowPairs(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         group_id = kwargs.get('group_id')
         if not super(ShowPairs, self).get(*args, **kwargs):
@@ -75,7 +75,7 @@ class ShowPairs(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
     def post(self, *args, **kwargs):
-        if not super(ShowPairs, self).post():
+        if not super(ShowPairs, self).post(*args, **kwargs):
             return
         classname = self.request.get('classname')
         date = str(self.request.get('date'))
@@ -112,7 +112,7 @@ class ShowPairs(BaseAdminHandler):
         self.redirect('/' + group_id + '/pairs')
 
 
-class NewPair(BaseAdminHandler):
+class NewPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewPair, self).get(*args, **kwargs):
             return
@@ -125,7 +125,7 @@ class NewPair(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
 
-class EditPair(BaseAdminHandler):
+class EditPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditPair, self).get(*args, **kwargs):
             return
@@ -138,7 +138,7 @@ class EditPair(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
 
-class DeletePair(BaseAdminHandler):
+class DeletePair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(DeletePair, self).get(*args, **kwargs):
             return

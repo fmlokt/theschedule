@@ -8,6 +8,7 @@ from google.appengine.ext import testbed
 
 import main
 from objects.schedule import *
+from objects.group import *
 from tests.requests import *
 
 
@@ -26,6 +27,11 @@ class TwoWeekScheduleTest(unittest2.TestCase):
         self.assertEqual(pair1.start_time, pair2.start_time)
 
     def test_create_2week_default_pair(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
+        simulate_login(self.testbed, 'a@b.com', '123', True)
         group_id = 'asgap'
         response = make_request('/' + group_id + '/new_default_pair', 'GET')
         self.assertEqual(response.status_int, 200)
@@ -41,6 +47,11 @@ class TwoWeekScheduleTest(unittest2.TestCase):
         self.check_default_pair_fields(added_pair, pair1)
 
     def test_change_schedule_settings(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        post_group(group)
+        simulate_login(self.testbed)
+        simulate_login(self.testbed, 'a@b.com', '123', True)
         group_id = 'asgap'
         response = make_request('/' + group_id + '/schedule_settings', 'GET')
         self.assertEqual(response.status_int, 200)

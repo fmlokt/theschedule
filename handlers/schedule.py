@@ -54,7 +54,7 @@ class ShowDefaultSchedule(BaseHandler):
         self.response.write(template.render(self.render_data))
 
 
-class ShowDefaultPairs(BaseAdminHandler):
+class ShowDefaultPairs(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(ShowDefaultPairs, self).get(*args, **kwargs):
             return
@@ -101,7 +101,7 @@ class ShowDefaultPairs(BaseAdminHandler):
         self.redirect('/' + group_id + '/default_pairs')
 
 
-class NewDefaultPair(BaseAdminHandler):
+class NewDefaultPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewDefaultPair, self).get(*args, **kwargs):
             return
@@ -115,7 +115,7 @@ class NewDefaultPair(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
 
-class EditDefaultPair(BaseAdminHandler):
+class EditDefaultPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditDefaultPair, self).get(*args, **kwargs):
             return
@@ -129,7 +129,7 @@ class EditDefaultPair(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
 
-class CopyFromDefault(BaseAdminHandler):
+class CopyFromDefault(BaseLocalAdminHandler):
     def post(self, *args, **kwargs):
         if not super(CopyFromDefault, self).post(*args, **kwargs):
             return
@@ -192,7 +192,7 @@ class CopyFromDefault(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
 
-class EditSettings(BaseAdminHandler):
+class EditSettings(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditSettings, self).get(*args, **kwargs):
             return
