@@ -8,6 +8,7 @@ import webapp2
 from google.appengine.api import memcache
 
 from objects.pair import *
+from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
 
@@ -139,7 +140,7 @@ class EditPair(BaseAdminHandler):
 
 class DeletePair(BaseAdminHandler):
     def get(self, *args, **kwargs):
-        if not super(DeletePair, self).get():
+        if not super(DeletePair, self).get(*args, **kwargs):
             return
         url_key = self.request.get('key')
         group_id = kwargs.get('group_id')

@@ -9,6 +9,7 @@ import webapp2
 import environment
 from handlers import pairs
 from handlers import schedule
+from handlers import groups
 from handlers import crons
 
 
@@ -46,5 +47,10 @@ application = webapp2.WSGIApplication([
     webapp2.Route(r'/<group_id:[-\w]+>/schedule_settings',
                   handler=schedule.EditSettings,
                   name='schedule settings'),
-    ('/cron/delete_old', crons.DeleteOld)
+    ('/cron/delete_old', crons.DeleteOld),
+    ('/choose_group', groups.ChooseGroup),
+    ('/create_group', groups.CreateGroup),
+    ('/groups', groups.ShowGroups),
+    ('/edit_group', groups.EditGroup),
+    ('/delete_group', groups.DeleteGroup)
 ], debug=True)

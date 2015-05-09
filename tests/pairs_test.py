@@ -7,6 +7,7 @@ import webapp2
 from google.appengine.ext import testbed
 
 import main
+from objects.group import Group
 from objects.pair import ScheduledPair
 from objects.schedule import DefaultPair
 from tests.requests import *
@@ -157,6 +158,9 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_show_schedule(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        post_group(group)
         group_id = 'asgap'
         response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
@@ -296,6 +300,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 422)
 
     def test_all_unauth(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        post_group(group)
+        simulate_login(self.testbed)
         group_id = 'asgap'
         today = datetime.date(2015, 01, 05)
         shift = today + datetime.timedelta(days=6)
@@ -337,6 +345,9 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 403)
 
     def test_all_no_admin(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        post_group(group)
         group_id = 'asgap'
         simulate_login(self.testbed, 'c@b.com', '124', False)
         today = datetime.date(2015, 01, 05)

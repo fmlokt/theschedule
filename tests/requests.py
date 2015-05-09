@@ -37,3 +37,10 @@ def post_default_pair(pair, key=''):
         '&key=' + key + '&group_id' + str(pair.group_id)
     return make_request('/' + str(pair.group_id) +
                         '/default_pairs', 'POST', body)
+
+
+def post_group(group, key=''):
+    body = 'group_id=' + str(group.group_id) +\
+        '&name=' + str(group.name) + '&origin=' + str(group.origin) +\
+        '&admin=' + str(group.admin) + '&key=' + key
+    return make_request('/groups', 'POST', body)

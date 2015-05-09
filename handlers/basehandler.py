@@ -7,12 +7,24 @@ import webapp2
 
 from google.appengine.api import users
 
+from objects.group import *
+
 
 class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()
         self.render_data = {}
-        self.render_data['group_id'] = kwargs.get('group_id')
+        if ('group_id' in kwargs):
+            if Group.query(Group.group_id ==
+                           kwargs.get('group_id')).get() != None:
+                self.render_data['group_id'] = kwargs.get('group_id')
+                self.render_data['group_name'] =\
+                    Group.query(Group.group_id ==
+                                kwargs.get('group_id')).get().name
+            else:
+                self.error(404)
+                self.response.write('404 Not Found\n')
+                return
         if user is None:
             self.render_data['login_link'] =\
                 users.create_login_url(self.request.uri)

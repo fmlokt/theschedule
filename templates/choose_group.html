@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+<title>Выберете группу</title>
+</head>
+<body>
+<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
+<center><h1>Выбор группы</h1>
+    <form method="post" action="/choose_group">
+        <br/>Название группы <select size="1" name="group_id" >
+                <option disabled>Название группы</option>
+                {% for group in groups %}
+                <option value="{{ group.group_id }}">{{ group.name }}</option>
+                {% endfor %}
+             </select>
+        <br/><input class="btn" type="submit" value="Выбрать"/>
+    </form>
+</center>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+<title>Список групп</title>
+</head>
+<body>
+<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
+<center><h1>Список групп</h1>
+<table border=3 column=4>
+<caption>Список групп</caption>
+{% for group in groups %}
+    <tr>
+        <td><a href="/{{group.group_id}}/">{{ group.group_id }}</a></td>
+        <td>{{ group.name }} </td>
+        <td>{{ group.origin }}</td>
+        <td>{{ group.admin }}</td>
+        <td><a href='{{ group.edit_link }}'>Редактировать</a></td>
+        <td><a href='{{ group.delete_link }}'>Удалить</a></td>
+    </tr>
+{% endfor %}
+</table>
+<a href="/create_group">Добавить группу</a>
+</center>
+</body>
+</html>

@@ -17,7 +17,8 @@
 {% endif %}
 </div>
 <div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
-<center><h1>Расписание {{ group_id|upper }}</h1>
+<center><h1>Расписание</h1>
+        <h2>{{ group_name|upper }}</h2>
 {% block content %}
 {% endblock %}
 </center>

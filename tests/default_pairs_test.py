@@ -8,6 +8,7 @@ from google.appengine.ext import testbed
 
 import main
 from objects.schedule import DefaultPair
+from objects.group import Group
 from tests.requests import *
 
 
@@ -138,8 +139,11 @@ class DefaultPairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_show_default_schedule(self):
+        simulate_login(self.testbed, 'a@b.com', '123', True)
+        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        post_group(group)
         group_id = 'asgap'
-        response = make_request('/' + group_id + '/schedule', 'GET')
+        response = make_request('/asgap/schedule', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 1)
         pair1 = DefaultPair(classname='Math 1', week_day=3,
