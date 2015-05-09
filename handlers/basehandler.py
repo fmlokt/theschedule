@@ -24,7 +24,8 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
             self.render_data['login_link_text'] = u'выйти'
-            self.render_data['greeting'] = u'Приветствуем, ' + user.nickname() + '.'
+            self.render_data['greeting'] = u'Приветствуем, ' +\
+                user.nickname() + '.'
 
 
 class BaseAdminHandler(BaseHandler):

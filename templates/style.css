@@ -42,6 +42,10 @@ h1 {
     color: #3D0066;
 }
 
+h2 {
+    margin-left: 20%;
+}
+
 table {
     border: 0;
     border-radius: 15px;
@@ -56,6 +60,7 @@ table.schedule {
 }
 
 table.list {
+    border-spacing: 0px;
     background: #ccddff;
     padding: 5px 10px;
 }
@@ -76,6 +81,11 @@ table.list td {
     border-bottom: 1px solid black;
     border-left: 1px solid black;
     border-radius: 0;
+    padding: 3px 5px;
+}
+
+table.list tr td:last-child {
+    border-right: 1px solid black;
 }
 
 td.day {
@@ -128,6 +138,7 @@ span.edit_links a {
 }
 
 caption {
+    font-weight: bold;
     padding-bottom: 10px;
 }
 
