@@ -13,8 +13,11 @@ from objects.group import *
 class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()
-        local_admin = Group.query(Group.group_id ==
-                                  kwargs.get('group_id')).get().admin
+        if (kwargs.get('group_id') != None):
+            local_admin = Group.query(Group.group_id ==
+                                      kwargs.get('group_id')).get().admin
+        else:
+            local_admin = 'aa' + str(user)
         self.render_data = {}
         if ('group_id' in kwargs):
             if Group.query(Group.group_id ==

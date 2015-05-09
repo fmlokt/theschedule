@@ -8,7 +8,7 @@
 <body>
 <div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
 <center><h1>Выбор группы</h1>
-    <form method="post" action="/choose_group">
+    <form method="post" action="/">
         <br/>Название группы <select size="1" name="group_id" >
                 <option disabled>Название группы</option>
                 {% for group in groups %}

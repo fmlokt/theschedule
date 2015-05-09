@@ -21,10 +21,17 @@ class ChooseGroup(BaseHandler):
         if len(group) == 0:
             self.response.write('this group id does not exists')
         else:
+            self.response.set_cookie('group',
+                                     group_id,
+                                     expires=datetime.datetime.now() +
+                                     datetime.timedelta(days=365))
             self.redirect('/' + group_id + '/')
 
     def get(self, *args, **kwargs):
         super(ChooseGroup, self).get(*args, **kwargs)
+        if 'group' in self.request.cookies:
+            self.redirect('/' + self.request.cookies['group'] + '/')
+            return
         template = JINJA_ENVIRONMENT.\
             get_template('templates/choose_group.html')
         group_qry = Group.query().order(Group.name)

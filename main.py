@@ -48,7 +48,7 @@ application = webapp2.WSGIApplication([
                   handler=schedule.EditSettings,
                   name='schedule settings'),
     ('/cron/delete_old', crons.DeleteOld),
-    ('/choose_group', groups.ChooseGroup),
+    ('/', groups.ChooseGroup),
     ('/create_group', groups.CreateGroup),
     ('/groups', groups.ShowGroups),
     ('/edit_group', groups.EditGroup),
