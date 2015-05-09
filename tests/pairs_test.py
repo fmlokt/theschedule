@@ -38,7 +38,8 @@ class PairsTest(unittest2.TestCase):
                               group_id='asgap')
         response = post_pair(pair1)
         self.assertEqual(response.status_int, 302)
-        pairs_list = ScheduledPair.query(ScheduledPair.group_id == group_id).fetch(2)
+        pairs_list = ScheduledPair.query(ScheduledPair.group_id ==
+                                         group_id).fetch(2)
         self.assertEqual(len(pairs_list), 1)
         added_pair = pairs_list[0]
         self.check_pair_fields(added_pair, pair1)
@@ -51,7 +52,8 @@ class PairsTest(unittest2.TestCase):
                               group_id='asgap')
         response = post_pair(pair2)
         self.assertEqual(response.status_int, 302)
-        pairs_list = ScheduledPair.query(ScheduledPair.group_id == group_id).fetch(3)
+        pairs_list = ScheduledPair.query(ScheduledPair.group_id ==
+                                         group_id).fetch(3)
         self.assertEqual(len(pairs_list), 2)
         added_pair1 = pairs_list[0]
         added_pair2 = pairs_list[1]
@@ -71,7 +73,8 @@ class PairsTest(unittest2.TestCase):
                              task='some_task',
                              group_id='asgap')
         response = post_pair(pair)
-        added_pair = ScheduledPair.query(ScheduledPair.group_id == group_id).fetch(2)[0]
+        added_pair = ScheduledPair.query(ScheduledPair.group_id ==
+                                         group_id).fetch(2)[0]
         response = make_request('/asgap/edit_pair?key=' +
                                 added_pair.key.urlsafe(), 'GET')
         self.assertEqual(response.status_int, 200)
@@ -82,7 +85,8 @@ class PairsTest(unittest2.TestCase):
                              group_id='asgap')
         response = post_pair(pair, added_pair.key.urlsafe())
         self.assertEqual(response.status_int, 302)
-        pairs_list = ScheduledPair.query(ScheduledPair.group_id == group_id).fetch(2)
+        pairs_list = ScheduledPair.query(ScheduledPair.group_id ==
+                                         group_id).fetch(2)
         self.assertEqual(len(pairs_list), 1)
         added_pair = pairs_list[0]
         self.check_pair_fields(added_pair, pair)
@@ -104,10 +108,11 @@ class PairsTest(unittest2.TestCase):
                               group_id='asgap')
         post_pair(pair1)
         post_pair(pair2)
-        pairs_list = ScheduledPair.query(ScheduledPair.group_id == group_id).fetch(2)
+        pairs_list = ScheduledPair.query(ScheduledPair.group_id ==
+                                         group_id).fetch(2)
         added_pair1 = pairs_list[0]
         added_pair2 = pairs_list[1]
-        response = make_request('/delete_pair?key=' +
+        response = make_request('/' + group_id + '/delete_pair?key=' +
                                 added_pair1.key.urlsafe() +
                                 '&return_url=/pairs', 'GET')
         self.assertEqual(response.status_int, 302)
@@ -117,26 +122,30 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(remained_pair, added_pair2)
 
     def test_show_pairs(self):
+        group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        response = make_request('/pairs', 'GET')
+        response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 0)
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         pair3 = ScheduledPair(classname='Math 3',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(10, 40),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         post_pair(pair2)
         post_pair(pair3)
         post_pair(pair1)
-        response = make_request('/pairs', 'GET')
+        response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('<tr>'), 3)
         self.assertNotEqual(response.body.find('Math 1'), -1)
@@ -148,32 +157,36 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_show_schedule(self):
-        response = make_request('/', 'GET')
+        group_id = 'asgap'
+        response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('</tr>'), 1)
-        if datetime.date.today().weekday() == 6:
-            today = datetime.date.today() + datetime.timedelta(days=1)
+        if datetime.date.today().weekday() >= 5:
+            today = datetime.date.today() + datetime.timedelta(days=2)
         else:
             today = datetime.date.today()
         pair1 = ScheduledPair(classname='Math 1',
                               date=today,
                               start_time=datetime.time(9, 10),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         pair2 = ScheduledPair(classname='Math 2',
                               date=today,
                               start_time=datetime.time(10, 40),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         pair3 = ScheduledPair(classname='Math 3',
                               date=today +
                               datetime.timedelta(days=1),
                               start_time=datetime.time(9, 40),
-                              task='some task')
+                              task='some task',
+                              group_id='asgap')
         simulate_login(self.testbed, 'a@b.com', '123', True)
         post_pair(pair2)
         post_pair(pair3)
         post_pair(pair1)
         simulate_login(self.testbed)
-        response = make_request('/', 'GET')
+        response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('</tr>'), 4)
         self.assertNotEqual(response.body.find('Math 1'), -1)
@@ -185,37 +198,44 @@ class PairsTest(unittest2.TestCase):
                         response.body.find('Math 3'))
 
     def test_copy_from_default(self):
+        group_id = 'asgap'
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        response = make_request('/copy_from_default', 'GET')
+        response = make_request('/' + group_id + '/copy_from_default', 'GET')
         self.assertEqual(response.status_int, 200)
         today = datetime.date(2015, 01, 05)
         shift = today + datetime.timedelta(days=6)
         shift_out = today + datetime.timedelta(days=190)
         pair1 = DefaultPair(classname='Math 1',
                             start_time=datetime.time(9, 10),
-                            week_day=0)
+                            week_day=0,
+                            group_id='asgap')
         pair2 = DefaultPair(classname='Math 2',
                             start_time=datetime.time(10, 40),
-                            week_day=1)
+                            week_day=1,
+                            group_id='asgap')
         pair3 = DefaultPair(classname='Math 3',
                             start_time=datetime.time(13, 00),
-                            week_day=2)
+                            week_day=2,
+                            group_id='asgap')
         standard_pair1 = ScheduledPair(classname=pair1.classname,
                                        date=today,
                                        start_time=pair1.start_time,
-                                       task='')
+                                       task='',
+                                       group_id='asgap')
         standard_pair2 = ScheduledPair(classname=pair2.classname,
                                        date=today + datetime.timedelta(days=1),
                                        start_time=pair2.start_time,
-                                       task='')
+                                       task='',
+                                       group_id='asgap')
         standard_pair3 = ScheduledPair(classname=pair3.classname,
                                        date=today + datetime.timedelta(days=2),
                                        start_time=pair3.start_time,
-                                       task='')
+                                       task='',
+                                       group_id='asgap')
         post_default_pair(pair1)
         post_default_pair(pair2)
         post_default_pair(pair3)
-        response = make_request('/copy_from_default?' +
+        response = make_request('/' + group_id + '/copy_from_default?' +
                                 'date_start=' + str(today.year) +
                                 '-' + str(today.month).zfill(2) +
                                 '-' + str(today.day).zfill(2) +
@@ -223,7 +243,7 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.month).zfill(2) +
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
-        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.status_int, 200)
         pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(4)
         self.assertEqual(len(pairs_list), 3)
         added_pair1 = pairs_list[0]
@@ -244,7 +264,7 @@ class PairsTest(unittest2.TestCase):
                                        task='')
         post_pair(standard_pair4)
         post_default_pair(pair4)
-        response = make_request('/copy_from_default?' +
+        response = make_request('/' + group_id + '/copy_from_default?' +
                                 'date_start=' + str(today.year) +
                                 '-' + str(today.month).zfill(2) +
                                 '-' + str(today.day).zfill(2) +
@@ -252,7 +272,7 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.month).zfill(2) +
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
-        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.status_int, 200)
         pairs_list = ScheduledPair.query().order(ScheduledPair.date).fetch(5)
         self.assertEqual(len(pairs_list), 4)
         added_pair1 = pairs_list[0]
@@ -263,9 +283,9 @@ class PairsTest(unittest2.TestCase):
         self.check_pair_fields(added_pair2, standard_pair2)
         self.check_pair_fields(added_pair3, standard_pair3)
         self.check_pair_fields(added_pair4, standard_pair4)
-        response = make_request('/pairs', 'GET')
+        response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        response = make_request('/copy_from_default?' +
+        response = make_request('/' + group_id + '/copy_from_default?' +
                                 'date_start=' + str(today.year) +
                                 '-' + str(today.month).zfill(2) +
                                 '-' + str(today.day).zfill(2) +
@@ -276,9 +296,10 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 422)
 
     def test_all_unauth(self):
+        group_id = 'asgap'
         today = datetime.date(2015, 01, 05)
         shift = today + datetime.timedelta(days=6)
-        response = make_request('/copy_from_default?' +
+        response = make_request('/' + group_id + '/copy_from_default?' +
                                 'date_start=' + str(today.year) +
                                 '-' + str(today.month).zfill(2) +
                                 '-' + str(today.day).zfill(2) +
@@ -287,38 +308,40 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
         self.assertEqual(response.status_int, 403)
-        response = make_request('/', 'GET')
+        response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
-        response = make_request('/pairs', 'GET')
+        response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 302)
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
-                              task='some_task')
+                              task='some_task',
+                              group_id='asgap')
         post_pair(pair1)
         pairs_list = ScheduledPair.query().fetch(2)
         added_pair1 = pairs_list[0]
         simulate_login(self.testbed)
-        response = make_request('/delete_pair?key=' +
+        response = make_request('/' + group_id + '/delete_pair?key=' +
                                 added_pair1.key.urlsafe() +
                                 '&return_url=/pairs', 'GET')
         self.assertEqual(response.status_int, 302)
         pairs_list = ScheduledPair.query().fetch(2)
         self.assertEqual(len(pairs_list), 1)
-        response = make_request('/edit_pair?key=' +
+        response = make_request('/' + group_id + '/edit_pair?key=' +
                                 added_pair1.key.urlsafe(), 'GET')
         self.assertEqual(response.status_int, 302)
-        response = make_request('/new_pair', 'GET')
+        response = make_request('/' + group_id + '/new_pair', 'GET')
         self.assertEqual(response.status_int, 302)
         response = post_pair(pair1)
         self.assertEqual(response.status_int, 403)
 
     def test_all_no_admin(self):
+        group_id = 'asgap'
         simulate_login(self.testbed, 'c@b.com', '124', False)
         today = datetime.date(2015, 01, 05)
         shift = today + datetime.timedelta(days=6)
-        response = make_request('/copy_from_default?' +
+        response = make_request('/' + group_id + '/copy_from_default?' +
                                 'date_start=' + str(today.year) +
                                 '-' + str(today.month).zfill(2) +
                                 '-' + str(today.day).zfill(2) +
@@ -327,29 +350,30 @@ class PairsTest(unittest2.TestCase):
                                 '-' + str(shift.day).zfill(2),
                                 'POST')
         self.assertEqual(response.status_int, 403)
-        response = make_request('/', 'GET')
+        response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
-        response = make_request('/pairs', 'GET')
+        response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 403)
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
-                              task='some_task')
+                              task='some_task',
+                              group_id='asgap')
         post_pair(pair1)
         pairs_list = ScheduledPair.query().fetch(2)
         added_pair1 = pairs_list[0]
         simulate_login(self.testbed, 'c@b.com', '124', False)
-        response = make_request('/delete_pair?key=' +
+        response = make_request('/' + group_id + '/delete_pair?key=' +
                                 added_pair1.key.urlsafe() +
                                 '&return_url=/pairs', 'GET')
         self.assertEqual(response.status_int, 403)
         pairs_list = ScheduledPair.query().fetch(2)
         self.assertEqual(len(pairs_list), 1)
-        response = make_request('/edit_pair?key=' +
+        response = make_request('/' + group_id + '/edit_pair?key=' +
                                 added_pair1.key.urlsafe(), 'GET')
         self.assertEqual(response.status_int, 403)
-        response = make_request('/new_pair', 'GET')
+        response = make_request('/' + group_id + '/new_pair', 'GET')
         self.assertEqual(response.status_int, 403)
         response = post_pair(pair1)
         self.assertEqual(response.status_int, 403)

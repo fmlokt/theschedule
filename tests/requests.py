@@ -24,8 +24,8 @@ def post_pair(pair, key=''):
         '-' + str(pair.date.day).zfill(2) +\
         '&time=' + str(pair.start_time.hour).zfill(2) +\
         ':' + str(pair.start_time.minute).zfill(2) + '&task=' +\
-        pair.task + '&key=' + key
-    return make_request('/pairs', 'POST', body)
+        pair.task + '&key=' + key + '&group_id' + str(pair.group_id)
+    return make_request('/' + str(pair.group_id) + '/pairs', 'POST', body)
 
 
 def post_default_pair(pair, key=''):
@@ -34,5 +34,6 @@ def post_default_pair(pair, key=''):
         '&week_parity=' + str(pair.week_day / 7) +\
         '&time=' + str(pair.start_time.hour).zfill(2) +\
         ':' + str(pair.start_time.minute).zfill(2) +\
-        '&key=' + key
-    return make_request('/default_pairs', 'POST', body)
+        '&key=' + key + '&group_id' + str(pair.group_id)
+    return make_request('/' + str(pair.group_id) +
+                        '/default_pairs', 'POST', body)

@@ -45,6 +45,7 @@ class BaseAdminHandler(BaseHandler):
             self.response.write('403 Forbidden\n')
             return False
         self.render_data = {}
+        self.render_data['group_id'] = kwargs.get('group_id')
         self.render_data['login_link'] =\
             users.create_logout_url(self.request.uri)
         self.render_data['login_link_text'] = 'Logout'

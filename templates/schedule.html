@@ -1,7 +1,7 @@
 {% extends "templates/base.html" %}
 {% block title %}Расписание{% endblock %}
 {% block content %}
-<div align='right'>Факультет: {{ group_id }}</div>
+<div align='right'>Группа: {{ group_id }}</div>
 <table border=3>
 	<tr>
 	{% for day in days %}
@@ -9,11 +9,11 @@
 	<table border=3 width="100%">
 	<caption>{{day.date|date}}, {{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr class="pair" onclick="desc('{{ pair.classname }}','{{ day.week_day|weekday }}','{{ day.date|date }}','{{ pair.start_time|time }}','{{ pair.task }}'{%if is_admin%},'{{ pair.edit_link }}','{{ pair.delete_link }}'{%endif%})">
-			<td>{{ pair.classname }}</td>
-			<td>{{ pair.start_time|time }}</td>
-			{% if pair.replace==True %}<td bgcolor=red >R</td>{% endif %}
-			{% if pair.task %}<td bgcolor=green >T</td>{% endif %}
+		<tr class="pair" onclick="desc('{{ pair['classname'] }}','{{ day.week_day|weekday }}','{{ day.date|date }}','{{ pair['start_time']|time }}','{{ pair['task'] }}'{%if is_admin%},'{{ pair['edit_link'] }}','{{ pair['delete_link'] }}'{%endif%})">
+			<td>{{ pair['classname'] }}</td>
+			<td>{{ pair['start_time']|time }}</td>
+			{% if pair['replace']==True %}<td bgcolor=red >R</td>{% endif %}
+			{% if pair['task'] %}<td bgcolor=green >T</td>{% endif %}
 		</tr>
 	{% endfor %}
 	</table>

@@ -18,30 +18,35 @@ DEFAULT_MONDAY = datetime.date(2015, 03, 2)
 
 
 class ShowDefaultSchedule(BaseHandler):
-    def get(self):
-        super(ShowDefaultSchedule, self).get()
+    def get(self, *args, **kwargs):
+        super(ShowDefaultSchedule, self).get(*args, **kwargs)
+        group_id = kwargs.get('group_id')
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_schedule.html')
-        settings_qry = ScheduleSettings.query().fetch(1)
+        settings_qry = ScheduleSettings.query(DefaultPair.group_id ==
+                                              group_id).fetch(1)
         if len(settings_qry) == 0:
             settings = ScheduleSettings(schedule_period=7,
-                                        first_week_begin=DEFAULT_MONDAY)
+                                        first_week_begin=DEFAULT_MONDAY,
+                                        group_id=group_id)
             settings.put()
         else:
             settings = settings_qry[0]
         self.render_data['double_week'] = settings.schedule_period == 14
         self.render_data['odd_days'] = [None] * 6
         for day in xrange(6):
-            pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
-                DefaultPair.start_time)
+            pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
+                                          DefaultPair.group_id == group_id).\
+                order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
         self.render_data['even_days'] = [None] * 6
         for day in xrange(7, 13):
-            pairs_qry = DefaultPair.query(DefaultPair.week_day == day).order(
-                DefaultPair.start_time)
+            pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
+                                          DefaultPair.group_id == group_id).\
+                order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
                 render_day['pairs'].append(pair)
@@ -50,24 +55,29 @@ class ShowDefaultSchedule(BaseHandler):
 
 
 class ShowDefaultPairs(BaseAdminHandler):
-    def get(self):
-        if not super(ShowDefaultPairs, self).get():
+    def get(self, *args, **kwargs):
+        if not super(ShowDefaultPairs, self).get(*args, **kwargs):
             return
-        pairs_qry = DefaultPair.query().order(DefaultPair.week_day,
-                                              DefaultPair.start_time)
+        group_id = kwargs.get('group_id')
+        pairs_qry = DefaultPair.query(DefaultPair.group_id ==
+                                      group_id).order(DefaultPair.week_day,
+                                                      DefaultPair.start_time)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'default_pairs.html')
         self.render_data['pairs'] = []
         for pair in pairs_qry:
-            pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
-            pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
-                '&return_url=/default_pairs'
+            pair.edit_link = '/' + group_id + '/edit_default_pair?key=' +\
+                             pair.key.urlsafe()
+            pair.delete_link = '/' + group_id + '/delete_pair?key=' +\
+                pair.key.urlsafe() + '&return_url=/' +\
+                group_id + '/default_pairs'
             self.render_data['pairs'].append(pair)
         self.response.write(template.render(self.render_data))
 
-    def post(self):
-        if not super(ShowDefaultPairs, self).post():
+    def post(self, *args, **kwargs):
+        if not super(ShowDefaultPairs, self).post(*args, **kwargs):
             return
+        group_id = kwargs.get('group_id')
         classname = self.request.get('classname')
         week_day = int(self.request.get('week_day')) +\
             7 * int(self.request.get('week_parity'))
@@ -82,18 +92,23 @@ class ShowDefaultPairs(BaseAdminHandler):
             pair.classname = classname
             pair.week_day = week_day
             pair.start_time = datetime.time(hour, minute)
+            pair.group_id = group_id
         else:
             pair = DefaultPair(classname=classname, week_day=week_day,
-                               start_time=datetime.time(hour, minute))
+                               start_time=datetime.time(hour, minute),
+                               group_id=group_id)
         pair.put()
-        self.redirect('/default_pairs')
+        self.redirect('/' + group_id + '/default_pairs')
 
 
 class NewDefaultPair(BaseAdminHandler):
-    def get(self):
-        if not super(NewDefaultPair, self).get():
+    def get(self, *args, **kwargs):
+        if not super(NewDefaultPair, self).get(*args, **kwargs):
             return
-        pair = DefaultPair(classname='classname', week_day=0)
+        group_id = kwargs.get('group_id')
+        pair = DefaultPair(classname='classname',
+                           week_day=0,
+                           group_id=group_id)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
         self.render_data['pair'] = pair
@@ -101,8 +116,8 @@ class NewDefaultPair(BaseAdminHandler):
 
 
 class EditDefaultPair(BaseAdminHandler):
-    def get(self):
-        if not super(EditDefaultPair, self).get():
+    def get(self, *args, **kwargs):
+        if not super(EditDefaultPair, self).get(*args, **kwargs):
             return
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
@@ -115,9 +130,10 @@ class EditDefaultPair(BaseAdminHandler):
 
 
 class CopyFromDefault(BaseAdminHandler):
-    def post(self):
-        if not super(CopyFromDefault, self).post():
+    def post(self, *args, **kwargs):
+        if not super(CopyFromDefault, self).post(*args, **kwargs):
             return
+        group_id = kwargs.get('group_id')
         date_start = str(self.request.get('date_start'))
         date_finish = str(self.request.get('date_end'))
         reg = '(\d\d\d\d)-(\d\d)-(\d\d)'
@@ -134,6 +150,7 @@ class CopyFromDefault(BaseAdminHandler):
             self.response.write('Too many days to copy')
             self.response.status = 422
             return
+        memcache.delete("schedule_to_render_" + group_id)
         settings_qry = ScheduleSettings.query().fetch(1)
         if len(settings_qry) == 0:
             settings = ScheduleSettings(schedule_period=7,
@@ -141,27 +158,30 @@ class CopyFromDefault(BaseAdminHandler):
             settings.put()
         else:
             settings = settings_qry[0]
-        memcache.delete("schedule_to_render")
         while date_begin <= date_end:
             if len(ScheduledPair.query(ScheduledPair.date ==
-                   date_begin).fetch(1)) == 0:
+                   date_begin, ScheduledPair.group_id ==
+                   group_id).fetch(1)) == 0:
                 weekday = (date_begin - settings.first_week_begin).days %\
                     settings.schedule_period
-                pairs_qry = DefaultPair.query(DefaultPair.week_day == weekday)
+                pairs_qry = DefaultPair.query(DefaultPair.week_day == weekday,
+                                              DefaultPair.group_id == group_id)
                 for pair in pairs_qry:
                     new_pair = ScheduledPair(classname=pair.classname,
                                              date=date_begin,
                                              start_time=pair.start_time,
-                                             task='')
+                                             task='',
+                                             group_id=group_id)
                     new_pair.put()
             else:
-                self.response.write('Schedule for ' + str(date_begin) +
-                                    ' already exists\n')
+                self.response.write('<div>Schedule for ' + str(date_begin) +
+                                    ' already exists' + '</div>\n')
             date_begin += datetime.timedelta(days=1)
-        self.redirect('/')
+        memcache.delete("schedule_to_render_" + group_id)
+        self.response.write('<a href=\"/'+group_id+'/\">Back to schedule</a>')
 
-    def get(self):
-        if not super(CopyFromDefault, self).get():
+    def get(self, *args, **kwargs):
+        if not super(CopyFromDefault, self).get(*args, **kwargs):
             return
         date_begin = datetime.date.today()
         date_end = datetime.date.today() + datetime.timedelta(days=13)
@@ -173,8 +193,8 @@ class CopyFromDefault(BaseAdminHandler):
 
 
 class EditSettings(BaseAdminHandler):
-    def get(self):
-        if not super(EditSettings, self).get():
+    def get(self, *args, **kwargs):
+        if not super(EditSettings, self).get(*args, **kwargs):
             return
         settings_qry = ScheduleSettings.query().fetch(1)
         if len(settings_qry) == 0:
@@ -189,8 +209,8 @@ class EditSettings(BaseAdminHandler):
                                                   'schedule_settings.html')
         self.response.write(template.render(self.render_data))
 
-    def post(self):
-        if not super(EditSettings, self).post():
+    def post(self, *args, **kwargs):
+        if not super(EditSettings, self).post(*args, **kwargs):
             return
         date = self.request.get('first_week_begin')
         period = int(self.request.get('schedule_period'))

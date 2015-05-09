@@ -10,3 +10,5 @@ class ScheduledPair(ndb.Model):
     task = ndb.StringProperty()
     replace = ndb.BooleanProperty()
     group_id = ndb.StringProperty()
+    edit_link = ''
+    delete_link = ''

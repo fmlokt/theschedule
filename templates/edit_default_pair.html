@@ -1,9 +1,9 @@
 {% extends "templates/base.html" %}
 {% block title %}Добавить занятие{% endblock %}
 {% block content %}
-	<form method="post" action="/default_pairs"> 
+	<form method="post" action="/{{ group_id }}/default_pairs"> 
 {% if pair.classname == 'classname' %}
-        <br/>Предмет  <input type="text" name="classname"  placeholder='{{ pair.classname }}'>
+        <br/>Предмет  <input type="text" name="classname" required placeholder='{{ pair.classname }}'>
 {% else %}
         <br/>Предмет  <input type="text" name="classname"  value='{{ pair.classname }}'>
 {% endif %}
@@ -22,7 +22,7 @@
                 <option {% if pair.week_day < 7 %}selected{% endif %} value="0">Нечетная</option>
                 <option {% if pair.week_day >= 7 %}selected{% endif %} value="1">Четная</option>
              </select>
-		<br/>Время <input type="time" name="time" value='{{ pair.start_time}}'>
+		<br/>Время <input type="time" name="time" required value='{{ pair.start_time}}'>
 		<br/><input class="btn" type="submit" value="Сохранить"/> 
 		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
 	</form>
