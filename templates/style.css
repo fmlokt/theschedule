@@ -30,7 +30,6 @@ body {
 
 #top div.login_link {
     font-size: 8pt;
-    color: grey;
 }
 
 div.container {
@@ -46,6 +45,7 @@ h1 {
 table {
     border: 0;
     border-radius: 15px;
+    empty-cells: show;
     font-family: Arial;
     font-size: 11pt;
     width: 100%;
@@ -118,16 +118,13 @@ div.no-task {
     color: grey;
 }
 
-span.edit_link {
+span.edit_links {
     display: none;
-    font-size: 8pt;
-    color: grey;
 }
 
-span.delete_link {
-    display: none;
+span.edit_links a {
     font-size: 8pt;
-    color: grey;
+    color: #777777;
 }
 
 caption {

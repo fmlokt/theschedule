@@ -15,10 +15,10 @@
                 <div class="start_time">{{ pair.start_time|time }}</div>
                 <span>
                 {% if pair.replace %}
-                    <div class="replace_tag">&#9679;</div>
+                    <div title="Замена" class="replace_tag">&#9679;</div>
                 {% endif %}
                 {% if pair.task %}
-                    <div class="task_tag">&#9679;</div>
+                    <div title="Задание" class="task_tag">&#9679;</div>
                 {% endif %}
                 </span>
             </div>
@@ -26,8 +26,10 @@
                 {{ pair.task }}
             </div>
         {% if is_admin %}
-            <span class="edit_link"><a href='{{pair.edit_link}}'>Редактировать</a></span>
-            <span class="delete_link"><a href='{{pair.delete_link}}'>Удалить</a></span>
+            <span class="edit_links">
+                <a href='{{pair.edit_link}}'>Редактировать</a>
+                <a href='{{pair.delete_link}}'>Удалить</a>
+            </span>
         {% endif %}
             </td>
 		</tr>
@@ -43,15 +45,13 @@ function desc(object){
     {
         object.getElementsByClassName("task")[0].style.display = 'block';
     {% if is_admin %}
-        object.getElementsByClassName("edit_link")[0].style.display = 'inline';
-        object.getElementsByClassName("delete_link")[0].style.display = 'inline';
+        object.getElementsByClassName("edit_links")[0].style.display = 'inline';
     {% endif %}
     } else
     {
         object.getElementsByClassName("task")[0].style.display = 'none';
     {% if is_admin %}
-        object.getElementsByClassName("edit_link")[0].style.display = 'none';
-        object.getElementsByClassName("delete_link")[0].style.display = 'none';
+        object.getElementsByClassName("edit_links")[0].style.display = 'none';
     {% endif %}
     }
 }
