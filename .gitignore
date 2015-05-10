@@ -3,3 +3,5 @@
 *.sh
 .DS*
 pep8.txt
+.coverage
+covhtml/
