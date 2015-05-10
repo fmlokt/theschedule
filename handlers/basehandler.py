@@ -17,7 +17,7 @@ class BaseHandler(webapp2.RequestHandler):
             local_admin = Group.query(Group.group_id ==
                                       kwargs.get('group_id')).get().admin
         else:
-            local_admin = 'aa' + str(user)
+            local_admin = ''
         self.render_data = {}
         if ('group_id' in kwargs):
             if Group.query(Group.group_id ==
