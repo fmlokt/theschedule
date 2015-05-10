@@ -12,6 +12,12 @@ indexes:
 
 - kind: DefaultPair
   properties:
+  - name: group_id
+  - name: week_day
+  - name: start_time
+
+- kind: DefaultPair
+  properties:
   - name: week_day
   - name: start_time
 
@@ -22,5 +28,17 @@ indexes:
 
 - kind: ScheduledPair
   properties:
+  - name: date
+  - name: group_id
+  - name: start_time
+
+- kind: ScheduledPair
+  properties:
+  - name: date
+  - name: start_time
+
+- kind: ScheduledPair
+  properties:
+  - name: group_id
   - name: date
   - name: start_time
