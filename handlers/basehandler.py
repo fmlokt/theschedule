@@ -12,25 +12,20 @@ class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()
         self.render_data = {}
+        self.render_data['is_admin'] = False
         if user is None:
             self.render_data['login_link'] =\
                 users.create_login_url(self.request.uri)
-            self.render_data['login_link_text'] = 'Login'
-            self.render_data['greeting'] = 'Hello, stranger.'
-            self.render_data['is_admin'] = False
-
-        elif users.is_current_user_admin():
-            self.render_data['login_link'] =\
-                users.create_logout_url(self.request.uri)
-            self.render_data['login_link_text'] = 'Logout'
-            self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-            self.render_data['is_admin'] = True
+            self.render_data['login_link_text'] = u'войти'
+            self.render_data['greeting'] = u'Приветствуем, странник.'
         else:
+            if users.is_current_user_admin():
+                self.render_data['is_admin'] = True
             self.render_data['login_link'] =\
                 users.create_logout_url(self.request.uri)
-            self.render_data['login_link_text'] = 'Logout'
-            self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-            self.render_data['is_admin'] = False
+            self.render_data['login_link_text'] = u'выйти'
+            self.render_data['greeting'] = u'Приветствуем, ' +\
+                user.nickname() + '.'
 
 
 class BaseAdminHandler(BaseHandler):
@@ -43,12 +38,7 @@ class BaseAdminHandler(BaseHandler):
             self.error(403)
             self.response.write('403 Forbidden\n')
             return False
-        self.render_data = {}
-        self.render_data['login_link'] =\
-            users.create_logout_url(self.request.uri)
-        self.render_data['login_link_text'] = 'Logout'
-        self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
-        self.render_data['is_admin'] = True
+        super(BaseAdminHandler, self).get(*args, **kwargs)
         return True
 
     def post(self, *args, **kwargs):

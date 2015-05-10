@@ -1,8 +1,15 @@
 {% extends "templates/base.html" %}
 {% block title %}Расписание по умолчанию{% endblock %}
 {% block content %}
-<table border=3 column=5>
-<caption>Расписание пар по умолчанию</caption>
+<h2>Расписание</h2>
+<table class="list">
+    <tr>
+        <th>Предмет</th>
+        <th>День недели</th>
+        <th>Время</th>
+        <th></th>
+        <th></th>
+    </tr>
 {% for pair in pairs %}
 	<tr>
 		<td>{{ pair.classname }}</td>
