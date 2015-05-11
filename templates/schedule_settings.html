@@ -1,7 +1,7 @@
 {% extends "templates/base.html" %}
 {% block title %}Настройки расписания{% endblock %}
 {% block content %}
-    <form method="post" action="/schedule_settings"> 
+    <form method="post" action="/{{ group_id }}/schedule_settings"> 
         <br/>Двухнедельное расписание? <select size="1" name="schedule_period" >
                 <option {% if schedule_period == 7 %}selected{% endif %} value="7">Нет</option>
                 <option {% if schedule_period == 14 %}selected{% endif %} value="14">Да</option>
