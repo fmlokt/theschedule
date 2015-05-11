@@ -40,8 +40,8 @@ class ShowDefaultSchedule(BaseHandler):
                 order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
-                pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
-                pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
+                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe()
+                pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/schedule'
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
@@ -52,6 +52,9 @@ class ShowDefaultSchedule(BaseHandler):
                 order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
+                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe()
+                pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
+                    '&return_url=/schedule'
                 render_day['pairs'].append(pair)
             self.render_data['even_days'][day - 7] = render_day
         self.response.write(template.render(self.render_data))
@@ -237,7 +240,7 @@ class EditSettings(BaseLocalAdminHandler):
                                                group_id)
             if DefaultPair.query(DefaultPair.week_day > 7,
                                  DefaultPair.group_id ==
-                                 group_id).get() is not None:
+                                 group_id).get() is None:
                 for pair in first_week_qry:
                     new_pair = DefaultPair(classname=pair.classname,
                                            start_time=pair.start_time,

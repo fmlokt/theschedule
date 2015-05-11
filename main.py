@@ -14,6 +14,13 @@ from handlers import crons
 
 
 application = webapp2.WSGIApplication([
+    ('/cron/delete_old', crons.DeleteOld),
+    ('/', groups.ChooseGroup),
+    ('/create_group', groups.CreateGroup),
+    ('/groups', groups.ShowGroups),
+    ('/edit_group', groups.EditGroup),
+    ('/delete_group', groups.DeleteGroup),
+    ('/register', groups.RegisterGroup),
     webapp2.Route(r'/<group_id:[-\w]+>/pairs',
                   handler=pairs.ShowPairs,
                   name='pairs list'),
@@ -46,11 +53,5 @@ application = webapp2.WSGIApplication([
                   name='copy from default'),
     webapp2.Route(r'/<group_id:[-\w]+>/schedule_settings',
                   handler=schedule.EditSettings,
-                  name='schedule settings'),
-    ('/cron/delete_old', crons.DeleteOld),
-    ('/', groups.ChooseGroup),
-    ('/create_group', groups.CreateGroup),
-    ('/groups', groups.ShowGroups),
-    ('/edit_group', groups.EditGroup),
-    ('/delete_group', groups.DeleteGroup)
+                  name='schedule settings')
 ], debug=True)

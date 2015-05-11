@@ -6,6 +6,7 @@ import re
 
 import webapp2
 from google.appengine.api import memcache
+from google.appengine.api import mail
 
 from objects.pair import *
 from objects.group import *
@@ -117,3 +118,37 @@ class DeleteGroup(BaseAdminHandler):
         key = ndb.Key(urlsafe=url_key)
         key.delete()
         self.redirect(return_url)
+
+class RegisterGroup(BaseHandler):
+    def get(self, *args, **kwargs):
+        super(RegisterGroup, self).get(*args, **kwargs)
+        template = JINJA_ENVIRONMENT.\
+            get_template('templates/register_group.html')
+        group = Group(group_id='group',
+                      name='',
+                      origin='',
+                      admin='')
+        self.render_data['group'] = group
+        self.response.write(template.render(self.render_data))
+
+    def post(self, *args, **kwargs):
+        super(RegisterGroup, self).get(*args, **kwargs)
+        group_id = self.request.get('group_id')
+        name = self.request.get('name')
+        origin = self.request.get('origin')
+        admin = self.request.get('admin')
+        info = self.request.get('info')
+        message = mail.EmailMessage(sender="The Schedule Support <info@the-schedule.appspotmail.com>",
+                                    to="Fedor Loktev <fmlokt@gmail.com>",
+                                    subject="You have new register request",
+                                    body="You have new registration request:\n" +\
+                                    "Group id : " + group_id + " \n" +\
+                                    "Name : " + name + " \n" +\
+                                    "Origin : " + origin + " \n" +\
+                                    "Info : " + info + " \n" +\
+                                    "---------\n" + "This message was generated automatically\n" +\
+                                    "The Schedule.")
+        message.send()
+        self.response.write('Спасибо, заявка будет рассмотрена. Мы обязательно с вами свяжемся')
+
+
