@@ -202,7 +202,8 @@ class EditSettings(BaseLocalAdminHandler):
         settings_qry = ScheduleSettings.query().fetch(1)
         if len(settings_qry) == 0:
             settings = ScheduleSettings(schedule_period=7,
-                                        first_week_begin=DEFAULT_MONDAY)
+                                        first_week_begin=DEFAULT_MONDAY,
+                                        group_id=kwargs.get('group_id'))
             settings.put()
         else:
             settings = settings_qry[0]
@@ -221,12 +222,28 @@ class EditSettings(BaseLocalAdminHandler):
         year = int(re.match(reg, date).group(1))
         month = int(re.match(reg, date).group(2))
         day = int(re.match(reg, date).group(3))
-        settings_qry = ScheduleSettings.query().fetch(1)
+        group_id = kwargs.get('group_id')
+        settings_qry = ScheduleSettings.query(ScheduleSettings.group_id ==
+                                              group_id).fetch(1)
         if len(settings_qry) == 0:
             settings = ScheduleSettings(schedule_period=7,
-                                        first_week_begin=DEFAULT_MONDAY)
+                                        first_week_begin=DEFAULT_MONDAY,
+                                        group_id=group_id)
         else:
             settings = settings_qry[0]
+        if period == 14 and settings.schedule_period == 7:
+            first_week_qry = DefaultPair.query(DefaultPair.week_day < 7,
+                                               DefaultPair.group_id ==
+                                               group_id)
+            if DefaultPair.query(DefaultPair.week_day > 7,
+                                 DefaultPair.group_id ==
+                                 group_id).get() is not None:
+                for pair in first_week_qry:
+                    new_pair = DefaultPair(classname=pair.classname,
+                                           start_time=pair.start_time,
+                                           week_day=pair.week_day + 7,
+                                           group_id=pair.group_id)
+                    new_pair.put()
         settings.schedule_period = period
         settings.first_week_begin = datetime.date(year, month, day)
         settings.put()

@@ -14,6 +14,11 @@ indexes:
   properties:
   - name: group_id
   - name: week_day
+
+- kind: DefaultPair
+  properties:
+  - name: group_id
+  - name: week_day
   - name: start_time
 
 - kind: DefaultPair
