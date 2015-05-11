@@ -6,7 +6,13 @@
 <title>Редактировать гуппу</title>
 </head>
 <body>
-<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
+<div class="container" id="top">
+    <span></span>
+    <span align="right">
+        <div class="top_link_list">{{greeting}}</div>
+        <div align="right" class="bottom_link_list login_link"><a href="{{login_link}}">{{login_link_text}}</a></div>
+    </span>
+</div>
 <center><h1>Создать группу</h1>
     <form method="post" action="/groups">
 {% if group.group_id != 'group' %}

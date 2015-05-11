@@ -15,10 +15,9 @@ from handlers.basehandler import *
 
 class ChooseGroup(BaseHandler):
     def post(self, *args, **kwargs):
-        super(ChooseGroup, self).get(*args, **kwargs)
         group_id = self.request.get('group_id')
-        group = Group.query(Group.group_id == group_id).fetch(1)
-        if len(group) == 0:
+        group = Group.query(Group.group_id == group_id).get()
+        if group is None:
             self.response.write('this group id does not exists')
         else:
             self.response.set_cookie('group',
@@ -29,7 +28,9 @@ class ChooseGroup(BaseHandler):
 
     def get(self, *args, **kwargs):
         super(ChooseGroup, self).get(*args, **kwargs)
-        if 'group' in self.request.cookies:
+        print 'GROUP FLAG : ' + str(self.request.get('change_group'))
+        if (not self.request.get('change_group') == 'True') and\
+                ('group' in self.request.cookies):
             self.redirect('/' + self.request.cookies['group'] + '/')
             return
         template = JINJA_ENVIRONMENT.\
@@ -70,7 +71,7 @@ class ShowGroups(BaseAdminHandler):
         self.response.write(template.render(self.render_data))
 
     def post(self, *args, **kwargs):
-        if not super(ShowGroups, self).get(*args, **kwargs):
+        if not super(ShowGroups, self).post(*args, **kwargs):
             return
         url_key = self.request.get('key')
         group_id = self.request.get('group_id')

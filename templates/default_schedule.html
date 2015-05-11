@@ -2,18 +2,31 @@
 {% block title %}Расписание{% endblock %}
 {% block content %}
 {% if double_week %}
-Нечетная неделя
+    <h2>Нечетная неделя</h2>
 {% endif %}
-<table border=3>
+<table class="schedule">
 	<tr>
 	{% for day in odd_days %}
-	<td valign="top">
-	<table border=3>
+	<td class="day">
+	<table class="day">
 	<caption>{{day.week_day|weekday}}</caption>
 	{% for pair in day.pairs %}
-		<tr>
-			<td>{{ pair.classname }}</td>
-			<td>{{ pair.start_time|time }}</td>
+		<tr class="pair" onclick="desc(this)">
+            <td class="pair">
+                <div class="classname">{{ pair.classname }}</div>
+                <div class="container">
+                    <div class="start_time">{{ pair.start_time|time }}</div>
+                </div>
+            <div class="no-task">
+                Здесь ничего нет. Куда подевалось?
+            </div>
+        {% if is_admin %}
+            <span class="edit_links">
+                <a href='{{pair.edit_link}}'>Редактировать</a>
+                <a href='{{pair.delete_link}}'>Удалить</a>
+            </span>
+        {% endif %}
+			</td>
 		</tr>
 	{% endfor %}
 	</table>
@@ -22,17 +35,30 @@
 	</tr>
 </table>
 {% if double_week %}
-Четная неделя
-<table border=3>
+<h2>Четная неделя</h2>
+<table class="schedule">
     <tr>
     {% for day in even_days %}
-    <td valign="top">
-    <table border=3>
+    <td class="day">
+    <table class="day">
     <caption>{{day.week_day|weekday}}</caption>
     {% for pair in day.pairs %}
-        <tr>
-            <td>{{ pair.classname }}</td>
-            <td>{{ pair.start_time|time }}</td>
+        <tr class="pair" onclick="desc(this)">
+            <td class="pair">
+                <div class="classname">{{ pair.classname }}</div>
+                <div class="container">
+                    <div class="start_time">{{ pair.start_time|time }}</div>
+                </div>
+            <div class="no-task">
+                Здесь ничего нет. Куда подевалось?
+            </div>
+        {% if is_admin %}
+            <span class="edit_links">
+                <a href='{{pair.edit_link}}'>Редактировать</a>
+                <a href='{{pair.delete_link}}'>Удалить</a>
+            </span>
+        {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </table>
@@ -41,4 +67,21 @@
     </tr>
 </table>
 {% endif %}
+<script>
+function desc(object){
+    if (object.getElementsByClassName("no-task")[0].style.display != 'block')
+    {
+        object.getElementsByClassName("no-task")[0].style.display = 'block';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_links")[0].style.display = 'inline';
+    {% endif %}
+    } else
+    {
+        object.getElementsByClassName("no-task")[0].style.display = 'none';
+    {% if is_admin %}
+        object.getElementsByClassName("edit_links")[0].style.display = 'none';
+    {% endif %}
+    }
+}
+</script>
 {% endblock %}

@@ -143,7 +143,7 @@ class PairsTest(unittest2.TestCase):
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 0)
+        self.assertEqual(response.body.count('</tr>'), 1)
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
@@ -164,7 +164,7 @@ class PairsTest(unittest2.TestCase):
         post_pair(pair1)
         response = make_request('/' + group_id + '/pairs', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 3)
+        self.assertEqual(response.body.count('</tr>'), 4)
         self.assertNotEqual(response.body.find('Math 1'), -1)
         self.assertNotEqual(response.body.find('Math 2'), -1)
         self.assertNotEqual(response.body.find('Math 3'), -1)

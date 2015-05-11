@@ -7,21 +7,28 @@
 <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div align='left'>
-    <a href="/{{ group_id }}/">Расписание</a>
-    <a href="/{{ group_id }}/schedule">Стандартное расписание</a>
-{% if is_admin %}
-    <a href="/{{ group_id }}/pairs">Список пар</a>
-    <a href="/{{ group_id }}/default_pairs">Стандартный список</a>
-    <a href="/{{ group_id }}/copy_from_default">Сгенерировать расписание</a>
-{% endif %}
+<div class="container" id="top">
+    <span align="left">
+        <div class="top_link_list">
+            <a href="/{{ group_id }}/">Расписание</a> 
+            <a href="/{{ group_id }}/schedule">Стандартное расписание</a>
+        </div>
+    {% if is_admin %}
+        <div class="bottom_link_list">
+            <a href="/{{ group_id }}/pairs">Список пар</a> 
+            <a href="/{{ group_id }}/default_pairs">Стандартный список</a> 
+            <a href="/{{ group_id }}/copy_from_default">Сгенерировать расписание</a>
+        </div>
+    {% endif %}
+    </span>
+    <span align="right">
+        <div class="top_link_list">{{greeting}}</div>
+        <div align="right" class="bottom_link_list login_link"><a href="/?change_group=True">cменить группу</a> <a href="{{login_link}}">{{login_link_text}}</a></div>
+    </span>
 </div>
-<div align='right'>{{greeting}} <a href="{{login_link}}">{{login_link_text}}</a></div>
-<center><h1>Расписание</h1>
-        <h2>{{ group_name|upper }}</h2>
+<h1>Расписание {{ group_name|upper }}</h1>
 {% block content %}
 {% endblock %}
-</center>
 </body>
 </html>
 {% endautoescape %}

@@ -40,6 +40,9 @@ class ShowDefaultSchedule(BaseHandler):
                 order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
+                pair.edit_link = '/edit_default_pair?key=' + pair.key.urlsafe()
+                pair.delete_link = '/delete_pair?key=' + pair.key.urlsafe() +\
+                    '&return_url=/schedule'
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
         self.render_data['even_days'] = [None] * 6

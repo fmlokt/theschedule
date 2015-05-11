@@ -15,7 +15,8 @@ from handlers.basehandler import *
 
 class ShowSchedule(BaseHandler):
     def get(self, *args, **kwargs):
-        super(ShowSchedule, self).get(*args, **kwargs)
+        if not super(ShowSchedule, self).get(*args, **kwargs):
+            return
         group_id = kwargs.get('group_id')
         template = JINJA_ENVIRONMENT.get_template('templates/schedule.html')
         schedule_to_render = memcache.get("schedule_to_render_" + group_id)

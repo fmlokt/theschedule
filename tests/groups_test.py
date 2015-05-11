@@ -109,7 +109,7 @@ class groupsTest(unittest2.TestCase):
         simulate_login(self.testbed, 'a@b.com', '123', True)
         response = make_request('/groups', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 0)
+        self.assertEqual(response.body.count('</tr>'), 1)
         group1 = Group(group_id='group1',
                        name='name1',
                        origin='origin1',
@@ -127,7 +127,7 @@ class groupsTest(unittest2.TestCase):
         post_group(group1)
         response = make_request('/groups', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('<tr>'), 3)
+        self.assertEqual(response.body.count('</tr>'), 4)
         self.assertNotEqual(response.body.find('group1'), -1)
         self.assertNotEqual(response.body.find('group2'), -1)
         self.assertNotEqual(response.body.find('group3'), -1)
