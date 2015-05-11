@@ -23,7 +23,7 @@ application = webapp2.WSGIApplication([
     webapp2.Route(r'/<group_id:[-\w]+>/edit_pair',
                   handler=pairs.EditPair,
                   name='edit pair'),
-    webapp2.Route(r'/<group_id:[-\w]+>/',
+    webapp2.Route(r'/<group_id:[-\w]+><:/?>',
                   handler=pairs.ShowSchedule,
                   name='schedule'),
     webapp2.Route(r'/<group_id:[-\w]+>/schedule',
