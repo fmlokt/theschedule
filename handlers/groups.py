@@ -140,7 +140,8 @@ class RegisterGroup(BaseHandler):
         info = self.request.get('info')
         message = mail.EmailMessage(sender="The Schedule Support <info@the-schedule.appspotmail.com>",
                                     to="Fedor Loktev <fmlokt@gmail.com>",
-                                    subject="You have new register request",
+                                    cc="Nikolay Kalinin<nakalinin@gmail.com>",
+                                    subject="You have new registration request",
                                     body="You have new registration request:\n" +\
                                     "Group id : " + group_id + " \n" +\
                                     "Name : " + name + " \n" +\
