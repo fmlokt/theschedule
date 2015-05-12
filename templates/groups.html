@@ -1,19 +1,7 @@
-<!DOCTYPE HTML PUBLIC>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/style.css">
-    <link rel="shortcut icon" href="/favicon.ico">
-<title>Список групп</title>
-</head>
-<body>
-<div class="container" id="top">
-    <span></span>
-    <span align="right">
-        <div class="top_link_list">{{greeting}}</div>
-        <div align="right" class="bottom_link_list login_link"><a href="{{login_link}}">{{login_link_text}}</a></div>
-    </span>
-</div>
-<center><h1>Список групп</h1>
+{% extends "templates/base.html" %}
+{% block title %}Список групп{% endblock %}
+{% block content_title %}
+<h1>Список групп</h1>
 <table class="list">
 <caption>Список групп</caption>
     <tr>
@@ -36,6 +24,4 @@
 {% endfor %}
 </table>
 <a href="/create_group">Добавить группу</a>
-</center>
-</body>
-</html>
+{% endblock %}

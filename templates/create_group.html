@@ -1,19 +1,7 @@
-<!DOCTYPE HTML PUBLIC>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/style.css">
-    <link rel="shortcut icon" href="/favicon.ico">
-<title>Редактировать гуппу</title>
-</head>
-<body>
-<div class="container" id="top">
-    <span></span>
-    <span align="right">
-        <div class="top_link_list">{{greeting}}</div>
-        <div align="right" class="bottom_link_list login_link"><a href="{{login_link}}">{{login_link_text}}</a></div>
-    </span>
-</div>
-<center><h1>Создать группу</h1>
+{% extends "templates/base.html" %}
+{% block title %}Редактировать гуппу{% endblock %}
+{% block content_title %}
+<h1>Создать группу</h1>
     <form method="post" action="/groups">
 {% if group.group_id != 'group' %}
         <br/>id  <input type="text" name="group_id"  required value='{{ group.group_id }}' >
@@ -29,6 +17,4 @@
         <br/><input class="btn" type="submit" value="Сохранить"/>
         <input type="hidden" name="key" value='{{ key_urlsafe }}'>
     </form>
-</center>
-</body>
-</html>
+{% endblock %}

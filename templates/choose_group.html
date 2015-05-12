@@ -1,19 +1,7 @@
-<!DOCTYPE HTML PUBLIC>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/style.css">
-    <link rel="shortcut icon" href="/favicon.ico">
-<title>Выберете группу</title>
-</head>
-<body>
-<div class="container" id="top">
-    <span></span>
-    <span align="right">
-        <div class="top_link_list">{{greeting}}</div>
-        <div align="right" class="bottom_link_list login_link"><a href="{{login_link}}">{{login_link_text}}</a></div>
-    </span>
-</div>
-<center><h1>Выбор группы</h1>
+{% extends "templates/base.html" %}
+{% block title %}Выберите группу{% endblock %}
+{% block content_title %}
+<h1>Выбор группы</h1>
     <form method="post" action="/">
         <br/>Название группы <select size="1" name="group_id" >
                 <option disabled>Название группы</option>
@@ -23,9 +11,8 @@
              </select>
         <br/><input class="btn" type="submit" value="Выбрать"/>
     </form>
-</center>
 <div style="position: absolute; bottom: 5px">
     <a href="/register">Подключить группу</a>
     </div>
 </body>
-</html>
+{% endblock %}

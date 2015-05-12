@@ -1,0 +1,21 @@
+{% extends "templates/base.html" %}
+{% block top_left %}
+    <span align="left">
+        <div class="top_link_list">
+            <a href="/{{ group_id }}/">Расписание</a> 
+            <a href="/{{ group_id }}/schedule">Стандартное расписание</a>
+        </div>
+    {% if is_admin %}
+        <div class="bottom_link_list">
+            <a href="/{{ group_id }}/pairs">Список пар</a> 
+            <a href="/{{ group_id }}/default_pairs">Стандартный список</a> 
+            <a href="/{{ group_id }}/copy_from_default">Сгенерировать расписание</a>
+        </div>
+    {% endif %}
+    </span>
+{% endblock %}
+{% block content_title %}
+<h1>Расписание {{ group_name|upper }}</h1>
+{% block content %}
+{% endblock %}
+{% endblock %}
