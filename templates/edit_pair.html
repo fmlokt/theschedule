@@ -2,16 +2,18 @@
 {% block title %}Расписание{% endblock %}
 {% block content %}
 	<form method="post" action="/{{ group_id }}/pairs">
+	<table>
 {% if pair.classname == 'classname' %}
-		<br/>Предмет  <input type="text" name="classname"  required placeholder='{{ pair.classname }}'>
+		<tr><td class="name">Предмет</td><td><input type="text" name="classname"  required placeholder='{{ pair.classname }}'></td></tr>
 {% else %}
-        <br/>Предмет  <input type="text" name="classname"  value='{{ pair.classname }}'>
+        <tr><td class="name">Предмет</td><td><input type="text" name="classname"  value='{{ pair.classname }}'></td></tr>
 {% endif %}
-		<br/>Дата  <input type="date" name="date" value='{{ pair.date }}'>
-		<br/>Время  <input type="time" name="time" value='{{ pair.start_time }}'>
-        <br/>Замена  <input type="checkbox" name="replace" {% if pair.replace %}checked{% endif %}>
-		<br/>Задание <br/> <textarea name="task" rows="10" cols="80">{{ pair.task }}</textarea> 
-		<br/><input class="btn" type="submit" value="Сохранить"/> 
+		<tr><td class="name">Дата</td><td><input type="date" name="date" value='{{ pair.date }}'></td></tr>
+		<tr><td class="name">Время</td><td><input type="time" name="time" value='{{ pair.start_time }}'></td></tr>
+        <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" {% if pair.replace %}checked{% endif %}></td></tr>
+		<tr><td class="name">Задание</td><td><textarea name="task" rows="10" cols="80">{{ pair.task }}</textarea></td></tr>
+	</table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
 		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
 	</form>
 {% endblock %}

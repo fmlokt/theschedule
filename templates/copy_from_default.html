@@ -2,8 +2,10 @@
 {% block title %}Сгенерировать Расписание{% endblock %}
 {% block content %}
 	<form method="post" action="/{{ group_id }}/copy_from_default"> 
-		<br/>С <input type="date" name="date_start" value='{{ date_begin }}'>
-		<br/>По <input type="date" name="date_end" value='{{ date_end }}'>
-		<br/><input class="btn" type="submit" value="Сгенерировать"/>
+	<table>
+        <tr><td class="name">С</td><td><input type="date" name="date_start" value='{{ date_begin }}'></td></tr>
+		<tr><td class="name">По</td><td><input type="date" name="date_end" value='{{ date_end }}'></td></tr>
+	</table>
+        <div class="btn"><input class="btn" type="submit" value="Сгенерировать"/></div>
 	</form>
 {% endblock %}

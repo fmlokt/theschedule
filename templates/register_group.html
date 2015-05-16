@@ -2,15 +2,15 @@
 {% block title %}Оставить заявку{% endblock %}
 {% block content_title %}
 <h1>Оставить заявку</h1>
-<center>
     <form method="post" action="/register">
-        <br/>Идентификатор группы<input type="text" name="group_id"  required placeholder='ex. asgap_1' >
-        <br/>Название для отображения <input type="text" name="name"  required placeholder='ex. ВШОПФ 1 курс' >
-        <br/>Университет  <input type="text" name="origin"  required placeholder='ex. ННГУ' >
-        <br/>Адреса администраторов (желательно @gmail.com) <input type="textarea" name="admin"  required placeholder='ex. a@b.com;c@d.com' >
-        <br/>Ваши контакты <input type="textarea" name="info"  required>
-        <br/><input class="btn" type="submit" value="Сохранить"/>
+    <table>
+        <tr><td class="name">Идентификатор группы</td><td><input type="text" name="group_id"  required placeholder='ex. asgap_1' ></td></tr>
+        <tr><td class="name">Название для отображения</td><td><input class="long" type="text" name="name"  required placeholder='ex. ВШОПФ 1 курс' ></td></tr>
+        <tr><td class="name">Университет</td><td><input class="long" type="text" name="origin"  required placeholder='ex. ННГУ' ></td></tr>
+        <tr><td class="name">Адреса администраторов (желательно @gmail.com)</td><td><input class="long" type="textarea" name="admin"  required placeholder='ex. a@b.com;c@d.com' ></td></tr>
+        <tr><td class="name">Ваши контакты</td><td><textarea name="info" cols="50" required></textarea></td></tr>
+    </table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"></div>
         <input type="hidden" name="key" value='{{ key_urlsafe }}'>
     </form>
-</center>
 {% endblock %}

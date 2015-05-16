@@ -3,18 +3,20 @@
 {% block content_title %}
 <h1>Создать группу</h1>
     <form method="post" action="/groups">
+        <table>
 {% if group.group_id != 'group' %}
-        <br/>id  <input type="text" name="group_id"  required value='{{ group.group_id }}' >
-        <br/>name  <input type="text" name="name"  required value='{{ group.name }}' >
-        <br/>origin  <input type="text" name="origin"  required value='{{ group.origin }}' >
-        <br/>admin  <input type="textarea" name="admin"  required value='{{ group.admin }}' >
+        <tr><td class="name">id</td><td><input type="text" name="group_id"  required value='{{ group.group_id }}' ></td></tr>
+        <tr><td class="name">name</td><td><input type="text" name="name"  required value='{{ group.name }}' ></td></tr>
+        <tr><td class="name">origin</td><td><input type="text" name="origin"  required value='{{ group.origin }}' ></td></tr>
+        <tr><td class="name">admin</td><td><input type="textarea" name="admin"  required value='{{ group.admin }}' ></td></tr>
 {% else %}
-        <br/>id  <input type="text" name="group_id"  required placeholder='ex. asgap' >
-        <br/>name  <input type="text" name="name"  required placeholder='ex. ВШОПФ' >
-        <br/>origin  <input type="text" name="origin"  required placeholder='ex. ННГУ' >
-        <br/>admin  <input type="textarea" name="admin"  required placeholder='ex. a@b.com' >
+        <tr><td class="name">id</td><td><input type="text" name="group_id"  required placeholder='ex. asgap' ></td></tr>
+        <tr><td class="name">name</td><td><input type="text" name="name"  required placeholder='ex. ВШОПФ' ></td></tr>
+        <tr><td class="name">origin</td><td><input type="text" name="origin"  required placeholder='ex. ННГУ' ></td></tr>
+        <tr><td class="name">admin</td><td><input type="textarea" name="admin"  required placeholder='ex. a@b.com' ></td></tr>
 {% endif %}
-        <br/><input class="btn" type="submit" value="Сохранить"/>
+        </table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
         <input type="hidden" name="key" value='{{ key_urlsafe }}'>
     </form>
 {% endblock %}

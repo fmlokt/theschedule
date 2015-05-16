@@ -158,3 +158,45 @@ td.pair:hover {
     background-color: #CCCCFF;
     border-radius: 15px;
 }
+
+form {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+form table {
+    border-spacing: 30px 10px;
+}
+
+form td {
+    width: 40%;
+}
+
+form td.name {
+    text-align: right;
+    vertical-align: top;
+}
+
+form textarea {
+    resize: vertical;
+    width: 40%;
+}
+
+form input {
+   width: 40%;
+}
+
+form input.long {
+    resize: horizontal;
+} 
+
+form div.btn {
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+}
+
+form .btn {
+    width: 10%;
+}

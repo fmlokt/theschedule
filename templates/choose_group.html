@@ -3,13 +3,15 @@
 {% block content_title %}
 <h1>Выбор группы</h1>
     <form method="post" action="/">
-        <br/>Название группы <select size="1" name="group_id" >
+    <table>
+        <tr><td class="name">Название группы</td><td><select size="1" name="group_id" >
                 <option disabled>Название группы</option>
                 {% for group in groups %}
                 <option value="{{ group.group_id }}">{{ group.name }}</option>
                 {% endfor %}
-             </select>
-        <br/><input class="btn" type="submit" value="Выбрать"/>
+             </select></td></tr>
+    </table>
+        <div class="btn"><input class="btn" type="submit" value="Выбрать"/></div>
     </form>
 <div style="position: absolute; bottom: 5px">
     <a href="/register">Подключить группу</a>

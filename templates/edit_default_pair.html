@@ -1,13 +1,14 @@
 {% extends "templates/base_groups.html" %}
 {% block title %}Добавить занятие{% endblock %}
 {% block content %}
-	<form method="post" action="/{{ group_id }}/default_pairs"> 
+	<form method="post" action="/{{ group_id }}/default_pairs">
+    <table>
 {% if pair.classname == 'classname' %}
-        <br/>Предмет  <input type="text" name="classname" required placeholder='{{ pair.classname }}'>
+        <tr><td class="name">Предмет</td><td><input type="text" name="classname" required placeholder='{{ pair.classname }}'></td></tr>
 {% else %}
-        <br/>Предмет  <input type="text" name="classname"  value='{{ pair.classname }}'>
+        <tr><td class="name">Предмет</td><td><input type="text" name="classname"  value='{{ pair.classname }}'></td></tr>
 {% endif %}
-        <br/>День недели <select size="1" name="week_day" >
+        <tr><td class="name">День недели</td><td><select size="1" name="week_day" >
                 <option disabled>День недели</option>
                 <option {% if pair.week_day % 7 == 0 %}selected{% endif %} value="0">Понедельник</option>
                 <option {% if pair.week_day % 7 == 1 %}selected{% endif %} value="1">Вторник</option>
@@ -16,14 +17,15 @@
                 <option {% if pair.week_day % 7 == 4 %}selected{% endif %} value="4">Пятница</option>
                 <option {% if pair.week_day % 7 == 5 %}selected{% endif %} value="5">Суббота</option>
                 <option {% if pair.week_day % 7 == 6 %}selected{% endif %} value="6">Воскресение</option>
-             </select>
-        <br/>Неделя <select size="1" name="week_parity" >
+             </select></td></tr>
+        <tr><td class="name">Неделя</td><td><select size="1" name="week_parity" >
                 <option disabled>Четность недели</option>
                 <option {% if pair.week_day < 7 %}selected{% endif %} value="0">Нечетная</option>
                 <option {% if pair.week_day >= 7 %}selected{% endif %} value="1">Четная</option>
-             </select>
-		<br/>Время <input type="time" name="time" required value='{{ pair.start_time}}'>
-		<br/><input class="btn" type="submit" value="Сохранить"/> 
+             </select></td></tr>
+		<tr><td class="name">Время</td><td><input type="time" name="time" required value='{{ pair.start_time}}'></td></tr>
+	</table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
 		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
 	</form>
 {% endblock %}
