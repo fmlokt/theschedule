@@ -12,7 +12,8 @@ from objects.group import *
 
 class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
-        user = users.get_current_user()
+        user_full = users.get_current_user()
+        user  = str(users.get_current_user()).lower()
         local_admin = ''
         self.render_data = {}
         if ('group_id' in kwargs):
@@ -27,7 +28,7 @@ class BaseHandler(webapp2.RequestHandler):
                 self.response.write('404 Not Found\n')
                 return False
         self.render_data['is_admin'] = False
-        if user is None:
+        if user_full is None:
             self.render_data['login_link'] =\
                 users.create_login_url(self.request.uri)
             self.render_data['login_link_text'] = u'войти'
@@ -40,7 +41,7 @@ class BaseHandler(webapp2.RequestHandler):
                 users.create_logout_url(self.request.uri)
             self.render_data['login_link_text'] = u'выйти'
             self.render_data['greeting'] = u'Приветствуем, ' +\
-                user.nickname() + '.'
+                user_full.nickname() + '.'
         return True
 
 
@@ -69,7 +70,7 @@ class BaseAdminHandler(BaseHandler):
 
 class BaseLocalAdminHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        user = users.get_current_user()
+        user = str(users.get_current_user()).lower()
         if not super(BaseLocalAdminHandler, self).get(*args, **kwargs):
             return
         local_admin = Group.query(Group.group_id ==
