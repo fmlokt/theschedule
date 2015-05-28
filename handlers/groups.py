@@ -13,7 +13,7 @@ from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
 
-
+##\brief Выбор группы
 class ChooseGroup(BaseHandler):
     def post(self, *args, **kwargs):
         group_id = self.request.get('group_id')
@@ -40,7 +40,7 @@ class ChooseGroup(BaseHandler):
         self.render_data['groups'] = group_qry
         self.response.write(template.render(self.render_data))
 
-
+##\brief Создать группу
 class CreateGroup(BaseAdminHandler):
     def get(self, *args, **kwargs):
         if not super(CreateGroup, self).get(*args, **kwargs):
@@ -54,7 +54,7 @@ class CreateGroup(BaseAdminHandler):
         self.render_data['group'] = group
         self.response.write(template.render(self.render_data))
 
-
+##\brief Показать список групп
 class ShowGroups(BaseAdminHandler):
     def get(self, *args, **kwargs):
         if not super(ShowGroups, self).get(*args, **kwargs):
@@ -94,7 +94,7 @@ class ShowGroups(BaseAdminHandler):
         group.put()
         self.redirect('/groups')
 
-
+##\brief Редактировать группу
 class EditGroup(BaseAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditGroup, self).get(*args, **kwargs):
@@ -108,7 +108,7 @@ class EditGroup(BaseAdminHandler):
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))
 
-
+##\brief Удалить группу
 class DeleteGroup(BaseAdminHandler):
     def get(self, *args, **kwargs):
         if not super(DeleteGroup, self).get(*args, **kwargs):
@@ -119,6 +119,7 @@ class DeleteGroup(BaseAdminHandler):
         key.delete()
         self.redirect(return_url)
 
+##\brief Подать заявку на добавление группы
 class RegisterGroup(BaseHandler):
     def get(self, *args, **kwargs):
         super(RegisterGroup, self).get(*args, **kwargs)

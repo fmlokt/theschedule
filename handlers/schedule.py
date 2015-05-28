@@ -16,7 +16,7 @@ from handlers.basehandler import *
 
 DEFAULT_MONDAY = datetime.date(2015, 03, 2)
 
-
+##\brief Показать стандартное расписание
 class ShowDefaultSchedule(BaseHandler):
     def get(self, *args, **kwargs):
         super(ShowDefaultSchedule, self).get(*args, **kwargs)
@@ -59,7 +59,7 @@ class ShowDefaultSchedule(BaseHandler):
             self.render_data['even_days'][day - 7] = render_day
         self.response.write(template.render(self.render_data))
 
-
+##\brief Список стандартных пар
 class ShowDefaultPairs(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(ShowDefaultPairs, self).get(*args, **kwargs):
@@ -106,7 +106,7 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
         pair.put()
         self.redirect('/' + group_id + '/default_pairs')
 
-
+##\brief Создать стандартную пару
 class NewDefaultPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewDefaultPair, self).get(*args, **kwargs):
@@ -120,7 +120,7 @@ class NewDefaultPair(BaseLocalAdminHandler):
         self.render_data['pair'] = pair
         self.response.write(template.render(self.render_data))
 
-
+##\brief Редактировать стандартную пару
 class EditDefaultPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditDefaultPair, self).get(*args, **kwargs):
@@ -134,7 +134,7 @@ class EditDefaultPair(BaseLocalAdminHandler):
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))
 
-
+##\brief Скопировать из стандартных в ближайшие
 class CopyFromDefault(BaseLocalAdminHandler):
     def post(self, *args, **kwargs):
         if not super(CopyFromDefault, self).post(*args, **kwargs):
@@ -197,7 +197,7 @@ class CopyFromDefault(BaseLocalAdminHandler):
         self.render_data['date_end'] = str(date_end)
         self.response.write(template.render(self.render_data))
 
-
+##\brief Настройки группы
 class EditSettings(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditSettings, self).get(*args, **kwargs):

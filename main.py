@@ -11,6 +11,7 @@ from handlers import pairs
 from handlers import schedule
 from handlers import groups
 from handlers import crons
+from service import calendar
 
 
 application = webapp2.WSGIApplication([
@@ -21,6 +22,7 @@ application = webapp2.WSGIApplication([
     ('/edit_group', groups.EditGroup),
     ('/delete_group', groups.DeleteGroup),
     ('/register', groups.RegisterGroup),
+    ('/calendar', calendar.Calendar),
     webapp2.Route(r'/<group_id:[-\w]+>/pairs',
                   handler=pairs.ShowPairs,
                   name='pairs list'),

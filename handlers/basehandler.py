@@ -9,7 +9,9 @@ from google.appengine.api import users
 
 from objects.group import *
 
-
+##\brief Класс, дающий доступ с правами пользователя
+#
+#
 class BaseHandler(webapp2.RequestHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()
@@ -43,7 +45,9 @@ class BaseHandler(webapp2.RequestHandler):
                 user.nickname() + '.'
         return True
 
-
+##\brief Класс, дающий доступ с правами глобального администратора
+#
+#
 class BaseAdminHandler(BaseHandler):
     def get(self, *args, **kwargs):
         if not super(BaseAdminHandler, self).get(*args, **kwargs):
@@ -66,7 +70,9 @@ class BaseAdminHandler(BaseHandler):
             return False
         return True
 
-
+##\brief Класс, дающий доступ с правами локального администратора группы
+#
+#
 class BaseLocalAdminHandler(BaseHandler):
     def get(self, *args, **kwargs):
         user = users.get_current_user()

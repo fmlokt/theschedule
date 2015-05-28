@@ -2,7 +2,7 @@
 
 from google.appengine.ext import ndb
 
-
+##\brief Класс пар
 class ScheduledPair(ndb.Model):
     classname = ndb.StringProperty()
     date = ndb.DateProperty()
@@ -10,5 +10,3 @@ class ScheduledPair(ndb.Model):
     task = ndb.StringProperty()
     replace = ndb.BooleanProperty()
     group_id = ndb.StringProperty()
-    edit_link = ''
-    delete_link = ''

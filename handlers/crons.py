@@ -13,7 +13,7 @@ from environment import JINJA_ENVIRONMENT
 from objects.pair import *
 from handlers.basehandler import *
 
-
+##\brief Удаляет старые пары
 class DeleteOld(BaseHandler):
     def get(self):
         pairs_qry = ScheduledPair.query(ScheduledPair.date <

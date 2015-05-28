@@ -12,7 +12,7 @@ from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
 
-
+##\brief Показать расписание
 class ShowSchedule(BaseHandler):
     def get(self, *args, **kwargs):
         if not super(ShowSchedule, self).get(*args, **kwargs):
@@ -55,7 +55,7 @@ class ShowSchedule(BaseHandler):
         self.render_data['days'] = schedule_to_render
         self.response.write(template.render(self.render_data))
 
-
+##\brief Список пар
 class ShowPairs(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         group_id = kwargs.get('group_id')
@@ -112,7 +112,7 @@ class ShowPairs(BaseLocalAdminHandler):
         memcache.delete("schedule_to_render_" + group_id)
         self.redirect('/' + group_id + '/pairs')
 
-
+##\brief Создать пару
 class NewPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewPair, self).get(*args, **kwargs):
@@ -125,7 +125,7 @@ class NewPair(BaseLocalAdminHandler):
         self.render_data['pair'] = pair
         self.response.write(template.render(self.render_data))
 
-
+##\brief Редактировать пару
 class EditPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(EditPair, self).get(*args, **kwargs):
@@ -138,7 +138,7 @@ class EditPair(BaseLocalAdminHandler):
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))
 
-
+##\brief Удалить пару
 class DeletePair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(DeletePair, self).get(*args, **kwargs):

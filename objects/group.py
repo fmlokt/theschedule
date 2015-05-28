@@ -2,7 +2,7 @@
 
 from google.appengine.ext import ndb
 
-
+##\brief Класс группы
 class Group(ndb.Model):
     group_id = ndb.StringProperty()
     name = ndb.StringProperty()
