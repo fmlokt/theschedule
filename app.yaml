@@ -6,8 +6,56 @@ threadsafe: true
 
 handlers:
 - url: /favicon\.ico
-  static_files: favicon.ico
+  static_files: icons/favicon.ico
   upload: favicon\.ico
+- url: /android-chrome-36x36\.png
+  static_files: icons/android-chrome-36x36.png
+  upload: android-chrome-36x36\.png
+- url: /android-chrome-48x48\.png
+  static_files: icons/android-chrome-48x48.png
+  upload: android-chrome-48x48\.png
+- url: /android-chrome-72x72\.png
+  static_files: icons/android-chrome-72x72.png
+  upload: android-chrome-72x72\.png
+- url: /android-chrome-96x96\.png
+  static_files: icons/android-chrome-96x96.png
+  upload: android-chrome-96x96\.png
+- url: /apple-touch-icon\.png
+  static_files: icons/apple-touch-icon.png
+  upload: apple-touch-icon\.png
+- url: /apple-touch-icon-precomposed\.png
+  static_files: icons/apple-touch-icon-precomposed.png
+  upload: apple-touch-icon-precomposed\.png 
+- url: /apple-touch-icon-57x57\.png
+  static_files: icons/apple-touch-icon-57x57.png
+  upload: apple-touch-icon-57x57\.png
+- url: /apple-touch-icon-60x60\.png
+  static_files: icons/apple-touch-icon-60x60.png
+  upload: apple-touch-icon-60x60\.png
+- url: /apple-touch-icon-72x72\.png
+  static_files: icons/apple-touch-icon-72x72.png
+  upload: apple-touch-icon-72x72\.png
+- url: /apple-touch-icon-76x76\.png
+  static_files: icons/apple-touch-icon-76x76.png
+  upload: apple-touch-icon-76x76\.png
+- url: /favicon-16x16\.png
+  static_files: icons/favicon-16x16.png
+  upload: favicon-16x16\.png
+- url: /favicon-32x32\.png
+  static_files: icons/favicon-32x32.png
+  upload: favicon-32x32\.png
+- url: /favicon-96x96\.png
+  static_files: icons/favicon-96x96.png
+  upload: favicon-96x96\.png
+- url: /mstile-70x70\.png
+  static_files: icons/mstile-70x70.png
+  upload: mstile-70x70\.png
+- url: /mstile-150x150\.png
+  static_files: icons/mstile-150x150.png
+  upload: mstile-150x150\.png
+- url: /mstile-310x150\.png
+  static_files: icons/mstile-310x150.png
+  upload: mstile-310x150\.png
 - url: /style\.css
   static_files: templates/style.css
   upload: templates/style.css
