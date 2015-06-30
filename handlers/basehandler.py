@@ -70,12 +70,13 @@ class BaseAdminHandler(BaseHandler):
 
 class BaseLocalAdminHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        user = str(users.get_current_user()).lower()
+        user_full = users.get_current_user()
+        user  = str(users.get_current_user()).lower()
         if not super(BaseLocalAdminHandler, self).get(*args, **kwargs):
             return
         local_admin = Group.query(Group.group_id ==
                                   kwargs.get('group_id')).get().admin
-        if user is None:
+        if user_full is None:
             self.redirect(users.create_login_url(self.request.uri))
             return False
         if not((str(user) in str(local_admin)) or
@@ -88,12 +89,13 @@ class BaseLocalAdminHandler(BaseHandler):
         self.render_data['login_link'] =\
             users.create_logout_url(self.request.uri)
         self.render_data['login_link_text'] = 'Logout'
-        self.render_data['greeting'] = 'Hello, ' + user.nickname() + '.'
+        self.render_data['greeting'] = 'Hello, ' + user_full.nickname() + '.'
         self.render_data['is_admin'] = True
         return True
 
     def post(self, *args, **kwargs):
-        user = users.get_current_user()
+        user_full = users.get_current_user()
+        user  = str(users.get_current_user()).lower()
         local_admin = Group.query(Group.group_id ==
                                   kwargs.get('group_id')).get().admin
         if (user is None) or (not ((str(user) in str(local_admin)) or
