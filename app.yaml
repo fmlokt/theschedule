@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /admin/.*
+  script: google.appengine.ext.admin.application #админка
+  login: admin
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
