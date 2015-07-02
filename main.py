@@ -22,7 +22,7 @@ application = webapp2.WSGIApplication([
     ('/edit_group', groups.EditGroup),
     ('/delete_group', groups.DeleteGroup),
     ('/register', groups.RegisterGroup),
-    #('/calendar', calendar.Calendar),
+    ('/calendar', calendar.Calendar),
     webapp2.Route(r'/<group_id:[-\w]+>/pairs',
                   handler=pairs.ShowPairs,
                   name='pairs list'),
