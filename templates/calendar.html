@@ -1,13 +1,22 @@
 {% extends "templates/base.html" %}
 {% block title %}Calendar{% endblock %}
 {% block content_title %}
-<h1>Сalendar event</h1>
+<h1>Сreate event</h1>
     <form method="post" action="/calendar">
         <table>
         <tr><td class="name">summary </td><td><input type="text" name="summary"  required placeholder='ex. asgap' ></td></tr>
-        <tr><td class="name">start </td><td><input type="datetime-local" name="start"  ></td></tr>
-        <tr><td class="name">end </td><td><input type="datetime-local" name="end" ></td></tr>
+        <tr><td class="name">start </td><td><input type="datetime-local" name="start"  required ></td></tr>
+        <tr><td class="name">end </td><td><input type="datetime-local" name="end" required ></td></tr>
         <tr><td class="name">desc </td><td><input type="textarea" name="desc"  required placeholder='ex. a@b.com' ></td></tr>
+        <tr><td class="name">cal </td><td><input type="textarea" name="cal" required ></td></tr>
+        </table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
+    </form>
+<h1>Delete event</h1>
+    <form method="post" action="/calendar_delete">
+        <table>
+        <tr><td class="name">calendar </td><td><input type="text" name="calendar"  required ></td></tr>
+        <tr><td class="name">event </td><td><input type="text" name="event" required ></td></tr>
         </table>
         <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
     </form>

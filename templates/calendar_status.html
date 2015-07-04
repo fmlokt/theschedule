@@ -1,0 +1,14 @@
+{% extends "templates/base.html" %}
+{% block title %}Calendar{% endblock %}
+{% block content_title %}
+<h1>Сalendar status</h1>
+<table class="list">
+{% for calendar in calendars %}
+    <tr>
+        
+        <td><a href="https://www.google.com/calendar/embed?src={{ calendar['id']|e }}&ctz=Europe/Moscow">{{ calendar['id'] }}</a></td>
+        <td>{{ calendar['summary'] }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

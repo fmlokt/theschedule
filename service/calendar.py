@@ -13,7 +13,7 @@ from apiclient.discovery import build
 from handlers.basehandler import *
 
 ##\brief Календарь
-def CreateEvent(calendarId ,summary, start_time, end_time, description):
+def CreateEvent_func(calendar_id, summary, start_time, end_time, description):
     credentials = AppAssertionCredentials(
         'https://www.googleapis.com/auth/calendar')
     http_auth = credentials.authorize(Http())
@@ -29,10 +29,10 @@ def CreateEvent(calendarId ,summary, start_time, end_time, description):
         },
         'description': description
     }
-    event = service.events().insert(calendarId=calendarId, body=event).execute()
+    event = service.events().insert(calendarId=calendar_id, body=event).execute()
     return event['id']
 
-def DeleteEvent(calendarId, eventId):
+def DeleteEvent_func(calendarId, eventId):
     credentials = AppAssertionCredentials(
         'https://www.googleapis.com/auth/calendar')
     http_auth = credentials.authorize(Http())
@@ -64,13 +64,19 @@ def CreateCalendar(group):
     created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
     return created_calendar['id']
 
+def EventList(calendarId):
+    events = service.events().list(calendarId=calendarId).execute()
+    for event in events['items']:
+         event_list = str(event['id']) + '\n'
+    return event_list
+
 def DeleteCalendar(calendarId):
     service.calendars().delete(calendarId).execute()
 
 
-class Calendar(BaseAdminHandler):
+class CreateEvent(BaseAdminHandler):
     def get(self):
-        if not super(Calendar, self).get():
+        if not super(CreateEvent, self).get():
             return
         template = JINJA_ENVIRONMENT.\
             get_template('templates/calendar.html')
@@ -81,8 +87,40 @@ class Calendar(BaseAdminHandler):
         start = self.request.get('start')
         end = self.request.get('end')
         desc = self.request.get('desc')
-        event = CreateEvent('4eff584ar3hrm3cbe014aup5qo@group.calendar.google.com', summary, start, end, desc)
+        calendar = self.request.get('cal')
+        event = CreateEvent_func(calendar, summary, start, end, desc)
         self.response.write('Event Id: ' + str(event))
+
+
+class CalendarStatus(BaseAdminHandler):
+    def get(self):
+        if not super(CalendarStatus, self).get():
+            return
+        credentials = AppAssertionCredentials(
+            'https://www.googleapis.com/auth/calendar')
+        http_auth = credentials.authorize(Http())
+        calendar = build('calendar', 'v3', http=http_auth)
+        service = discovery.build('calendar', 'v3', http=http_auth)
+
+        template = JINJA_ENVIRONMENT.\
+            get_template('templates/calendar_status.html')
+        calendars = service.calendarList().list().execute()
+        self.render_data['calendars'] = []
+        item = {}
+        for calendar in calendars['items']:
+            self.render_data['calendars'].append(calendar)
+        self.response.write(template.render(self.render_data))
+
+class DeleteEvent(BaseAdminHandler):
+    def post(self):
+        calendar = self.request.get('calendar')
+        event = self.request.get('event')
+        delete = DeleteEvent_func(calendar, event)
+        self.response.write('Event Deleted: ' + str(event))
+
+
+
+
 
 
 
