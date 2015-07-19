@@ -41,7 +41,7 @@ def DeleteEvent_func(calendarId, eventId):
 
     service.events().delete(calendarId=calendarId, eventId=eventId).execute()
 
-def CreateCalendar(group):
+def CreateCalendar_func(group):
     credentials = AppAssertionCredentials(
         'https://www.googleapis.com/auth/calendar')
     http_auth = credentials.authorize(Http())
@@ -52,17 +52,16 @@ def CreateCalendar(group):
         'summary': group,
         'timeZone': 'Europe/Moscow'
     }
-
+    created_calendar = service.calendars().insert(body=calendar).execute()
+    cal_id = created_calendar['id']
     rule = {
         'scope': {
-            'type': 'default' #это настройки календаря, например сделать публичным для подписки
+            'type': 'default'
             },
         'role': 'reader'
         }
-
-    created_calendar = service.calendars().insert(body=calendar).execute()
-    created_rule = service.acl().insert(calendarId='primary', body=rule).execute()
-    return created_calendar['id']
+    created_rule = service.acl().insert(calendarId=cal_id, body=rule).execute()
+    return cal_id
 
 def EventList(calendarId):
     events = service.events().list(calendarId=calendarId).execute()
@@ -70,18 +69,27 @@ def EventList(calendarId):
          event_list = str(event['id']) + '\n'
     return event_list
 
-def DeleteCalendar(calendarId):
-    service.calendars().delete(calendarId).execute()
+def DeleteCalendar_func(calendarId):
+    credentials = AppAssertionCredentials(
+        'https://www.googleapis.com/auth/calendar')
+    http_auth = credentials.authorize(Http())
+    calendar = build('calendar', 'v3', http=http_auth)
+    service = discovery.build('calendar', 'v3', http=http_auth)
+
+    service.calendars().delete(calendarId=calendarId).execute()
+
+# =========================
 
 
-class CreateEvent(BaseAdminHandler):
+class CalendarMain(BaseAdminHandler):
     def get(self):
-        if not super(CreateEvent, self).get():
+        if not super(CalendarMain, self).get():
             return
         template = JINJA_ENVIRONMENT.\
             get_template('templates/calendar.html')
         self.response.write(template.render())
 
+class CreateEvent(BaseAdminHandler):
     def post(self):
         summary = self.request.get('summary')
         start = self.request.get('start')
@@ -117,6 +125,18 @@ class DeleteEvent(BaseAdminHandler):
         event = self.request.get('event')
         delete = DeleteEvent_func(calendar, event)
         self.response.write('Event Deleted: ' + str(event))
+
+class CreateCalendar(BaseAdminHandler):
+    def post(self):
+        summary = self.request.get('summary')
+        cal = CreateCalendar_func(summary)
+        self.response.write('Cal Id: ' + str(cal))
+
+class DeleteCalendar(BaseAdminHandler):
+    def post(self):
+        cal = self.request.get('calendar')
+        delete = DeleteCalendar_func(cal)
+        self.response.write('Calendar Deleted: ' + str(cal))
 
 
 
