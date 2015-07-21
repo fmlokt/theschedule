@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /telegram/.* 
+  script: service.telegram.app
+  secure: optional
 - url: /admin/.*
   script: google.appengine.ext.admin.application #админка
   login: admin

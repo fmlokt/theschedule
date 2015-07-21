@@ -12,6 +12,7 @@ from handlers import schedule
 from handlers import groups
 from handlers import crons
 from service import calendar
+from service import telegram
 
 
 application = webapp2.WSGIApplication([
