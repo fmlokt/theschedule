@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import StringIO
 import json
 import logging
@@ -13,7 +15,7 @@ import webapp2
 from handlers.basehandler import *
 
 
-token = 'YOUR_AUTH_TOKEN'
+token = '109564499:AAFyt97uLRl9Rmy4DZK2BaWBrBEPCcdz1gg'
 base_url = 'https://api.telegram.org/bot' + token + '/'
 
 # ================================
@@ -85,8 +87,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 resp = urllib2.urlopen(base_url + 'sendMessage', data=urllib.urlencode({
                     'chat_id': str(chat_id),
                     'text': msg.encode('utf-8'),
-                    'disable_web_page_preview': 'true',
-                    'reply_to_message_id': str(message_id),
                 })).read()
             else:
                 logging.error('no txt msg or specified')
@@ -97,22 +97,20 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if text.startswith('/'):
             if text == '/start':
-                reply('The Schedule bot enabled')
+                reply(u'Здравствуйте, ' + str(fr['first_name']) + ' ' + str(fr['last_name']))
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('The Schedule bot disabled')
+                reply(u'Бот отключен')
                 setEnabled(chat_id, False)
             elif text == '/time':
                 reply(str(datetime.datetime.now()))
-            elif text == '/me':
-                reply(str(fr))
             else:
-                reply('What command?')
+                reply(u'Какая команда?')
 
         elif 'what time is it' in text:
             reply('It is ASGAP time')
         else:
-            reply('i do not know')
+            reply(u'Я не понимаю')
 
 
 app = webapp2.WSGIApplication([
