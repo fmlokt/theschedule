@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import StringIO
 import json
 import logging
@@ -12,7 +14,6 @@ import webapp2
 
 from handlers.basehandler import *
 import xml.etree.ElementTree as ET
-
 
 
 token = 'AUTH_TOKEN'
@@ -87,8 +88,6 @@ class WebhookHandler(webapp2.RequestHandler):
                 resp = urllib2.urlopen(base_url + 'sendMessage', data=urllib.urlencode({
                     'chat_id': str(chat_id),
                     'text': msg.encode('utf-8'),
-                    'disable_web_page_preview': 'true',
-                    'reply_to_message_id': str(message_id),
                 })).read()
             else:
                 logging.error('no txt msg or specified')
@@ -99,10 +98,10 @@ class WebhookHandler(webapp2.RequestHandler):
 
         if text.startswith('/'):
             if text == '/start':
-                reply('The Schedule bot enabled')
+                reply(u'Здравствуйте, ' + str(fr['first_name']) + ' ' + str(fr['last_name']))
                 setEnabled(chat_id, True)
             elif text == '/stop':
-                reply('The Schedule bot disabled')
+                reply(u'Бот отключен')
                 setEnabled(chat_id, False)
             elif text == '/time':
                 reply(u'Текущее время - ' + str((datetime.datetime.now() + datetime.timedelta(hours=3)).strftime('%H:%M')))
@@ -120,12 +119,12 @@ class WebhookHandler(webapp2.RequestHandler):
                 cloud = root[0][0][0][0].attrib['cloudiness']
                 reply(u'Погода на ' + hour + u' час(а) ' + day  + u'.' + month  + u'.' + year + '\n' + u'От ' + min_temp + u' до ' + max_temp + u'градусов по Цельсию' +'\n' + u'Облачность ' + cloud + u'/3')
             else:
-                reply('What command?')
+                reply(u'Какая команда?')
 
         elif 'what time is it' in text:
             reply('It is ASGAP time')
         else:
-            reply('i do not know')
+            reply(u'Я не понимаю')
 
 
 app = webapp2.WSGIApplication([
