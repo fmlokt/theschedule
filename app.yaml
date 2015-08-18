@@ -1,11 +1,11 @@
 application: the-schedule
-version: 1
+version: beta
 runtime: python27
 api_version: 1
 threadsafe: true
 
 handlers:
-- url: /telegram/.* 
+- url: /telegram/.*
   script: service.telegram.app
   secure: optional
 - url: /admin/.*
@@ -31,7 +31,7 @@ handlers:
   upload: apple-touch-icon\.png
 - url: /apple-touch-icon-precomposed\.png
   static_files: icons/apple-touch-icon-precomposed.png
-  upload: apple-touch-icon-precomposed\.png 
+  upload: apple-touch-icon-precomposed\.png
 - url: /apple-touch-icon-57x57\.png
   static_files: icons/apple-touch-icon-57x57.png
   upload: apple-touch-icon-57x57\.png

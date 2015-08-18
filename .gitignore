@@ -5,3 +5,5 @@
 pep8.txt
 .coverage
 covhtml/
+service/secret.py
+data.json
