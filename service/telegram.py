@@ -62,8 +62,8 @@ def reply(chat_id, msg):
     else:
         logging.error('no txt msg or specified')
         resp = None
-    logging.info('send response:')
-    logging.info(resp)
+    #logging.info('send response:')
+    #logging.info(resp)
 
 
 def proceed_start(chat_id, fr, text):
@@ -71,7 +71,7 @@ def proceed_start(chat_id, fr, text):
 
 
 def proceed_time(chat_id, fr, text):
-    reply(chat_id, u'Текущее время - ' + unicode((timezone.now() + datetime.timedelta(hours=3)).strftime('%H:%M')))
+    reply(chat_id, u'Текущее время - ' + unicode(timezone.now().strftime('%H:%M')))
 
 
 def proceed_weather(chat_id, fr, text):
@@ -99,7 +99,7 @@ def proceed_help(chat_id, fr, text):
 def proceed_set_groupid(chat_id, fr, text):
     text = text.strip()
     if text == '':
-        reply(chat_id, u'Чтобы привязать чат к группе, наберите /set_group <id группы>.')
+        reply(chat_id, u'Чтобы привязать чат к группе, наберите /setgroup <id группы>.')
         return
     group = Group.query(Group.group_id == text).get()
     if group is None:
@@ -114,7 +114,7 @@ def proceed_set_groupid(chat_id, fr, text):
 def proceed_groupid(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))
     if chat_settings.group_id == '':
-        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /set_group <id группы>.')
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
     else:
         group = Group.query(Group.group_id == chat_settings.group_id).get()
         reply(chat_id, u'Id группы: \"' + chat_settings.group_id + '\" (' + group.name + ', ' + group.origin + ').')
@@ -123,7 +123,7 @@ def proceed_groupid(chat_id, fr, text):
 def proceed_next(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))
     if chat_settings.group_id == '':
-        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /set_group <id группы>.')
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
     else:
         event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today(), ScheduledPair.start_time > (timezone.now() - datetime.timedelta(minutes=10)).time()).order(ScheduledPair.start_time).fetch(3)
         if len(event_list) == 0:
@@ -135,13 +135,29 @@ def proceed_next(chat_id, fr, text):
         reply(chat_id, text)
 
 
+def proceed_tomorrow(chat_id, fr, text):
+    chat_settings = ChatSettings.get_or_insert(str(chat_id))
+    if chat_settings.group_id == '':
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+    else:
+        event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today() + datetime.timedelta(days=1)).order(ScheduledPair.start_time).fetch(5)
+        if len(event_list) == 0:
+            reply(chat_id, u'Завтра событий нет.')
+            return
+        text = u'Расписание на завтра:\n\n'
+        for event in event_list:
+            text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
+        reply(chat_id, text)
+
+
 COMMANDS = [
     ['/start', proceed_start, u'начать работу'],
     ['/time', proceed_time, u'текущее время'],
     ['/weather', proceed_weather, u'текущая погода'],
-    ['/set_group', proceed_set_groupid, u'привязать чат к группе'],
+    ['/setgroup', proceed_set_groupid, u'привязать чат к группе'],
     ['/group', proceed_groupid, u'показать группу, к которой привязан чат'],
     ['/next', proceed_next, u'показать следующее событие из расписания группы'],
+    ['/tomorrow', proceed_tomorrow, u'показать расписание на завтра'],
     ['/help', proceed_help, u'показать данную справку']
 ]
 
