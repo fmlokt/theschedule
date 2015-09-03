@@ -32,8 +32,9 @@ class ChooseGroup(BaseHandler):
         print 'GROUP FLAG : ' + str(self.request.get('change_group'))
         if (not self.request.get('change_group') == 'True') and\
                 ('group' in self.request.cookies):
-            self.redirect('/' + self.request.cookies['group'] + '/')
-            return
+            if Group.query(Group.group_id == self.request.cookies['group']).get() is not None:
+                self.redirect('/' + self.request.cookies['group'] + '/')
+                return
         template = JINJA_ENVIRONMENT.\
             get_template('templates/choose_group.html')
         group_qry = Group.query().order(Group.name)

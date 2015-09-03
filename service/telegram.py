@@ -67,11 +67,11 @@ def reply(chat_id, msg):
 
 
 def proceed_start(chat_id, fr, text):
-    reply(chat_id, u'Здравствуйте, ' + str(fr['first_name']) + ' ' + str(fr['last_name']))
+    reply(chat_id, u'Здравствуйте, ' + unicode(fr['first_name']) + ' ' + unicode(fr['last_name']))
 
 
 def proceed_time(chat_id, fr, text):
-    reply(chat_id, u'Текущее время - ' + str((timezone.now() + datetime.timedelta(hours=3)).strftime('%H:%M')))
+    reply(chat_id, u'Текущее время - ' + unicode((timezone.now() + datetime.timedelta(hours=3)).strftime('%H:%M')))
 
 
 def proceed_weather(chat_id, fr, text):
