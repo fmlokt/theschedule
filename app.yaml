@@ -1,5 +1,5 @@
 application: the-schedule
-version: beta
+version: 1
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -55,13 +55,13 @@ handlers:
   upload: icons/favicon-96x96\.png
 - url: /mstile-70x70\.png
   static_files: icons/mstile-70x70.png
-  upload: mstile-70x70\.png
+  upload: icons/mstile-70x70\.png
 - url: /mstile-150x150\.png
   static_files: icons/mstile-150x150.png
-  upload: mstile-150x150\.png
+  upload: icons/mstile-150x150\.png
 - url: /mstile-310x150\.png
   static_files: icons/mstile-310x150.png
-  upload: mstile-310x150\.png
+  upload: icons/mstile-310x150\.png
 - url: /style\.css
   static_files: templates/style.css
   upload: templates/style.css
