@@ -8,12 +8,12 @@
         <tr><td class="name">id</td><td><input type="text" name="group_id"  required value='{{ group.group_id }}' ></td></tr>
         <tr><td class="name">name</td><td><input type="text" name="name"  required value='{{ group.name }}' ></td></tr>
         <tr><td class="name">origin</td><td><input type="text" name="origin"  required value='{{ group.origin }}' ></td></tr>
-        <tr><td class="name">admin</td><td><input type="text" name="admin"  required value='{{ group.admin }}' ></td></tr>
+        <tr><td class="name">admin</td><td><input type="textarea" name="admin"  required value='{{ group.admin }}' cols=30 raws=6 ></td></tr>
 {% else %}
         <tr><td class="name">id</td><td><input type="text" name="group_id"  required placeholder='ex. asgap' ></td></tr>
         <tr><td class="name">name</td><td><input type="text" name="name"  required placeholder='ex. ВШОПФ' ></td></tr>
         <tr><td class="name">origin</td><td><input type="text" name="origin"  required placeholder='ex. ННГУ' ></td></tr>
-        <tr><td class="name">admin</td><td><input type="text" name="admin"  required placeholder='ex. a@b.com' ></td></tr>
+        <tr><td class="name">admin</td><td><input type="textarea" name="admin"  required placeholder='ex. a@b.com' cols=30 raws=6 ></td></tr>
 {% endif %}
         </table>
         <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>

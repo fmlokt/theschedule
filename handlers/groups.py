@@ -81,8 +81,6 @@ class ShowGroups(BaseAdminHandler):
         origin = self.request.get('origin')
         admin_raw = self.request.get('admin').lower()
         admin = re.split(';| |,|\*|\n',admin_raw)
-        print admin_raw
-        print admin
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             group = key.get()
@@ -123,6 +121,42 @@ class DeleteGroup(BaseAdminHandler):
         key.delete()
         self.redirect(return_url)
 
+class ShowRequests(BaseAdminHandler):
+    def get(self, *args, **kwargs):
+        if not super(ShowRequests, self).get(*args, **kwargs):
+            return
+        template = JINJA_ENVIRONMENT.\
+            get_template('templates/groups_requests.html')
+        group_qry = Premoderated_Group.query().order(Premoderated_Group.group_id)
+        self.render_data['groups'] = []
+        for group in group_qry:
+            group.edit_link = '/edit_group?key=' +\
+                             group.key.urlsafe()
+            group.delete_link = '/delete_group?key=' +\
+                group.key.urlsafe() + '&return_url=/groups'
+            group.apply_link = '/apply_request?key=' +\
+                group.key.urlsafe() + '&return_url=/groups'
+            self.render_data['groups'].append(group)
+        self.response.write(template.render(self.render_data))
+
+class ApplyRequest(BaseAdminHandler):
+    def get(self, *args, **kwargs):
+        if not super(ApplyRequest, self).get(*args, **kwargs):
+            return
+        url_key = self.request.get('key')
+        return_url = self.request.get('return_url')
+        key = ndb.Key(urlsafe=url_key)
+        request = key.get()
+        group = Group(group_id=request.group_id,
+                      name=request.name,
+                      origin=request.origin,
+                      admin=request.admin)
+        group.put()
+        key.delete()
+        self.redirect(return_url)
+
+
+
 ##\brief Подать заявку на добавление группы
 class RegisterGroup(BaseHandler):
     def get(self, *args, **kwargs):
@@ -132,7 +166,7 @@ class RegisterGroup(BaseHandler):
         group = Group(group_id='group',
                       name='',
                       origin='',
-                      admin='')
+                      admin=[])
         self.render_data['group'] = group
         self.response.write(template.render(self.render_data))
 
@@ -141,8 +175,14 @@ class RegisterGroup(BaseHandler):
         group_id = self.request.get('group_id')
         name = self.request.get('name')
         origin = self.request.get('origin')
-        admin = self.request.get('admin')
+        admin_raw = self.request.get('admin').lower()
+        admin = re.split(';| |,|\*|\n',admin_raw)
         info = self.request.get('info')
+        group = Premoderated_Group(group_id=group_id,
+                                   name=name,
+                                   origin=origin,
+                                   admin=admin)
+        group.put()
         message = mail.EmailMessage(sender="The Schedule Support <info@the-schedule.appspotmail.com>",
                                     to="Fedor Loktev <fmlokt@gmail.com>",
                                     cc="Nikolay Kalinin<nakalinin@gmail.com>",
@@ -151,6 +191,7 @@ class RegisterGroup(BaseHandler):
                                     "Group id : " + group_id + " \n" +\
                                     "Name : " + name + " \n" +\
                                     "Origin : " + origin + " \n" +\
+                                    "Admin : " + admin_raw + " \n" +\
                                     "Info : " + info + " \n" +\
                                     "---------\n" + "This message was generated automatically\n" +\
                                     "The Schedule.")
