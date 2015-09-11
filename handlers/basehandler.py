@@ -95,7 +95,7 @@ class BaseLocalAdminHandler(BaseHandler):
         self.render_data['login_link'] =\
             users.create_logout_url(self.request.uri)
         self.render_data['login_link_text'] = 'Logout'
-        self.render_data['greeting'] = 'Hello, ' + user_full.nickname() + '.'
+        self.render_data['greeting'] = 'Приветствуем, ' + user_full.nickname() + '.'
         self.render_data['is_admin'] = True
         return True
 
