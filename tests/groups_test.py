@@ -31,7 +31,7 @@ class groupsTest(unittest2.TestCase):
         group1 = Group(group_id='group',
                        name='name2',
                        origin='origin1',
-                       admin='admin1')
+                       admin=[u'admin1'])
         response = post_group(group1)
         self.assertEqual(response.status_int, 302)
         groups_list = Group.query().fetch()
@@ -43,7 +43,7 @@ class groupsTest(unittest2.TestCase):
         group2 = Group(group_id='group2',
                        name='name2',
                        origin='origin2',
-                       admin='admin2')
+                       admin=[u'admin2'])
         response = post_group(group2)
         self.assertEqual(response.status_int, 302)
         groups_list = Group.query().fetch(3)
@@ -62,7 +62,7 @@ class groupsTest(unittest2.TestCase):
         group = Group(group_id='group1',
                       name='name1',
                       origin='origin1',
-                      admin='admin1')
+                      admin=[u'admin1'])
         response = post_group(group)
         added_group = Group.query().fetch(2)[0]
         response = make_request('/edit_group?key=' +
@@ -71,7 +71,7 @@ class groupsTest(unittest2.TestCase):
         group = Group(group_id='group2',
                       name='name2',
                       origin='origin2',
-                      admin='admin2')
+                      admin=[u'admin2'])
         response = post_group(group, added_group.key.urlsafe())
         self.assertEqual(response.status_int, 302)
         groups_list = Group.query().fetch(2)
@@ -86,11 +86,11 @@ class groupsTest(unittest2.TestCase):
         group1 = Group(group_id='group1',
                        name='name1',
                        origin='origin1',
-                       admin='admin1')
+                       admin=[u'admin1'])
         group2 = Group(group_id='group2',
                        name='name2',
                        origin='origin2',
-                       admin='admin2')
+                       admin=[u'admin2'])
         post_group(group1)
         post_group(group2)
         groups_list = Group.query().fetch(2)
@@ -113,15 +113,15 @@ class groupsTest(unittest2.TestCase):
         group1 = Group(group_id='group1',
                        name='name1',
                        origin='origin1',
-                       admin='admin1')
+                       admin=[u'admin1'])
         group2 = Group(group_id='group2',
                        name='name2',
                        origin='origin2',
-                       admin='admin2')
+                       admin=[u'admin2'])
         group3 = Group(group_id='group3',
                        name='name3',
                        origin='origin3',
-                       admin='admin3')
+                       admin=[u'admin3'])
         post_group(group2)
         post_group(group3)
         post_group(group1)
@@ -151,7 +151,7 @@ class groupsTest(unittest2.TestCase):
         group1 = Group(group_id='group1',
                        name='name1',
                        origin='origin1',
-                       admin='admin1')
+                       admin=[u'admin1'])
         post_group(group1)
         groups_list = Group.query().fetch(2)
         added_group1 = groups_list[0]

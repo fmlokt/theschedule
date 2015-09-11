@@ -30,7 +30,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_create_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -72,7 +72,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_edit_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -105,7 +105,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_delete_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -137,7 +137,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_show_pairs(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -176,7 +176,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_show_schedule(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -221,7 +221,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_copy_from_default(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -325,7 +325,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_all_unauth(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='1')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'1'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'
@@ -370,7 +370,7 @@ class PairsTest(unittest2.TestCase):
 
     def test_all_no_admin(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         group_id = 'asgap'

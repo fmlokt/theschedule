@@ -20,6 +20,8 @@ application = webapp2.WSGIApplication([
     ('/', groups.ChooseGroup),
     ('/create_group', groups.CreateGroup),
     ('/groups', groups.ShowGroups),
+    ('/requests', groups.ShowRequests),
+    ('/apply_request', groups.ApplyRequest),
     ('/edit_group', groups.EditGroup),
     ('/delete_group', groups.DeleteGroup),
     ('/register', groups.RegisterGroup),

@@ -28,7 +28,7 @@ class TwoWeekScheduleTest(unittest2.TestCase):
 
     def test_create_2week_default_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         simulate_login(self.testbed, 'a@b.com', '123', True)
@@ -48,7 +48,7 @@ class TwoWeekScheduleTest(unittest2.TestCase):
 
     def test_change_schedule_settings(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
-        group = Group(group_id='asgap', name='1', origin='1', admin='a@b.com')
+        group = Group(group_id='asgap', name='1', origin='1', admin=[u'a@b.com'])
         post_group(group)
         simulate_login(self.testbed)
         simulate_login(self.testbed, 'a@b.com', '123', True)

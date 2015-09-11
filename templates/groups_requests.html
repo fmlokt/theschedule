@@ -1,0 +1,28 @@
+{% extends "templates/base.html" %}
+{% block title %}Список групп{% endblock %}
+{% block content_title %}
+<h1>Список групп</h1>
+<table class="list">
+<caption>Список групп</caption>
+    <tr>
+        <th>id группы</th>
+        <th>Название</th>
+        <th>Университет</th>
+        <th>Администратор(ы)</th>
+        <th></th>
+        <th></th>
+    </tr>
+{% for group in groups %}
+    <tr>
+        <td><a href="/{{group.group_id}}/">{{ group.group_id }}</a></td>
+        <td>{{ group.name }} </td>
+        <td>{{ group.origin }}</td>
+        <td>{{ group.admin }}</td>
+        <td><a href='{{ group.edit_link }}'>Редактировать</a></td>
+        <td><a href='{{ group.delete_link }}'>Удалить</a></td>
+        <td><a href='{{ group.apply_link }}'>Принять</a></td>
+    </tr>
+{% endfor %}
+</table>
+<a href="/create_group">Добавить группу</a>
+{% endblock %}

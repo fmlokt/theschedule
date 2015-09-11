@@ -42,5 +42,5 @@ def post_default_pair(pair, key=''):
 def post_group(group, key=''):
     body = 'group_id=' + str(group.group_id) +\
         '&name=' + str(group.name) + '&origin=' + str(group.origin) +\
-        '&admin=' + str(group.admin) + '&key=' + key
+        '&admin=' + str(group.admin[0]) + '&key=' + key
     return make_request('/groups', 'POST', body)
