@@ -6,6 +6,7 @@ import unittest2
 import webapp2
 from google.appengine.ext import testbed
 
+from service import timezone
 import main
 from objects.group import Group
 from objects.pair import ScheduledPair
@@ -182,10 +183,10 @@ class PairsTest(unittest2.TestCase):
         response = make_request('/' + group_id + '/', 'GET')
         self.assertEqual(response.status_int, 200)
         self.assertEqual(response.body.count('</tr>'), 1)
-        if datetime.date.today().weekday() >= 5:
-            today = datetime.date.today() + datetime.timedelta(days=2)
+        if timezone.today().weekday() >= 5:
+            today = timezone.today() + datetime.timedelta(days=2)
         else:
-            today = datetime.date.today()
+            today = timezone.today()
         pair1 = ScheduledPair(classname='Math 1',
                               date=today,
                               start_time=datetime.time(9, 10),

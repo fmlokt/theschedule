@@ -8,6 +8,7 @@ import re
 import webapp2
 from google.appengine.api import memcache
 
+from service import timezone
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
@@ -189,8 +190,8 @@ class CopyFromDefault(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(CopyFromDefault, self).get(*args, **kwargs):
             return
-        date_begin = datetime.date.today()
-        date_end = datetime.date.today() + datetime.timedelta(days=13)
+        date_begin = timezone.today()
+        date_end = timezone.today() + datetime.timedelta(days=13)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'copy_from_default.html')
         self.render_data['date_begin'] = str(date_begin)
