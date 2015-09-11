@@ -11,6 +11,7 @@ from handlers import pairs
 from handlers import schedule
 from handlers import groups
 from handlers import crons
+from handlers import howto
 #from service import calendar # disabled because tests are failing
 from service import telegram
 
@@ -63,5 +64,8 @@ application = webapp2.WSGIApplication([
                   name='copy from default'),
     webapp2.Route(r'/<group_id:[-\w]+>/schedule_settings',
                   handler=schedule.EditSettings,
-                  name='schedule settings')
+                  name='schedule settings'),
+    webapp2.Route(r'/<group_id:[-\w]+>/howto',
+                  handler=howto.ShowHowto,
+                  name='howto')
 ], debug=True)

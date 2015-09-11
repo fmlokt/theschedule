@@ -2,21 +2,23 @@
 {% block top_left %}
     <span align="left">
         <div class="top_link_list">
-            <a href="/{{ group_id }}/">Расписание</a> 
-            <a href="/{{ group_id }}/schedule">Стандартное расписание</a>
+            <a href="/{{ group_id }}/">Актуальное расписание</a> 
+            <a href="/{{ group_id }}/schedule">Регулярное расписание</a>
         </div>
     {% if is_admin %}
         <div class="bottom_link_list">
-            <a href="/{{ group_id }}/pairs">Список пар</a> 
-            <a href="/{{ group_id }}/default_pairs">Стандартный список</a> 
+            <a href="/{{ group_id }}/pairs">Актуальные занятия</a> 
+            <a href="/{{ group_id }}/default_pairs">Регулярные занятия</a> 
             <a href="/{{ group_id }}/copy_from_default">Сгенерировать расписание</a>
-            <a href="/{{ group_id }}/schedule_settings">Настройки расписания</a>
+            <a href="/{{ group_id }}/schedule_settings">Настройки</a>
+            <a href="/{{ group_id }}/howto"><b>?</b></a>
         </div>
     {% endif %}
     </span>
 {% endblock %}
 {% block content_title %}
 <h1>Расписание {{ group_name|upper }}</h1>
+<h2>{% block subtitle %}{% endblock %}</h2>
 {% block content %}
 {% endblock %}
 {% endblock %}

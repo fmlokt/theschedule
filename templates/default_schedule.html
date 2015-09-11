@@ -1,8 +1,10 @@
 {% extends "templates/base_groups.html" %}
-{% block title %}Расписание{% endblock %}
+{% block title %}Расписание регулярных занятий{% endblock %}
 {% block content %}
 {% if double_week %}
     <h2>Нечетная неделя</h2>
+{% else %}
+    <h2>Расписание регулярных занятий</h2>
 {% endif %}
 <table class="schedule">
 	<tr>

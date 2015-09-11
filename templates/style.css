@@ -200,3 +200,7 @@ form div.btn {
 form .btn {
     width: 10%;
 }
+
+p.text {
+    padding: 0% 10%;
+}

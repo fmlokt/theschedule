@@ -1,9 +1,10 @@
 {% extends "templates/base_groups.html" %}
-{% block title %}Сгенерировать Расписание{% endblock %}
+{% block title %}Сгенерировать расписание{% endblock %}
+{% block subtitle %}Сгенерировать расписание{% endblock %}
 {% block content %}
     {% if result!=None %}
         {% for line in result %}
-            <h2>{{line}}</h2>
+            <p class="text">{{line}}</p>
         {% endfor %}
     {% endif %}
 	<form method="post" action="/{{ group_id }}/copy_from_default"> 
