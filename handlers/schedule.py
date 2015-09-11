@@ -153,9 +153,18 @@ class CopyFromDefault(BaseLocalAdminHandler):
 
         date_begin = datetime.date(year_start, month_start, day_start)
         date_end = datetime.date(year_end, month_end, day_end)
+        date_begin_new = timezone.today()
+        date_end_new = timezone.today() + datetime.timedelta(days=13)
+        self.render_data['date_begin'] = str(date_begin_new)
+        self.render_data['date_end'] = str(date_end_new)
+        template = JINJA_ENVIRONMENT.\
+            get_template('templates/copy_from_default.html')
+        self.render_data['result'] = [u'Расписание успешно добавлено.']
         if (date_end - date_begin) > 180*datetime.timedelta(days=1):
-            self.response.write('Too many days to copy')
+            self.render_data['result'] = [u'Ошибка: cлишком много дней для копирования.' +\
+                                         u' Пожалуйста, попробуйте с меньшим диапазоном.']
             self.response.status = 422
+            self.response.write(template.render(self.render_data))
             return
         memcache.delete("schedule_to_render_" + group_id)
         settings_qry = ScheduleSettings.query().fetch(1)
@@ -181,11 +190,11 @@ class CopyFromDefault(BaseLocalAdminHandler):
                                              group_id=group_id)
                     new_pair.put()
             else:
-                self.response.write('<div>Schedule for ' + str(date_begin) +
-                                    ' already exists' + '</div>\n')
+                self.render_data['result'] += [u'Расписание на ' + str(date_begin) +\
+                                              u' уже существует.\n']
             date_begin += datetime.timedelta(days=1)
         memcache.delete("schedule_to_render_" + group_id)
-        self.response.write('<a href=\"/'+group_id+'/\">Back to schedule</a>')
+        self.response.write(template.render(self.render_data))
 
     def get(self, *args, **kwargs):
         if not super(CopyFromDefault, self).get(*args, **kwargs):

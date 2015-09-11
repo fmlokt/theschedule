@@ -79,7 +79,7 @@ class BaseLocalAdminHandler(BaseHandler):
         user_full = users.get_current_user()
         user  = str(users.get_current_user()).lower()
         if not super(BaseLocalAdminHandler, self).get(*args, **kwargs):
-            return
+            return False
         local_admin = Group.query(Group.group_id ==
                                   kwargs.get('group_id')).get().admin
         if user_full is None:
@@ -94,7 +94,7 @@ class BaseLocalAdminHandler(BaseHandler):
         self.render_data['group_id'] = kwargs.get('group_id')
         self.render_data['login_link'] =\
             users.create_logout_url(self.request.uri)
-        self.render_data['login_link_text'] = 'Logout'
+        self.render_data['login_link_text'] = u'выйти'
         self.render_data['greeting'] = u'Приветствуем, ' + user_full.nickname() + '.'
         self.render_data['is_admin'] = True
         return True
@@ -109,4 +109,11 @@ class BaseLocalAdminHandler(BaseHandler):
             self.error(403)
             self.response.write('403 Forbidden\n')
             return False
+        self.render_data = {}
+        self.render_data['group_id'] = kwargs.get('group_id')
+        self.render_data['login_link'] =\
+            users.create_logout_url(self.request.uri)
+        self.render_data['login_link_text'] = u'выйти'
+        self.render_data['greeting'] = u'Приветствуем, ' + user_full.nickname() + '.'
+        self.render_data['is_admin'] = True
         return True

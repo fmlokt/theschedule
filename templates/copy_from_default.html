@@ -1,6 +1,11 @@
 {% extends "templates/base_groups.html" %}
 {% block title %}Сгенерировать Расписание{% endblock %}
 {% block content %}
+    {% if result!=None %}
+        {% for line in result %}
+            <h2>{{line}}</h2>
+        {% endfor %}
+    {% endif %}
 	<form method="post" action="/{{ group_id }}/copy_from_default"> 
 	<table>
         <tr><td class="name">С</td><td><input type="date" name="date_start" value='{{ date_begin }}'></td></tr>

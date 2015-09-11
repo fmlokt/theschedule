@@ -19,7 +19,11 @@ class ChooseGroup(BaseHandler):
         group_id = self.request.get('group_id')
         group = Group.query(Group.group_id == group_id).get()
         if group is None:
-            self.response.write('this group id does not exists')
+            self.response.set_cookie('group',
+                                     group_id,
+                                     expires=datetime.datetime.now() -
+                                     datetime.timedelta(days=365)) # delete
+            self.redirect('/')
         else:
             self.response.set_cookie('group',
                                      group_id,
@@ -155,6 +159,8 @@ class RegisterGroup(BaseHandler):
                                     "---------\n" + "This message was generated automatically\n" +\
                                     "The Schedule.")
         message.send()
-        self.response.write('Спасибо, заявка будет рассмотрена. Мы обязательно с вами свяжемся')
+        template = JINJA_ENVIRONMENT.\
+            get_template('templates/group_request_added.html')
+        self.response.write(template.render(self.render_data))
 
 
