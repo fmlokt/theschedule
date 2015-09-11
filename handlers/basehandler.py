@@ -85,7 +85,7 @@ class BaseLocalAdminHandler(BaseHandler):
         if user_full is None:
             self.redirect(users.create_login_url(self.request.uri))
             return False
-        if not((str(user) in str(local_admin)) or
+        if not((str(user) in local_admin) or
                 users.is_current_user_admin()):
             self.error(403)
             self.response.write('403 Forbidden\n')

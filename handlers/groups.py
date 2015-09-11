@@ -51,7 +51,7 @@ class CreateGroup(BaseAdminHandler):
         group = Group(group_id='group',
                       name='',
                       origin='',
-                      admin='')
+                      admin=[])
         self.render_data['group'] = group
         self.response.write(template.render(self.render_data))
 
@@ -79,7 +79,10 @@ class ShowGroups(BaseAdminHandler):
         group_id = self.request.get('group_id')
         name = self.request.get('name')
         origin = self.request.get('origin')
-        admin = self.request.get('admin')
+        admin_raw = self.request.get('admin').lower()
+        admin = re.split(';| |,|\*|\n',admin_raw)
+        print admin_raw
+        print admin
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             group = key.get()
