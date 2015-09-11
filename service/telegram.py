@@ -149,6 +149,20 @@ def proceed_tomorrow(chat_id, fr, text):
             text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
         reply(chat_id, text)
 
+def proceed_task(chat_id, fr, text):
+    chat_settings = ChatSettings.get_or_insert(str(chat_id))
+    if chat_settings.group_id == '':
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+    else:
+        event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today() + datetime.timedelta(days=1)).order(ScheduledPair.start_time).fetch(5)
+        if len(event_list) == 0:
+            reply(chat_id, u'Завтра событий нет.')
+            return
+        text = u'Задания на завтра:\n\n'
+        for event in event_list:
+            text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
+        reply(chat_id, text)
+
 
 COMMANDS = [
     ['/start', proceed_start, u'начать работу'],
@@ -158,7 +172,8 @@ COMMANDS = [
     ['/group', proceed_groupid, u'показать группу, к которой привязан чат'],
     ['/next', proceed_next, u'показать следующее событие из расписания группы'],
     ['/tomorrow', proceed_tomorrow, u'показать расписание на завтра'],
-    ['/help', proceed_help, u'показать данную справку']
+    ['/help', proceed_help, u'показать данную справку'],
+    ['/task', proceed_task, u'показать задания на завтра']
 ]
 
 
