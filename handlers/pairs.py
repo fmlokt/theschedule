@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import datetime
 import re
 
 import webapp2
 from google.appengine.api import memcache
 
+from service import timezone
 from objects.pair import *
 from objects.group import *
 from environment import JINJA_ENVIRONMENT
@@ -22,10 +22,10 @@ class ShowSchedule(BaseHandler):
         schedule_to_render = memcache.get("schedule_to_render_" + group_id)
         date_in_memcache = memcache.get("schedule_set_date_" + group_id)
         if (schedule_to_render is None) or (date_in_memcache is None)\
-                or (date_in_memcache != datetime.date.today()):
+                or (date_in_memcache != timezone.today()):
             schedule_to_render = [None] * 6
             for day in xrange(7):
-                today = datetime.date.today()
+                today = timezone.today()
                 thatday = today + datetime.timedelta(days=day)
                 if thatday.weekday() == 6:
                     continue
@@ -51,7 +51,7 @@ class ShowSchedule(BaseHandler):
             memcache.set(key="schedule_to_render_" + group_id,
                          value=schedule_to_render)
             memcache.set(key="schedule_set_date_" + group_id,
-                         value=datetime.date.today())
+                         value=timezone.today())
         self.render_data['days'] = schedule_to_render
         self.response.write(template.render(self.render_data))
 
@@ -118,7 +118,7 @@ class NewPair(BaseLocalAdminHandler):
         if not super(NewPair, self).get(*args, **kwargs):
             return
         pair = ScheduledPair(classname='classname',
-                             date=datetime.date.today(),
+                             date=timezone.today(),
                              start_time=datetime.time(9, 10),
                              task='')
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
