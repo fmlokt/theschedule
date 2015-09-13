@@ -13,7 +13,8 @@ from objects.group import *
 #
 #
 class BaseHandler(webapp2.RequestHandler):
-    def get(self, *args, **kwargs):
+    
+    def add_default_render_date(self, *args, **kwargs):
         user_full = users.get_current_user()
         user  = str(users.get_current_user()).lower()
         local_admin = ''
@@ -44,6 +45,14 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['login_link_text'] = u'выйти'
             self.render_data['greeting'] = u'Приветствуем, ' +\
                 user_full.nickname() + '.'
+        
+    
+    def get(self, *args, **kwargs):
+        self.add_default_render_date(*args, **kwargs);
+        return True
+
+    def post(self, *args, **kwargs):
+        self.add_default_render_date(*args, **kwargs);
         return True
 
 ##\brief Класс, дающий доступ с правами глобального администратора
@@ -64,6 +73,8 @@ class BaseAdminHandler(BaseHandler):
         return True
 
     def post(self, *args, **kwargs):
+        if not super(BaseAdminHandler, self).post(*args, **kwargs):
+            return False
         user = users.get_current_user()
         if (user is None) or (not users.is_current_user_admin()):
             self.error(403)
@@ -76,10 +87,10 @@ class BaseAdminHandler(BaseHandler):
 #
 class BaseLocalAdminHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        user_full = users.get_current_user()
-        user  = str(users.get_current_user()).lower()
         if not super(BaseLocalAdminHandler, self).get(*args, **kwargs):
             return False
+        user_full = users.get_current_user()
+        user  = str(users.get_current_user()).lower()
         local_admin = Group.query(Group.group_id ==
                                   kwargs.get('group_id')).get().admin
         if user_full is None:
@@ -94,6 +105,8 @@ class BaseLocalAdminHandler(BaseHandler):
         return True
 
     def post(self, *args, **kwargs):
+        if not super(BaseLocalAdminHandler, self).post(*args, **kwargs):
+            return False
         user_full = users.get_current_user()
         user  = str(users.get_current_user()).lower()
         local_admin = Group.query(Group.group_id ==
