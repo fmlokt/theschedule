@@ -206,3 +206,7 @@ form .btn {
 p.text {
     padding: 0% 10%;
 }
+
+input.default:read-only {
+    color: #777777;
+}

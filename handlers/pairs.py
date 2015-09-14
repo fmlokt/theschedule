@@ -117,9 +117,10 @@ class NewPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewPair, self).get(*args, **kwargs):
             return
-        pair = ScheduledPair(classname='classname',
+        pair = ScheduledPair(classname='',
                              date=timezone.today(),
                              start_time=datetime.time(9, 10),
+                             replace=True,
                              task='')
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
         self.render_data['pair'] = pair

@@ -4,17 +4,35 @@
 {% block content %}
 	<form method="post" action="/{{ group_id }}/pairs">
 	<table>
-{% if pair.classname == 'classname' %}
-		<tr><td class="name">Предмет</td><td><input type="text" name="classname"  required placeholder='{{ pair.classname }}'></td></tr>
+{% if pair.classname == '' %}
+		<tr><td class="name">Предмет</td><td><input type="text" name="classname" class="default" required placeholder='Название'></td></tr>
 {% else %}
-        <tr><td class="name">Предмет</td><td><input type="text" name="classname"  value='{{ pair.classname }}'></td></tr>
+        <tr><td class="name">Предмет</td><td><input type="text" name="classname" class="default" value='{{ pair.classname }}'></td></tr>
 {% endif %}
-		<tr><td class="name">Дата</td><td><input type="date" name="date" value='{{ pair.date }}'></td></tr>
-		<tr><td class="name">Время</td><td><input type="time" name="time" value='{{ pair.start_time }}'></td></tr>
-        <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" {% if pair.replace %}checked{% endif %}></td></tr>
+		<tr><td class="name">Дата</td><td><input type="date" name="date" class="default" value='{{ pair.date }}'></td></tr>
+		<tr><td class="name">Время</td><td><input type="time" name="time" class="default" value='{{ pair.start_time }}'></td></tr>
+        <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" id="checkbox" onclick="replaceset()" {% if pair.replace %} checked disabled {% endif %}></td></tr>
 		<tr><td class="name">Задание</td><td><textarea name="task" rows="10" cols="80">{{ pair.task }}</textarea></td></tr>
 	</table>
         <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
 		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
 	</form>
+<script>
+var default_values = []
+function replaceset() {
+    var inputs = document.getElementsByClassName("default");
+    var should_disable = !document.getElementById("checkbox").checked;
+    for (i = 0; i < inputs.length; i++)
+    {
+        inputs[i].readOnly = should_disable;
+        if (should_disable) inputs[i].value = default_values[i];
+    }
+}
+function saveform() {
+    var inputs = document.getElementsByClassName("default");
+    for (i = 0; i < inputs.length; i++) default_values[i] = inputs[i].value;
+}
+saveform();
+replaceset();
+</script>
 {% endblock %}
