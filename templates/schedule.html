@@ -2,17 +2,17 @@
 {% block title %}Расписание{% endblock %}
 {% block content %}
 <table class="schedule">
-	<tr>
-	{% for day in days %}
-	<td class="day" {% if day.is_current %}id="current_day"{% endif %}>
-	<table class="day">
-	<caption>{{day.date|date}}, {{day.week_day|weekday}}</caption>
-	{% for pair in day.pairs %}
-		<tr class="pair" onclick="desc(this)">
-			<td class="pair">
-			<div class="classname">{{ pair['classname'] }}</div>
-			<div class="container">
-                <div class="start_time">{{ pair['start_time']|time }}</div>
+    <tr>
+    {% for day in days %}
+    <td class="day" {% if day.is_current %}id="current_day"{% endif %}>
+    <table class="day">
+    <caption>{{day.date|date}},<br/>{{day.week_day|weekday}}</caption>
+    {% for pair in day.pairs %}
+        <tr class="pair" onclick="desc(this)">
+            <td class="pair">
+            <div class="classname">{{ pair['classname'] }}</div>
+            <div class="container">
+                <span class="start_time">{{ pair['start_time']|time }}</span>
                 <span>
                 {% if pair['replace'] %}
                     <div title="Замена" class="replace_tag">&#9679;</div>

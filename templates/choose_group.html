@@ -4,7 +4,7 @@
 <h1>Выбор группы</h1>
     <form method="post" action="/">
     <table>
-        <tr><td class="name">Название группы</td><td><select size="1" name="group_id" >
+        <tr><td class="name">Выберите вашу группу:</td><td><select size="1" name="group_id" >
                 <option disabled>Название группы</option>
                 {% for group in groups %}
                 <option value="{{ group.group_id }}">{{ group.name }}</option>
@@ -13,8 +13,7 @@
     </table>
         <div class="btn"><input class="btn" type="submit" value="Выбрать"/></div>
     </form>
-<div style="position: absolute; bottom: 5px">
-    <a href="/register">Подключить группу</a>
-    </div>
-</body>
+    <center>
+        Нет вашей группы? <a href="/register">Подключить.</a>
+    </center>
 {% endblock %}
