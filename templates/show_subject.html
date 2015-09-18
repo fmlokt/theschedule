@@ -1,0 +1,6 @@
+{% extends "templates/base_groups.html" %}
+{% block title %}Информация о предмете{% endblock %}
+{% block subtitle %}{{subject.classname}}{% endblock %}
+{% block content %}
+<p class="text"><b>Преподаватель:</b> {{subject.teacher}}</p>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "templates/base_groups.html" %}
+{% block title %}Редактировать предмет{% endblock %}
+{% block subtitle %}Редактировать предмет{% endblock %}
+{% block content %}
+	<form method="post" action="/{{ group_id }}/subjects">
+	<table>
+{% if subject.classname == '' %}
+		<tr><td class="name">Название</td><td><input type="text" name="classname" required placeholder='Название'></td></tr>
+{% else %}
+        <tr><td class="name">Название</td><td><input type="text" name="classname" value='{{ subject.classname }}'></td></tr>
+{% endif %}
+		<tr><td class="name">Преподаватель</td><td><input type="text" name="teacher" value='{{ subject.teacher }}'></td></tr>
+    </table>
+        <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
+		<input type="hidden" name="key" value='{{ key_urlsafe }}'>
+	</form>
+{% endblock %}

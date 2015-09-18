@@ -1,0 +1,22 @@
+{% extends "templates/base_groups.html" %}
+{% block title %}Cписок предметов{% endblock %}
+{% block subtitle %}Cписок предметов{% endblock %}
+{% block content %}
+<table class="list">
+    <tr>
+        <th>Название</th>
+        <th>Преподаватель</th>
+        <th></th>
+        <th></th>
+    </tr>
+{% for subject in subjects %}
+	<tr>
+		<td>{{ subject.classname }}</td>
+		<td>{{ subject.teacher }} </td>
+		<td><a href='{{ subject.edit_link }}'>Редактировать</a></td>
+		<td><a href='{{ subject.delete_link }}'>Удалить</a></td>
+	</tr>
+{% endfor %}
+</table>
+<a href="/{{ group_id }}/new_subject">Добавить предмет</a>
+{% endblock %}
