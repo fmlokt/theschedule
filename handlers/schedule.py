@@ -41,9 +41,10 @@ class ShowDefaultSchedule(BaseHandler):
                 order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
-                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe()
+                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
+                    '&return_url=/' + group_id + '/schedule'
                 pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
-                    '&return_url=/schedule'
+                    '&return_url=/' + group_id + '/schedule'
                 render_day['pairs'].append(pair)
             self.render_data['odd_days'][day] = render_day
         self.render_data['even_days'] = [None] * 6
@@ -53,9 +54,10 @@ class ShowDefaultSchedule(BaseHandler):
                 order(DefaultPair.start_time)
             render_day = {'week_day': day, 'pairs': []}
             for pair in pairs_qry:
-                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe()
+                pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
+                    '&return_url=/' + group_id + '/schedule'
                 pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
-                    '&return_url=/schedule'
+                    '&return_url=/' + group_id + '/schedule'
                 render_day['pairs'].append(pair)
             self.render_data['even_days'][day - 7] = render_day
         self.response.write(template.render(self.render_data))
@@ -74,7 +76,8 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
         self.render_data['pairs'] = []
         for pair in pairs_qry:
             pair.edit_link = '/' + group_id + '/edit_default_pair?key=' +\
-                             pair.key.urlsafe()
+                pair.key.urlsafe() + '&return_url=/' +\
+                group_id + '/default_pairs'
             pair.delete_link = '/' + group_id + '/delete_pair?key=' +\
                 pair.key.urlsafe() + '&return_url=/' +\
                 group_id + '/default_pairs'
@@ -105,7 +108,11 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
                                start_time=datetime.time(hour, minute),
                                group_id=group_id)
         pair.put()
-        self.redirect('/' + group_id + '/default_pairs')
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/default_pairs'
+        self.redirect(return_url)
+
 
 ##\brief Создать стандартную пару
 class NewDefaultPair(BaseLocalAdminHandler):
@@ -116,9 +123,13 @@ class NewDefaultPair(BaseLocalAdminHandler):
         pair = DefaultPair(classname='classname',
                            week_day=0,
                            group_id=group_id)
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/default_pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
         self.render_data['pair'] = pair
+        self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
 
 ##\brief Редактировать стандартную пару
@@ -129,10 +140,14 @@ class EditDefaultPair(BaseLocalAdminHandler):
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/default_pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
+        self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
 
 ##\brief Скопировать из стандартных в ближайшие

@@ -45,15 +45,15 @@ class BaseHandler(webapp2.RequestHandler):
             self.render_data['login_link_text'] = u'выйти'
             self.render_data['greeting'] = u'Приветствуем, ' +\
                 user_full.nickname() + '.'
+        return True
         
     
     def get(self, *args, **kwargs):
-        self.add_default_render_date(*args, **kwargs);
-        return True
+        return self.add_default_render_date(*args, **kwargs)
 
     def post(self, *args, **kwargs):
-        self.add_default_render_date(*args, **kwargs);
-        return True
+        return self.add_default_render_date(*args, **kwargs)
+
 
 ##\brief Класс, дающий доступ с правами глобального администратора
 #
