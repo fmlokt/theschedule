@@ -41,8 +41,9 @@ class ShowSchedule(BaseHandler):
                 for pair in pairs_qry:
                     pair_dict = pair.to_dict()
                     pair_dict['edit_link'] = '/' + group_id +\
-                                             '/edit_pair?key=' +\
-                                             pair.key.urlsafe()
+                         '/edit_pair?key=' +\
+                         pair.key.urlsafe() +\
+                        '&return_url=/' + group_id + '/'
                     pair_dict['delete_link'] = '/' + group_id +\
                         '/delete_pair?key=' + pair.key.urlsafe() +\
                         '&return_url=/' + group_id + '/'
@@ -110,7 +111,11 @@ class ShowPairs(BaseLocalAdminHandler):
                                  group_id=group_id)
         pair.put()
         memcache.delete("schedule_to_render_" + group_id)
-        self.redirect('/' + group_id + '/pairs')
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/pairs'
+        self.redirect(return_url)
+
 
 ##\brief Создать пару
 class NewPair(BaseLocalAdminHandler):
@@ -122,9 +127,14 @@ class NewPair(BaseLocalAdminHandler):
                              start_time=datetime.time(9, 10),
                              replace=True,
                              task='')
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
         self.render_data['pair'] = pair
+        self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
+
 
 ##\brief Редактировать пару
 class EditPair(BaseLocalAdminHandler):
@@ -134,9 +144,13 @@ class EditPair(BaseLocalAdminHandler):
         url_key = self.request.get('key')
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
+        return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
+        self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
 
 ##\brief Удалить пару
@@ -147,6 +161,8 @@ class DeletePair(BaseLocalAdminHandler):
         url_key = self.request.get('key')
         group_id = kwargs.get('group_id')
         return_url = self.request.get('return_url')
+        if return_url is None:
+            return_url = '/' + group_id + '/pairs'
         key = ndb.Key(urlsafe=url_key)
         key.delete()
         memcache.delete("schedule_to_render_" + group_id)
