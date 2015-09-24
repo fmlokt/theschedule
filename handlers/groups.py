@@ -33,7 +33,6 @@ class ChooseGroup(BaseHandler):
 
     def get(self, *args, **kwargs):
         super(ChooseGroup, self).get(*args, **kwargs)
-        print 'GROUP FLAG : ' + str(self.request.get('change_group'))
         if (not self.request.get('change_group') == 'True') and\
                 ('group' in self.request.cookies):
             if Group.query(Group.group_id == self.request.cookies['group']).get() is not None:
@@ -114,6 +113,7 @@ class EditGroup(BaseAdminHandler):
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))
 
+
 ##\brief Удалить группу
 class DeleteGroup(BaseAdminHandler):
     def get(self, *args, **kwargs):
@@ -124,6 +124,7 @@ class DeleteGroup(BaseAdminHandler):
         key = ndb.Key(urlsafe=url_key)
         key.delete()
         self.redirect(return_url)
+
 
 class ShowRequests(BaseAdminHandler):
     def get(self, *args, **kwargs):

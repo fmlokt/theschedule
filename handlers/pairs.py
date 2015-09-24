@@ -8,6 +8,7 @@ from google.appengine.api import memcache
 
 from service import timezone
 from objects.pair import *
+from objects.subject import *
 from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
@@ -91,6 +92,7 @@ class ShowPairs(BaseLocalAdminHandler):
         task = self.request.get('task')
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
+        print replace
         group_id = kwargs.get('group_id')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
@@ -123,6 +125,8 @@ class NewPair(BaseLocalAdminHandler):
                              replace=True,
                              task='')
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.response.write(template.render(self.render_data))
 
@@ -135,6 +139,8 @@ class EditPair(BaseLocalAdminHandler):
         key = ndb.Key(urlsafe=url_key)
         pair = key.get()
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))

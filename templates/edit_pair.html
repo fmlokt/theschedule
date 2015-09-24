@@ -2,16 +2,18 @@
 {% block title %}Редактировать занятие из актуального расписания{% endblock %}
 {% block subtitle %}Редактировать занятие из актуального расписания{% endblock %}
 {% block content %}
-	<form method="post" action="/{{ group_id }}/pairs">
+	<form method="post" action="/{{ group_id }}/pairs" onsubmit="beforesubmit(this)">
 	<table>
-{% if pair.classname == '' %}
-		<tr><td class="name">Предмет</td><td><input type="text" name="classname" class="default" required placeholder='Название'></td></tr>
-{% else %}
-        <tr><td class="name">Предмет</td><td><input type="text" name="classname" class="default" value='{{ pair.classname }}'></td></tr>
-{% endif %}
+		<tr><td class="name">Предмет</td><td><select size="1" name="classname" class="default" >
+                <option disabled>Предмет</option>
+                {% for subject in subjects %}
+                <option value="{{ subject.classname }}" {% if pair.classname == subject.classname %}selected{% endif %}>{{ subject.classname }}</option>
+                {% endfor %}
+                <option value="" {% if pair.classname == '' %}selected{% endif %}>Другой</option>
+             </select></td></tr>
 		<tr><td class="name">Дата</td><td><input type="date" name="date" class="default" value='{{ pair.date }}'></td></tr>
 		<tr><td class="name">Время</td><td><input type="time" name="time" class="default" value='{{ pair.start_time }}'></td></tr>
-        <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" id="checkbox" onclick="replaceset()" {% if pair.replace %} checked disabled {% endif %}></td></tr>
+        <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" id="checkbox" onclick="replaceset()" {% if pair.replace==True %} checked disabled {% endif %}></td></tr>
 		<tr><td class="name">Задание</td><td><textarea name="task" rows="10" cols="80">{{ pair.task }}</textarea></td></tr>
 	</table>
         <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>
@@ -24,7 +26,7 @@ function replaceset() {
     var should_disable = !document.getElementById("checkbox").checked;
     for (i = 0; i < inputs.length; i++)
     {
-        inputs[i].readOnly = should_disable;
+        inputs[i].disabled = should_disable;
         if (should_disable) inputs[i].value = default_values[i];
     }
 }
@@ -34,5 +36,10 @@ function saveform() {
 }
 saveform();
 replaceset();
+function beforesubmit(object) {
+    var inputs = document.getElementsByClassName("default");
+    for (i = 0; i < inputs.length; i++) inputs[i].disabled = false;
+    document.getElementById("checkbox").disabled = false;
+}
 </script>
 {% endblock %}
