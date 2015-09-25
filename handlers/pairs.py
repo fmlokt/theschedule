@@ -8,6 +8,7 @@ from google.appengine.api import memcache
 
 from service import timezone
 from objects.pair import *
+from objects.subject import *
 from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
@@ -80,6 +81,9 @@ class ShowPairs(BaseLocalAdminHandler):
         if not super(ShowPairs, self).post(*args, **kwargs):
             return
         classname = self.request.get('classname')
+        other_classname = self.request.get('other_classname')
+        if classname == '':
+            classname = other_classname
         date = str(self.request.get('date'))
         reg_date = '(\d\d\d\d)-(\d\d)-(\d\d)'
         year = int(re.match(reg_date, date).group(1))
@@ -131,6 +135,8 @@ class NewPair(BaseLocalAdminHandler):
         if return_url is None:
             return_url = '/' + group_id + '/pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
@@ -148,6 +154,8 @@ class EditPair(BaseLocalAdminHandler):
         if return_url is None:
             return_url = '/' + group_id + '/pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/edit_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
         self.render_data['return_url'] = return_url

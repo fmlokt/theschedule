@@ -12,6 +12,7 @@ from handlers import schedule
 from handlers import groups
 from handlers import crons
 from handlers import howto
+from handlers import subjects
 #from service import calendar # disabled because tests are failing
 from service import telegram
 
@@ -67,5 +68,20 @@ application = webapp2.WSGIApplication([
                   name='schedule settings'),
     webapp2.Route(r'/<group_id:[-\w]+>/howto',
                   handler=howto.ShowHowto,
-                  name='howto')
+                  name='howto'),
+    webapp2.Route(r'/<group_id:[-\w]+>/subject',
+                  handler=subjects.ShowSubject,
+                  name='show subject'),
+    webapp2.Route(r'/<group_id:[-\w]+>/subjects',
+                  handler=subjects.ShowSubjects,
+                  name='show subjects list'),
+    webapp2.Route(r'/<group_id:[-\w]+>/new_subject',
+                  handler=subjects.NewSubject,
+                  name='new subject'),
+    webapp2.Route(r'/<group_id:[-\w]+>/edit_subject',
+                  handler=subjects.EditSubject,
+                  name='new subject'),
+    webapp2.Route(r'/<group_id:[-\w]+>/delete_subject',
+                  handler=subjects.DeleteSubject,
+                  name='new subject')
 ], debug=True)
