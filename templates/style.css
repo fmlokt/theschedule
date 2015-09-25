@@ -210,3 +210,15 @@ p.text {
 input.default:read-only {
     color: #777777;
 }
+
+a.subject_link {
+    color: #000000;
+    border-radius: 10px;
+    text-decoration: none;
+    padding: 0px 7px;
+}
+
+a.subject_link:hover {
+    background-color: #EEEEEE;
+/*     background-color: #FFFFA6;    */
+}

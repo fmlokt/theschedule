@@ -55,6 +55,8 @@ class ShowSubjects(BaseLocalAdminHandler):
                              subject.key.urlsafe()
             subject.delete_link = '/' + group_id + '/delete_subject?key=' +\
                 subject.key.urlsafe() + '&return_url=/' + group_id + '/subjects'
+            subject.link = '/' + group_id + '/subject?key=' +\
+                subject.key.urlsafe()
             self.render_data['subjects'].append(subject)
         self.response.write(template.render(self.render_data))
 

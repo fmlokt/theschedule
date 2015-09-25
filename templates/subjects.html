@@ -11,7 +11,7 @@
     </tr>
 {% for subject in subjects %}
 	<tr>
-		<td>{{ subject.classname }}</td>
+		<td><a href="{{ subject.link }}">{{ subject.classname }}</a></td>
 		<td>{{ subject.teacher }} </td>
 		<td><a href='{{ subject.edit_link }}'>Редактировать</a></td>
 		<td><a href='{{ subject.delete_link }}'>Удалить</a></td>

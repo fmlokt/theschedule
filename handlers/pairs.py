@@ -48,6 +48,12 @@ class ShowSchedule(BaseHandler):
                     pair_dict['delete_link'] = '/' + group_id +\
                         '/delete_pair?key=' + pair.key.urlsafe() +\
                         '&return_url=/' + group_id + '/'
+                    subject = Subject.query(Subject.classname == pair.classname).get()
+                    if subject is None:
+                        pair_dict['subject_link'] = ''
+                    else:
+                        pair_dict['subject_link'] = '/' + group_id +\
+                            '/subject?key=' + subject.key.urlsafe()
                     render_day['pairs'].append(pair_dict)
                 schedule_to_render[thatday.weekday()] = render_day
             memcache.set(key="schedule_to_render_" + group_id,
