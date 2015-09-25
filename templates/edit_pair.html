@@ -4,13 +4,12 @@
 {% block content %}
 	<form method="post" action="/{{ group_id }}/pairs" onsubmit="beforesubmit(this)">
 	<table>
-		<tr><td class="name">Предмет</td><td><select size="1" name="classname" class="default" >
-                <option disabled>Предмет</option>
+		<tr><td class="name">Предмет</td><td><select size="1" name="classname" class="default" id="subject_select" onchange="subjectChanged()" >
+                <option value="" {% if pair.classname == '' %}selected{% endif %}>Другой</option>
                 {% for subject in subjects %}
                 <option value="{{ subject.classname }}" {% if pair.classname == subject.classname %}selected{% endif %}>{{ subject.classname }}</option>
                 {% endfor %}
-                <option value="" {% if pair.classname == '' %}selected{% endif %}>Другой</option>
-             </select></td></tr>
+             </select><input type="text" name="other_classname" class="default" id="other_classname" value="{{ pair.classname }}" style="display:none"></input></td></tr>
 		<tr><td class="name">Дата</td><td><input type="date" name="date" class="default" value='{{ pair.date }}'></td></tr>
 		<tr><td class="name">Время</td><td><input type="time" name="time" class="default" value='{{ pair.start_time }}'></td></tr>
         <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" id="checkbox" onclick="replaceset()" {% if pair.replace==True %} checked disabled {% endif %}></td></tr>
@@ -21,14 +20,26 @@
 	</form>
 <script>
 var default_values = []
+function subjectChanged() {
+    select = document.getElementById("subject_select")
+    if (select.value == "")
+    {
+        document.getElementById("other_classname").style.display = "inline";
+    } else
+    {
+        document.getElementById("other_classname").style.display = "none";
+    }
+}
 function replaceset() {
     var inputs = document.getElementsByClassName("default");
     var should_disable = !document.getElementById("checkbox").checked;
+    console.log(inputs.length);
     for (i = 0; i < inputs.length; i++)
     {
         inputs[i].disabled = should_disable;
         if (should_disable) inputs[i].value = default_values[i];
     }
+    subjectChanged();
 }
 function saveform() {
     var inputs = document.getElementsByClassName("default");
@@ -36,6 +47,7 @@ function saveform() {
 }
 saveform();
 replaceset();
+subjectChanged();
 function beforesubmit(object) {
     var inputs = document.getElementsByClassName("default");
     for (i = 0; i < inputs.length; i++) inputs[i].disabled = false;

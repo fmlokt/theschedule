@@ -12,6 +12,7 @@ from service import timezone
 from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
+from objects.subject import *
 from handlers.basehandler import *
 
 
@@ -118,6 +119,8 @@ class NewDefaultPair(BaseLocalAdminHandler):
                            group_id=group_id)
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.response.write(template.render(self.render_data))
 
@@ -131,6 +134,8 @@ class EditDefaultPair(BaseLocalAdminHandler):
         pair = key.get()
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
+        subjects_qry = Subject.query().order(Subject.classname)
+        self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
         self.response.write(template.render(self.render_data))

@@ -80,6 +80,9 @@ class ShowPairs(BaseLocalAdminHandler):
         if not super(ShowPairs, self).post(*args, **kwargs):
             return
         classname = self.request.get('classname')
+        other_classname = self.request.get('other_classname')
+        if classname == '':
+            classname = other_classname
         date = str(self.request.get('date'))
         reg_date = '(\d\d\d\d)-(\d\d)-(\d\d)'
         year = int(re.match(reg_date, date).group(1))
@@ -92,7 +95,6 @@ class ShowPairs(BaseLocalAdminHandler):
         task = self.request.get('task')
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
-        print replace
         group_id = kwargs.get('group_id')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)

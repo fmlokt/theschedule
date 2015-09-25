@@ -4,11 +4,11 @@
 {% block content %}
 	<form method="post" action="/{{ group_id }}/default_pairs">
     <table>
-{% if pair.classname == 'classname' %}
-        <tr><td class="name">Предмет</td><td><input type="text" name="classname" required placeholder='{{ pair.classname }}'></td></tr>
-{% else %}
-        <tr><td class="name">Предмет</td><td><input type="text" name="classname"  value='{{ pair.classname }}'></td></tr>
-{% endif %}
+        <tr><td class="name">Предмет</td><td><select size="1" name="classname" class="default" id="subject_select" onchange="subjectChanged()" >
+                {% for subject in subjects %}
+                <option value="{{ subject.classname }}" {% if pair.classname == subject.classname %}selected{% endif %}>{{ subject.classname }}</option>
+                {% endfor %}
+             </select></td></tr>
         <tr><td class="name">День недели</td><td><select size="1" name="week_day" >
                 <option disabled>День недели</option>
                 <option {% if pair.week_day % 7 == 0 %}selected{% endif %} value="0">Понедельник</option>
