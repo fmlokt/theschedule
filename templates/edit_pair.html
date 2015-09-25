@@ -9,7 +9,7 @@
                 {% for subject in subjects %}
                 <option value="{{ subject.classname }}" {% if pair.classname == subject.classname %}selected{% endif %}>{{ subject.classname }}</option>
                 {% endfor %}
-             </select><input type="text" name="other_classname" class="default" id="other_classname" value="{{ pair.classname }}" style="display:none"></input></td></tr>
+             </select>  <input type="text" name="other_classname" class="default" id="other_classname" value="{{ pair.classname }}" style="display:none"></input></td></tr>
 		<tr><td class="name">Дата</td><td><input type="date" name="date" class="default" value='{{ pair.date }}'></td></tr>
 		<tr><td class="name">Время</td><td><input type="time" name="time" class="default" value='{{ pair.start_time }}'></td></tr>
         <tr><td class="name">Замена</td><td><input type="checkbox" name="replace" id="checkbox" onclick="replaceset()" {% if pair.replace==True %} checked disabled {% endif %}></td></tr>
