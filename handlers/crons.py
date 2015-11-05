@@ -2,6 +2,7 @@
 
 import os
 import calendar
+import datetime
 
 import webapp2
 from google.appengine.api import memcache
@@ -11,6 +12,7 @@ from objects.schedule import *
 from environment import JINJA_ENVIRONMENT
 from objects.pair import *
 from handlers.basehandler import *
+from service.telegram import *
 
 ##\brief Удаляет старые пары
 class DeleteOld(BaseHandler):
@@ -19,3 +21,24 @@ class DeleteOld(BaseHandler):
                                         timezone.today())
         for pair in pairs_qry:
             pair.key.delete()
+
+
+class SendChanges(BaseHandler):
+    def get(self):
+        groups = Group.query()
+        for group in groups:
+            pairs_qry = ScheduledPair.query(ScheduledPair.group_id == group.group_id,
+                                            ScheduledPair.date == timezone.today() + datetime.timedelta(days=1),
+                                            ScheduledPair.replace == True)
+            text = u''
+            for pair in pairs_qry:
+                text += pair.classname + u'\nНачало в ' + pair.start_time.strftime('%H:%M') + '.\n\n'
+            logging.info(text)
+            if text == u'':
+                continue
+            text = u'Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
+            chats = ChatSettings.query(ChatSettings.group_id == group.group_id)
+            for chat in chats:
+                logging.info("send changes to " + chat.key)
+                #reply(chat.key, text)
+

@@ -19,6 +19,7 @@ from service import telegram
 
 application = webapp2.WSGIApplication([
     ('/cron/delete_old', crons.DeleteOld),
+    ('/cron/send_changes', crons.SendChanges),
     ('/', groups.ChooseGroup),
     ('/create_group', groups.CreateGroup),
     ('/groups', groups.ShowGroups),

@@ -28,7 +28,7 @@ NAME = 'thescheduleBot'
 
 class ChatSettings(ndb.Model):
     # key name: str(chat_id)
-    group_id = ndb.StringProperty(indexed=False, default='')
+    group_id = ndb.StringProperty(default='')
 
 
 class MeHandler(webapp2.RequestHandler):

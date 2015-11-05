@@ -2,3 +2,6 @@ cron:
 - description: delete old pairs
   url: /cron/delete_old
   schedule: every 24 hours
+- description: send changes to telegram chats
+  url: /cron/send_changes
+  schedule: every day 19:00
