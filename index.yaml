@@ -47,3 +47,8 @@ indexes:
   - name: group_id
   - name: date
   - name: start_time
+
+- kind: Subject
+  properties:
+  - name: group_id
+  - name: classname

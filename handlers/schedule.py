@@ -129,7 +129,7 @@ class NewDefaultPair(BaseLocalAdminHandler):
             return_url = '/' + group_id + '/default_pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
-        subjects_qry = Subject.query().order(Subject.classname)
+        subjects_qry = Subject.query(Subject.group_id == group_id).order(Subject.classname)
         self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['return_url'] = return_url
@@ -148,7 +148,7 @@ class EditDefaultPair(BaseLocalAdminHandler):
             return_url = '/' + group_id + '/default_pairs'
         template = JINJA_ENVIRONMENT.get_template('templates/'
                                                   'edit_default_pair.html')
-        subjects_qry = Subject.query().order(Subject.classname)
+        subjects_qry = Subject.query(Subject.group_id == group_id).order(Subject.classname)
         self.render_data['subjects'] = subjects_qry
         self.render_data['pair'] = pair
         self.render_data['key_urlsafe'] = url_key
