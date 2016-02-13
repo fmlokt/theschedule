@@ -43,7 +43,7 @@
     <caption>{{day.week_day|weekday}}</caption>
     {% for pair in day.pairs %}
         <tr class="pair" onclick="desc(this)">
-            <td class="pair">
+            <td class="pair {{pair['pair_type']}}">
                 <div class="classname">{{ pair.classname }}</div>
                 <div class="container">
                     <span class="start_time">{{ pair.start_time|time }}</span>

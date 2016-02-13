@@ -20,6 +20,7 @@
             <option {% if pair.pair_type == 'exam' %}selected{% endif %} value="exam">Экзамен</option>
             <option {% if pair.pair_type == 'lect' %}selected{% endif %} value="lect">Лекция</option>
             <option {% if pair.pair_type == 'pract' %}selected{% endif %} value="pract">Практика</option>
+            <option {% if pair.pair_type == 'mixed' %}selected{% endif %} value="mixed">Лекция/Практика</option>
         </select></td></tr>
 	</table>
         <div class="btn"><input class="btn" type="submit" value="Сохранить"/></div>

@@ -151,28 +151,36 @@ caption {
 
 td.pair {
     padding: 3px 10px 3px 10px;
-    background-color: #ccddff;
+    background: #ccddff;
     height: 50pt;
     cursor: pointer;
 }
 
 td.pair.exam {
    padding: 3px 10px 3px 10px;
-    background-color: #ffccdd;
+    background: #ffccdd;
     height: 50pt;
     cursor: pointer; 
 }
 
 td.pair.lect {
    padding: 3px 10px 3px 10px;
-    background-color: #ddffcc;
+    background: #ddffcc;
     height: 50pt;
     cursor: pointer; 
 }
 
 td.pair.pract {
    padding: 3px 10px 3px 10px;
-    background-color: #f7ffcc;
+    background: #f7ffcc;
+    height: 50pt;
+    cursor: pointer; 
+}
+
+td.pair.mixed {
+   padding: 3px 10px 3px 10px;
+    background: #ddffcc;
+    background: linear-gradient(-45deg, #ddffcc 0%, #ddffcc 50%, #f7ffcc 51%, #f7ffcc 100%);
     height: 50pt;
     cursor: pointer; 
 }
