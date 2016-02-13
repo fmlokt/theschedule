@@ -97,6 +97,7 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
         hour = int(re.match(reg_time, time).group(1))
         minute = int(re.match(reg_time, time).group(2))
         url_key = self.request.get('key')
+        pair_type = self.request.get('pair_type')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             pair = key.get()
@@ -104,10 +105,12 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
             pair.week_day = week_day
             pair.start_time = datetime.time(hour, minute)
             pair.group_id = group_id
+            pair.pair_type = pair_type
         else:
             pair = DefaultPair(classname=classname, week_day=week_day,
                                start_time=datetime.time(hour, minute),
-                               group_id=group_id)
+                               group_id=group_id,
+                               pair_type=pair_type)
         pair.put()
         return_url = self.request.get('return_url')
         if return_url is None:
@@ -123,7 +126,8 @@ class NewDefaultPair(BaseLocalAdminHandler):
         group_id = kwargs.get('group_id')
         pair = DefaultPair(classname='classname',
                            week_day=0,
-                           group_id=group_id)
+                           group_id=group_id,
+                           pair_type='')
         return_url = self.request.get('return_url')
         if return_url is None:
             return_url = '/' + group_id + '/default_pairs'
@@ -207,7 +211,8 @@ class CopyFromDefault(BaseLocalAdminHandler):
                                              date=date_begin,
                                              start_time=pair.start_time,
                                              task='',
-                                             group_id=group_id)
+                                             group_id=group_id,
+                                             pair_type=pair.pair_type)
                     new_pair.put()
             else:
                 self.render_data['result'] += [u'Расписание на ' + str(date_begin) +\

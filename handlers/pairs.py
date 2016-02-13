@@ -103,6 +103,7 @@ class ShowPairs(BaseLocalAdminHandler):
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
         group_id = kwargs.get('group_id')
+        pair_type = self.request.get('pair_type')
         if url_key != '':
             key = ndb.Key(urlsafe=url_key)
             pair = key.get()
@@ -112,13 +113,15 @@ class ShowPairs(BaseLocalAdminHandler):
             pair.task = task
             pair.replace = replace
             pair.group_id = group_id
+            pair.pair_type = pair_type
         else:
             pair = ScheduledPair(classname=classname,
                                  date=datetime.date(year, month, day),
                                  start_time=datetime.time(hour, minute),
                                  task=task,
                                  replace=replace,
-                                 group_id=group_id)
+                                 group_id=group_id,
+                                 pair_type=pair_type)
         pair.put()
         memcache.delete("schedule_to_render_" + group_id)
         return_url = self.request.get('return_url')
@@ -136,7 +139,8 @@ class NewPair(BaseLocalAdminHandler):
                              date=timezone.today(),
                              start_time=datetime.time(9, 10),
                              replace=True,
-                             task='')
+                             task='',
+                             pair_type='')
         return_url = self.request.get('return_url')
         if return_url is None:
             return_url = '/' + group_id + '/pairs'

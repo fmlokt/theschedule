@@ -8,6 +8,7 @@ class DefaultPair(ndb.Model):
     start_time = ndb.TimeProperty()
     week_day = ndb.IntegerProperty()
     group_id = ndb.StringProperty()
+    pair_type = ndb.StringProperty()
 
 ##\brief Класс настроек группы
 class ScheduleSettings(ndb.Model):

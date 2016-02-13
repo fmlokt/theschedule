@@ -156,6 +156,27 @@ td.pair {
     cursor: pointer;
 }
 
+td.pair.exam {
+   padding: 3px 10px 3px 10px;
+    background-color: #ffccdd;
+    height: 50pt;
+    cursor: pointer; 
+}
+
+td.pair.lect {
+   padding: 3px 10px 3px 10px;
+    background-color: #ddffcc;
+    height: 50pt;
+    cursor: pointer; 
+}
+
+td.pair.pract {
+   padding: 3px 10px 3px 10px;
+    background-color: #f7ffcc;
+    height: 50pt;
+    cursor: pointer; 
+}
+
 td.pair:hover { 
     background-color: #CCCCFF;
     border-radius: 15px;

@@ -10,3 +10,4 @@ class ScheduledPair(ndb.Model):
     task = ndb.StringProperty()
     replace = ndb.BooleanProperty()
     group_id = ndb.StringProperty()
+    pair_type = ndb.StringProperty()
