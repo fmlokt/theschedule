@@ -163,6 +163,30 @@ def proceed_task(chat_id, fr, text):
             text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
         reply(chat_id, text)
 
+def proceed_delta(chat_id, fr, text):
+    chat_settings = ChatSettings.get_or_insert(str(chat_id))
+    if chat_settings.group_id == '':
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+    else:
+        date_delta = text
+        if date_delta.isdigit():
+            delta_value = int(date_delta)
+            if (delta_value<7 & delta_value>0):
+                event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today() + datetime.timedelta(days=delta_value)).order(ScheduledPair.start_time).fetch(5)
+                    if len(event_list) == 0:
+                        reply(chat_id, u'На этот день событий нет.')
+                        return
+                    text = u'Расписание на  '+ delta_value +' дней вперед:\n\n'
+                    for event in event_list:
+                        text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
+                    reply(chat_id, text)
+            else:
+                reply(chat_id, u'Выбран недопустимый временной интервал.')
+        else:
+            reply(chat_id, u'Данные введены некорректно.')
+
+
+
 
 COMMANDS = [
     ['/start', proceed_start, u'начать работу'],
@@ -173,7 +197,8 @@ COMMANDS = [
     ['/next', proceed_next, u'показать следующее событие из расписания группы'],
     ['/tomorrow', proceed_tomorrow, u'показать расписание на завтра'],
     ['/help', proceed_help, u'показать данную справку'],
-    ['/task', proceed_task, u'показать задания на завтра']
+    ['/task', proceed_task, u'показать задания на завтра'],
+    ['/delta', proceed_delta, u'показать на n дней вперед']
 ]
 
 
