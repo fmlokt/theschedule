@@ -157,36 +157,30 @@ td.pair {
 }
 
 td.pair.exam {
-   padding: 3px 10px 3px 10px;
     background: #ffccdd;
-    height: 50pt;
-    cursor: pointer; 
+     
 }
 
 td.pair.lect {
-   padding: 3px 10px 3px 10px;
-    background: #ddffcc;
-    height: 50pt;
-    cursor: pointer; 
+    background: #ddffcc; 
 }
 
 td.pair.pract {
-   padding: 3px 10px 3px 10px;
-    background: #f7ffcc;
-    height: 50pt;
-    cursor: pointer; 
+    background: #f7ffcc; 
 }
 
 td.pair.mixed {
-   padding: 3px 10px 3px 10px;
     background: #ddffcc;
-    background: linear-gradient(-45deg, #ddffcc 0%, #ddffcc 50%, #f7ffcc 51%, #f7ffcc 100%);
-    height: 50pt;
-    cursor: pointer; 
+    background: linear-gradient(-45deg, #ddffcc 0%, #ddffcc 50%, #f7ffcc 51%, #f7ffcc 100%); 
 }
 
 td.pair:hover { 
-    background-color: #CCCCFF;
+    background: #CCCCFF;
+    border-radius: 15px;
+}
+
+td.pair.mixed:hover {
+    background: #CCCCFF;
     border-radius: 15px;
 }
 
