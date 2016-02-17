@@ -174,14 +174,34 @@ td.pair.mixed {
     background: linear-gradient(-45deg, #ddffcc 0%, #ddffcc 50%, #f7ffcc 51%, #f7ffcc 100%); 
 }
 
+td.pair.cancel {
+    background: linear-gradient(-45deg, #ccddff 0%, #ccddff 20%, #ffccdd 21%, #ffccdd 40%, #ccddff 41%, #ccddff 60%, #ffccdd 61%, #ffccdd 80%, #ccddff 81%, #ccddff 100%)
+}
+
 td.pair:hover { 
     background: #CCCCFF;
     border-radius: 15px;
 }
 
 td.pair.mixed:hover {
-    background: #CCCCFF;
+    background: linear-gradient(-45deg, #bbff99 0%, #bbff99 50%, #efff99 51%, #efff99 100%);
     border-radius: 15px;
+}
+
+td.pair.cancel:hover {
+    background: linear-gradient(-45deg, #ccccff 0%, #ccccff 20%, #ff99bb 21%, #ff99bb 40%, #ccccff 41%, #ccccff 60%, #ff99bb 61%, #ff99bb 80%, #ccccff 81%, #ccccff 100%)
+}
+
+td.pair.lect:hover {
+    background: #bbff99; 
+}
+
+td.pair.exam:hover {
+    background: #ff99bb; 
+}
+
+td.pair.pract:hover {
+    background: #efff99; 
 }
 
 form {
