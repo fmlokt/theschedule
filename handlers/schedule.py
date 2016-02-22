@@ -40,7 +40,10 @@ class ShowDefaultSchedule(BaseHandler):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
                 order(DefaultPair.start_time)
-            render_day = {'week_day': day, 'pairs': []}
+            render_day = {'week_day': day, 'pairs': [],
+                          'pair_add_link': '/' + group_id +
+                          '/new_default_pair?weekday=' + str(day) +
+                          '&return_url=/' + group_id + '/schedule'}
             for pair in pairs_qry:
                 pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
@@ -53,7 +56,10 @@ class ShowDefaultSchedule(BaseHandler):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
                 order(DefaultPair.start_time)
-            render_day = {'week_day': day, 'pairs': []}
+            render_day = {'week_day': day, 'pairs': [],
+                          'pair_add_link': '/' + group_id +
+                          '/new_default_pair?weekday=' + str(day) +
+                          '&return_url=/' + group_id + '/schedule'}
             for pair in pairs_qry:
                 pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
@@ -121,8 +127,13 @@ class NewDefaultPair(BaseLocalAdminHandler):
         if not super(NewDefaultPair, self).get(*args, **kwargs):
             return
         group_id = kwargs.get('group_id')
+        default_day = self.request.get('weekday')
+        if not default_day.isdigit():
+            default_day = 0
+        else:
+            default_day = int(default_day) % 14
         pair = DefaultPair(classname='classname',
-                           week_day=0,
+                           week_day=default_day,
                            start_time=datetime.time(9, 10),
                            group_id=group_id,
                            pair_type='')
