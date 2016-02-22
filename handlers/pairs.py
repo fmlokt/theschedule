@@ -2,6 +2,7 @@
 
 import os
 import re
+import datetime
 
 import webapp2
 from google.appengine.api import memcache
@@ -12,6 +13,11 @@ from objects.subject import *
 from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
+
+
+def datefromstr(strdate):
+    return datetime.datetime.strptime(strdate, "%Y-%m-%d")
+
 
 ##\brief Показать расписание
 class ShowSchedule(BaseHandler):
@@ -38,7 +44,11 @@ class ShowSchedule(BaseHandler):
                 render_day = {'week_day': thatday.weekday(),
                               'pairs': [],
                               'date': thatday,
-                              'is_current': (today == thatday)}
+                              'is_current': (today == thatday),
+                              'pair_add_link': '/' + group_id +\
+                                    '/new_pair?date=' +\
+                                    str(thatday) +\
+                                    '&return_url=/' + group_id + '/'}
                 for pair in pairs_qry:
                     pair_dict = pair.to_dict()
                     pair_dict['edit_link'] = '/' + group_id +\
@@ -135,8 +145,13 @@ class NewPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewPair, self).get(*args, **kwargs):
             return
+        default_day = self.request.get('date')
+        if default_day is None:
+            default_day = timezone.today()
+        else:
+            default_day = datefromstr(default_day).date()
         pair = ScheduledPair(classname='',
-                             date=timezone.today(),
+                             date=default_day,
                              start_time=datetime.time(9, 10),
                              replace=True,
                              task='',

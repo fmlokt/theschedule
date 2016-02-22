@@ -35,6 +35,11 @@
 		</tr>
 	{% endfor %}
 	</table>
+    {% if is_admin %}
+        <span class="add_pair_link">
+            <a href='{{day.pair_add_link}}'>Добавить занятие</a>
+        </span>
+    {% endif %}
 	</td>
 	{% endfor %}
 	</tr>
