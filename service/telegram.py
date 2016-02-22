@@ -173,7 +173,6 @@ def proceed_delta(chat_id, fr, text):
         if date_delta.isdigit():
             delta_value = int(date_delta)
             if delta_value < 7 and delta_value > 0:
-            if (delta_value<7 and delta_value>0):
                 event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today() + datetime.timedelta(days=delta_value)).order(ScheduledPair.start_time).fetch(5)
                 if len(event_list) == 0:
                     reply(chat_id, u'На этот день событий нет.')
