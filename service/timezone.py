@@ -8,3 +8,13 @@ def now():
 
 def today():
     return now().date()
+
+
+def datefromstr(strdate):
+    return datetime.strptime(strdate, "%Y-%m-%d").date()
+
+
+def timefromstr(strtime):
+    return datetime.strptime(strtime, "%H:%M").time()
+
+
