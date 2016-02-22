@@ -71,7 +71,7 @@ def proceed_start(chat_id, fr, text):
 
 
 def proceed_time(chat_id, fr, text):
-    reply(chat_id, u'Текущее время - ' + unicode(timezone.now().strftime('%H:%M')))
+    reply(chat_id, u'🕐' + u'Текущее время - ' + unicode(timezone.now().strftime('%H:%M')))
 
 
 def proceed_weather(chat_id, fr, text):
