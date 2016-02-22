@@ -13,6 +13,7 @@ from objects.group import *
 from environment import JINJA_ENVIRONMENT
 from handlers.basehandler import *
 
+
 ##\brief Показать расписание
 class ShowSchedule(BaseHandler):
     def get(self, *args, **kwargs):
@@ -38,7 +39,11 @@ class ShowSchedule(BaseHandler):
                 render_day = {'week_day': thatday.weekday(),
                               'pairs': [],
                               'date': thatday,
-                              'is_current': (today == thatday)}
+                              'is_current': (today == thatday),
+                              'pair_add_link': '/' + group_id +\
+                                    '/new_pair?date=' +\
+                                    str(thatday) +\
+                                    '&return_url=/' + group_id + '/'}
                 for pair in pairs_qry:
                     pair_dict = pair.to_dict()
                     pair_dict['edit_link'] = '/' + group_id +\
@@ -90,15 +95,8 @@ class ShowPairs(BaseLocalAdminHandler):
         other_classname = self.request.get('other_classname')
         if classname == '':
             classname = other_classname
-        date = str(self.request.get('date'))
-        reg_date = '(\d\d\d\d)-(\d\d)-(\d\d)'
-        year = int(re.match(reg_date, date).group(1))
-        month = int(re.match(reg_date, date).group(2))
-        day = int(re.match(reg_date, date).group(3))
-        time = str(self.request.get('time'))
-        reg_time = '(\d\d):(\d\d)'
-        hour = int(re.match(reg_time, time).group(1))
-        minute = int(re.match(reg_time, time).group(2))
+        date = timezone.datefromstr(self.request.get('date'))
+        time = timezone.timefromstr(self.request.get('time'))
         task = self.request.get('task')
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
@@ -108,16 +106,16 @@ class ShowPairs(BaseLocalAdminHandler):
             key = ndb.Key(urlsafe=url_key)
             pair = key.get()
             pair.classname = classname
-            pair.date = datetime.date(year, month, day)
-            pair.start_time = datetime.time(hour, minute)
+            pair.date = date
+            pair.start_time = time
             pair.task = task
             pair.replace = replace
             pair.group_id = group_id
             pair.pair_type = pair_type
         else:
             pair = ScheduledPair(classname=classname,
-                                 date=datetime.date(year, month, day),
-                                 start_time=datetime.time(hour, minute),
+                                 date=date,
+                                 start_time=time,
                                  task=task,
                                  replace=replace,
                                  group_id=group_id,
@@ -135,8 +133,13 @@ class NewPair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
         if not super(NewPair, self).get(*args, **kwargs):
             return
+        default_day = self.request.get('date')
+        if default_day is None or default_day == "":
+            default_day = timezone.today()
+        else:
+            default_day = timezone.datefromstr(default_day)
         pair = ScheduledPair(classname='',
-                             date=timezone.today(),
+                             date=default_day,
                              start_time=datetime.time(9, 10),
                              replace=True,
                              task='',

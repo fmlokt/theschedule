@@ -149,6 +149,7 @@ def proceed_tomorrow(chat_id, fr, text):
             text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
         reply(chat_id, text)
 
+
 def proceed_task(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))
     if chat_settings.group_id == '':
@@ -162,6 +163,7 @@ def proceed_task(chat_id, fr, text):
         for event in event_list:
             text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
         reply(chat_id, text)
+
 
 def proceed_delta(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))

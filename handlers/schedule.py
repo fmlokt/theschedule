@@ -40,7 +40,10 @@ class ShowDefaultSchedule(BaseHandler):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
                 order(DefaultPair.start_time)
-            render_day = {'week_day': day, 'pairs': []}
+            render_day = {'week_day': day, 'pairs': [],
+                          'pair_add_link': '/' + group_id +
+                          '/new_default_pair?weekday=' + str(day) +
+                          '&return_url=/' + group_id + '/schedule'}
             for pair in pairs_qry:
                 pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
@@ -53,7 +56,10 @@ class ShowDefaultSchedule(BaseHandler):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
                 order(DefaultPair.start_time)
-            render_day = {'week_day': day, 'pairs': []}
+            render_day = {'week_day': day, 'pairs': [],
+                          'pair_add_link': '/' + group_id +
+                          '/new_default_pair?weekday=' + str(day) +
+                          '&return_url=/' + group_id + '/schedule'}
             for pair in pairs_qry:
                 pair.edit_link = '/' + group_id + '/edit_default_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
@@ -92,10 +98,7 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
         classname = self.request.get('classname')
         week_day = int(self.request.get('week_day')) +\
             7 * int(self.request.get('week_parity'))
-        time = str(self.request.get('time'))
-        reg_time = '(\d\d):(\d\d)'
-        hour = int(re.match(reg_time, time).group(1))
-        minute = int(re.match(reg_time, time).group(2))
+        time = timezone.timefromstr(self.request.get('time'))
         url_key = self.request.get('key')
         pair_type = self.request.get('pair_type')
         if url_key != '':
@@ -103,12 +106,12 @@ class ShowDefaultPairs(BaseLocalAdminHandler):
             pair = key.get()
             pair.classname = classname
             pair.week_day = week_day
-            pair.start_time = datetime.time(hour, minute)
+            pair.start_time = time
             pair.group_id = group_id
             pair.pair_type = pair_type
         else:
             pair = DefaultPair(classname=classname, week_day=week_day,
-                               start_time=datetime.time(hour, minute),
+                               start_time=time,
                                group_id=group_id,
                                pair_type=pair_type)
         pair.put()
@@ -124,8 +127,14 @@ class NewDefaultPair(BaseLocalAdminHandler):
         if not super(NewDefaultPair, self).get(*args, **kwargs):
             return
         group_id = kwargs.get('group_id')
+        default_day = self.request.get('weekday')
+        if not default_day.isdigit():
+            default_day = 0
+        else:
+            default_day = int(default_day) % 14
         pair = DefaultPair(classname='classname',
-                           week_day=0,
+                           week_day=default_day,
+                           start_time=datetime.time(9, 10),
                            group_id=group_id,
                            pair_type='')
         return_url = self.request.get('return_url')

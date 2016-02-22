@@ -29,14 +29,19 @@ class SendChanges(BaseHandler):
         for group in groups:
             pairs_qry = ScheduledPair.query(ScheduledPair.group_id == group.group_id,
                                             ScheduledPair.date == timezone.today() + datetime.timedelta(days=1),
-                                            ScheduledPair.replace == True)
+                                            ScheduledPair.replace == True).order(ScheduledPair.start_time)
             text = u''
             for pair in pairs_qry:
-                text += pair.classname + u'\nНачало в ' + pair.start_time.strftime('%H:%M') + '.\n\n'
+                if pair.pair_type == 'cancel':
+                    text += unichr(1230) + u'Занятие ОТМЕНЕНО:\n'
+                else:
+                    text += unichr(1267) + u'Изменение:\n'
+                text += pair.classname + u'\nНачало в ' + pair.start_time.strftime('%H:%M') + '.'
+                text += '\n\n'
             logging.info(text)
             if text == u'':
                 continue
-            text = u'Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
+            text = unichr(1244) + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
             chats = ChatSettings.query(ChatSettings.group_id == group.group_id)
             for chat in chats:
                 logging.info("send changes to " + str(chat.key.id()))
