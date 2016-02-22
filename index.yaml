@@ -35,6 +35,13 @@ indexes:
   properties:
   - name: date
   - name: group_id
+  - name: replace
+  - name: start_time
+
+- kind: ScheduledPair
+  properties:
+  - name: date
+  - name: group_id
   - name: start_time
 
 - kind: ScheduledPair
