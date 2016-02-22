@@ -159,9 +159,13 @@ def proceed_task(chat_id, fr, text):
         if len(event_list) == 0:
             reply(chat_id, u'Завтра событий нет.')
             return
+        if ([''] * len(event_list) == [event.task for event in event_list]):
+            reply(chat_id, u'Нет заданий на завтра')
+            return
         text = u'Задания на завтра:\n\n'
         for event in event_list:
-            text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
+            if not (event.task == ''):
+                text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
         reply(chat_id, text)
 
 
