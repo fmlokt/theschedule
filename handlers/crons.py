@@ -44,6 +44,6 @@ class SendChanges(BaseHandler):
             text = unichr(1244) + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
             chats = ChatSettings.query(ChatSettings.group_id == group.group_id)
             for chat in chats:
-                #logging.info("send changes to " + str(chat.key.id()))
+                logging.info("send changes to " + str(chat.key.id()))
                 reply(chat.key.id(), text)
 
