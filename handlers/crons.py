@@ -33,17 +33,17 @@ class SendChanges(BaseHandler):
             text = u''
             for pair in pairs_qry:
                 if pair.pair_type == 'cancel':
-                    text += unichr(1230) + u'Занятие ОТМЕНЕНО:\n'
+                    text += u'❌' + u'Занятие ОТМЕНЕНО:\n'
                 else:
-                    text += unichr(1267) + u'Изменение:\n'
+                    text += u'🔀' + u'Изменение:\n'
                 text += pair.classname + u'\nНачало в ' + pair.start_time.strftime('%H:%M') + '.'
                 text += '\n\n'
             logging.info(text)
             if text == u'':
                 continue
-            text = unichr(1244) + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
+            text = u'‼' + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
             chats = ChatSettings.query(ChatSettings.group_id == group.group_id)
             for chat in chats:
-                logging.info("send changes to " + str(chat.key.id()))
+                #logging.info("send changes to " + str(chat.key.id()))
                 reply(chat.key.id(), text)
 

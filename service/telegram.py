@@ -71,7 +71,7 @@ def proceed_start(chat_id, fr, text):
 
 
 def proceed_time(chat_id, fr, text):
-    reply(chat_id, u'Текущее время - ' + unicode(timezone.now().strftime('%H:%M')))
+    reply(chat_id, u'🕐' + u'Текущее время - ' + unicode(timezone.now().strftime('%H:%M')))
 
 
 def proceed_weather(chat_id, fr, text):
@@ -97,7 +97,6 @@ def proceed_help(chat_id, fr, text):
 
 
 def proceed_set_groupid(chat_id, fr, text):
-    text = text.strip()
     if text == '':
         reply(chat_id, u'Чтобы привязать чат к группе, наберите /setgroup <id группы>.')
         return
@@ -174,10 +173,10 @@ def proceed_delta(chat_id, fr, text):
     if chat_settings.group_id == '':
         reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
     else:
-        date_delta = text.strip()
+        date_delta = text
         if date_delta.isdigit():
             delta_value = int(date_delta)
-            if (delta_value<7 and delta_value>0):
+            if delta_value < 7 and delta_value > 0:
                 event_list = ScheduledPair.query(ScheduledPair.group_id == chat_settings.group_id, ScheduledPair.date == timezone.today() + datetime.timedelta(days=delta_value)).order(ScheduledPair.start_time).fetch(5)
                 if len(event_list) == 0:
                     reply(chat_id, u'На этот день событий нет.')
@@ -210,6 +209,7 @@ COMMANDS = [
 
 def proceed_command(chat_id, fr, command, text):
     logging.info('recieved command: ' + command + ', text: ' + text);
+    text = text.strip()
     if (text.startswith('@') and not text.startswith('@' + NAME)):
         logging.info('This command is not for us')
         return
