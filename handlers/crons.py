@@ -41,7 +41,7 @@ class SendChanges(BaseHandler):
             logging.info(text)
             if text == u'':
                 continue
-            text = u'‼' + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
+            text = u'ℹ' + u' Внимание! На завтра имеются изменения в расписании!\n\n' + text + u'Полное расписание на завтра: /tomorrow.'
             chats = ChatSettings.query(ChatSettings.group_id == group.group_id)
             for chat in chats:
                 #logging.info("send changes to " + str(chat.key.id()))

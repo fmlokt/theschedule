@@ -9,12 +9,10 @@
 <table class="schedule">
 	<tr>
 	{% for day in odd_days %}
-	<td class="day">
-	<table class="day">
-	<caption>{{day.week_day|weekday}}</caption>
+	<td class="day" style="height: {{day.height}};">
+    <div class="caption">{{day.week_day|weekday}}</div>
 	{% for pair in day.pairs %}
-		<tr class="pair" onclick="desc(this)">
-            <td class="pair {{pair['pair_type']}}">
+		<div class="pair {{pair['pair_type']}}" style="top: {{pair['from_up']}}px; height: {{pair['height']}};" onclick="desc(this)">
                 <div class="classname">{{ pair.classname }}</div>
                 <div class="container">
                     <span class="start_time">{{ pair.start_time|time }}</span>
@@ -25,10 +23,8 @@
                 <a href='{{pair.delete_link}}'>Удалить</a>
             </span>
         {% endif %}
-			</td>
-		</tr>
+		</div>
 	{% endfor %}
-	</table>
     {% if is_admin %}
         <span class="add_pair_link">
             <a href='{{day.pair_add_link}}'>Добавить занятие</a>
@@ -43,12 +39,10 @@
 <table class="schedule">
     <tr>
     {% for day in even_days %}
-    <td class="day">
-    <table class="day">
-    <caption>{{day.week_day|weekday}}</caption>
+    <td class="day" style="height: {{day.height}};">
+    <div class="caption">{{day.week_day|weekday}}</div>
     {% for pair in day.pairs %}
-        <tr class="pair" onclick="desc(this)">
-            <td class="pair {{pair['pair_type']}}">
+        <div class="pair {{pair['pair_type']}}" style="top: {{pair['from_up']}}px; height: {{pair['height']}};" onclick="desc(this)">
                 <div class="classname">{{ pair.classname }}</div>
                 <div class="container">
                     <span class="start_time">{{ pair.start_time|time }}</span>
@@ -59,10 +53,8 @@
                 <a href='{{pair.delete_link}}'>Удалить</a>
             </span>
         {% endif %}
-            </td>
-        </tr>
+        </div>
     {% endfor %}
-    </table>
     {% if is_admin %}
         <span class="add_pair_link">
             <a href='{{day.pair_add_link}}'>Добавить занятие</a>

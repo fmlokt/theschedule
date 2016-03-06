@@ -179,7 +179,7 @@ class DefaultPairsTest(unittest2.TestCase):
         simulate_login(self.testbed)
         response = make_request('/' + group_id + '/schedule', 'GET')
         self.assertEqual(response.status_int, 200)
-        self.assertEqual(response.body.count('</tr>'), 4)
+        self.assertEqual(response.body.count('<div class="pair'), 3)
         self.assertNotEqual(response.body.find('Math 1'), -1)
         self.assertNotEqual(response.body.find('Math 2'), -1)
         self.assertNotEqual(response.body.find('Math 3'), -1)

@@ -9,7 +9,7 @@ body {
     border-radius: 0px 0px 15px 15px;
     margin: 0px;
     border: 0px;
-    padding: 10px 5% 10px 5%;
+    padding: 10px 1% 10px 1%;
 }
 
 #top a {
@@ -34,9 +34,18 @@ body {
 }
 
 div.container {
+    box-sizing: border-box;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    vertical-align: middle;
+    align-items: baseline;
+    width: 100%;
+}
+
+div.container_bottom {
+    margin: auto;
+    margin-bottom: 3px;
+    align-self: flex-end;
 }
 
 h1 {
@@ -96,6 +105,7 @@ td.day {
     background-color: #ddddff;
     padding: 3px 10px 3px 10px;
     vertical-align: top;
+    position: relative;
 }
 
 div.class_name {
@@ -140,72 +150,84 @@ span.edit_links a {
     color: #777777;
 }
 
+span.add_pair_link {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+}
+
 span.add_pair_link a {
     font-size: 8pt;
     color: #777777;
 }
 
-caption {
+div.caption {
     font-weight: bold;
-    padding-bottom: 10px;
+    text-align: center;
 }
 
 #current_day {
     background-color: #F2EEB3;
 }
 
-td.pair {
+div.pair {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
     padding: 3px 10px 3px 10px;
     background: #ccddff;
-    height: 50pt;
     cursor: pointer;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-td.pair.exam {
+div.pair.exam {
     background: #ffccdd;
-     
 }
 
-td.pair.lect {
+div.pair.lect {
     background: #ddffcc; 
 }
 
-td.pair.pract {
+div.pair.pract {
     background: #f7ffcc; 
 }
 
-td.pair.mixed {
+div.pair.mixed {
     background: #ddffcc;
     background: linear-gradient(-45deg, #ddffcc 0%, #ddffcc 50%, #f7ffcc 51%, #f7ffcc 100%); 
 }
 
-td.pair.cancel {
+div.pair.cancel {
     background: linear-gradient(-45deg, #ccddff 0%, #ccddff 20%, #ffccdd 21%, #ffccdd 40%, #ccddff 41%, #ccddff 60%, #ffccdd 61%, #ffccdd 80%, #ccddff 81%, #ccddff 100%)
 }
 
-td.pair:hover { 
+div.pair:hover { 
     background: #CCCCFF;
     border-radius: 15px;
 }
 
-td.pair.mixed:hover {
+div.pair.mixed:hover {
     background: linear-gradient(-45deg, #bbff99 0%, #bbff99 50%, #efff99 51%, #efff99 100%);
     border-radius: 15px;
 }
 
-td.pair.cancel:hover {
+div.pair.cancel:hover {
     background: linear-gradient(-45deg, #ccccff 0%, #ccccff 20%, #ff99bb 21%, #ff99bb 40%, #ccccff 41%, #ccccff 60%, #ff99bb 61%, #ff99bb 80%, #ccccff 81%, #ccccff 100%)
 }
 
-td.pair.lect:hover {
+div.pair.lect:hover {
     background: #bbff99; 
 }
 
-td.pair.exam:hover {
+div.pair.exam:hover {
     background: #ff99bb; 
 }
 
-td.pair.pract:hover {
+div.pair.pract:hover {
     background: #efff99; 
 }
 

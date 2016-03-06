@@ -36,6 +36,8 @@ class ShowDefaultSchedule(BaseHandler):
             settings = settings_qry[0]
         self.render_data['double_week'] = settings.schedule_period == 14
         self.render_data['odd_days'] = [None] * 6
+        min_start_time = timezone.timefromstr("23:59")
+        max_start_time = timezone.timefromstr("00:00")
         for day in xrange(6):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
@@ -50,8 +52,18 @@ class ShowDefaultSchedule(BaseHandler):
                 pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
                 render_day['pairs'].append(pair)
+                min_start_time = min(min_start_time, pair.start_time)
+                max_start_time = max(max_start_time, pair.start_time)
             self.render_data['odd_days'][day] = render_day
+        coef = 1.2
+        for day in self.render_data['odd_days']:
+            for pair in day['pairs']:
+                pair.from_up = 40 + int(timezone.gettimediff(pair.start_time, min_start_time).seconds / 60 / coef)
+                pair.height = int(90 / coef)
+            day['height'] = 40 + int(timezone.gettimediff(max_start_time, min_start_time).seconds / 60 / coef) + 90 / coef + 40
         self.render_data['even_days'] = [None] * 6
+        min_start_time = timezone.timefromstr("23:59")
+        max_start_time = timezone.timefromstr("00:00")
         for day in xrange(7, 13):
             pairs_qry = DefaultPair.query(DefaultPair.week_day == day,
                                           DefaultPair.group_id == group_id).\
@@ -65,8 +77,15 @@ class ShowDefaultSchedule(BaseHandler):
                     '&return_url=/' + group_id + '/schedule'
                 pair.delete_link = '/' + group_id + '/delete_pair?key=' + pair.key.urlsafe() +\
                     '&return_url=/' + group_id + '/schedule'
+                min_start_time = min(min_start_time, pair.start_time)
+                max_start_time = max(max_start_time, pair.start_time)
                 render_day['pairs'].append(pair)
             self.render_data['even_days'][day - 7] = render_day
+        for day in self.render_data['even_days']:
+            for pair in day['pairs']:
+                pair.from_up = 40 + int(timezone.gettimediff(pair.start_time, min_start_time).seconds / 60 / coef)
+                pair.height = int(90 / coef)
+            day['height'] = 40 + int(timezone.gettimediff(max_start_time, min_start_time).seconds / 60 / coef) + 90 / coef + 40
         self.response.write(template.render(self.render_data))
 
 ##\brief Список стандартных пар
