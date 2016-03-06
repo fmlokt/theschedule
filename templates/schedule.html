@@ -4,14 +4,13 @@
 <table class="schedule">
     <tr>
     {% for day in days %}
-    <td class="day" {% if day.is_current %}id="current_day"{% endif %}>
-    <table class="day">
-    <caption>{{day.date|date}},<br/>{{day.week_day|weekday}}</caption>
+    <td class="day" {% if day.is_current %}id="current_day"{% endif %} style="height: {{day.height}};">
+    <div class="caption">{{day.date|date}},</div>
+    <div class="caption">{{day.week_day|weekday}}</div>
     {% for pair in day.pairs %}
-        <tr class="pair" onclick="desc(this)">
-            <td class="pair {{pair['pair_type']}}">
+        <div class="pair {{pair['pair_type']}}" style="top: {{pair['from_up']}}px; height: {{pair['height']}}" onclick="desc(this)">
             <div class="classname"><a class="subject_link" href="{{ pair['subject_link'] }}">{{ pair['classname'] }}</a></div>
-            <div class="container">
+            <div class="container container_bottom">
                 <span class="start_time">{{ pair['start_time']|time }}</span>
                 <span>
                 {% if pair['replace'] %}
@@ -31,10 +30,8 @@
                 <a href='{{pair['delete_link']}}'>Удалить</a>
             </span>
         {% endif %}
-            </td>
-		</tr>
+		</div>
 	{% endfor %}
-	</table>
     {% if is_admin %}
         <span class="add_pair_link">
             <a href='{{day.pair_add_link}}'>Добавить занятие</a>

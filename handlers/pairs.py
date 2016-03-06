@@ -26,6 +26,8 @@ class ShowSchedule(BaseHandler):
         if (schedule_to_render is None) or (date_in_memcache is None)\
                 or (date_in_memcache != timezone.today()):
             schedule_to_render = [None] * 6
+            min_start_time = timezone.timefromstr("23:59")
+            max_start_time = timezone.timefromstr("00:00")
             for day in xrange(7):
                 today = timezone.today()
                 thatday = today + datetime.timedelta(days=day)
@@ -60,7 +62,15 @@ class ShowSchedule(BaseHandler):
                         pair_dict['subject_link'] = '/' + group_id +\
                             '/subject?key=' + subject.key.urlsafe()
                     render_day['pairs'].append(pair_dict)
+                    min_start_time = min(min_start_time, pair.start_time)
+                    max_start_time = max(max_start_time, pair.start_time)
                 schedule_to_render[thatday.weekday()] = render_day
+            coef = 1.2 # mins per pixel
+            for day in schedule_to_render:
+                for pair in day['pairs']:
+                    pair['from_up'] = 40 + int(timezone.gettimediff(pair['start_time'], min_start_time).seconds / 60 / coef)
+                    pair['height'] = int(90 / coef)
+                day['height'] = 40 + int(timezone.gettimediff(max_start_time, min_start_time).seconds / 60 / coef) + 90 / coef + 40
             memcache.set(key="schedule_to_render_" + group_id,
                          value=schedule_to_render)
             memcache.set(key="schedule_set_date_" + group_id,

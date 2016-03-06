@@ -18,3 +18,7 @@ def timefromstr(strtime):
     return datetime.strptime(strtime, "%H:%M").time()
 
 
+def gettimediff(time1, time2):
+    return datetime.combine(today(), time1) - datetime.combine(today(), time2)
+
+
