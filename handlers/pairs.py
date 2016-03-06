@@ -2,6 +2,7 @@
 
 import os
 import re
+import json
 
 import webapp2
 from google.appengine.api import memcache
@@ -188,3 +189,32 @@ class DeletePair(BaseLocalAdminHandler):
         key.delete()
         memcache.delete("schedule_to_render_" + group_id)
         self.redirect(return_url)
+
+class GetJSON(BaseHandler):
+    def get(self, *args, **kwargs):
+        group_id = kwargs.get('group_id')
+        if not super(GetJSON, self).get(*args, **kwargs):
+            return
+        pairs_qry = ScheduledPair.query(ScheduledPair.group_id ==
+                                        group_id).order(ScheduledPair.date,
+                                                        ScheduledPair.
+                                                        start_time)
+        data={}
+        datalist=[]
+        for pair in pairs_qry:
+            classname = pair.classname
+            date = pair.date
+            start_time = pair.start_time
+            task = pair.task
+            replace = pair.replace
+            pair_type = pair.pair_type
+
+            data['classname'] = classname
+            data['date'] = date.strftime('%d.%m.%y')
+            data['start_time'] = start_time.strftime('%H:%M')
+            data['task'] = task
+            data['replace'] = replace
+            data['pair_type'] = pair_type
+            datalist.append(data)
+        self.response.write(json.dumps(datalist, sort_keys=True, indent=4, separators=(',', ': ')))
+        

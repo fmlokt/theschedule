@@ -84,5 +84,8 @@ application = webapp2.WSGIApplication([
                   name='new subject'),
     webapp2.Route(r'/<group_id:[-\w]+>/delete_subject',
                   handler=subjects.DeleteSubject,
-                  name='new subject')
+                  name='new subject'),
+        webapp2.Route(r'/<group_id:[-\w]+>/sched.json',
+                  handler=pairs.GetJSON,
+                  name='get json list')
 ], debug=True)
