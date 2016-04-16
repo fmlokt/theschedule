@@ -67,7 +67,7 @@ def reply(chat_id, msg):
 
 
 def proceed_start(chat_id, fr, text):
-    reply(chat_id, u'Здравствуйте, ' + unicode(fr['first_name']) + ' ' + unicode(fr['last_name']))
+    reply(chat_id, u'Здравствуйте, ' + unicode(fr['first_name']) + (' ' + str(fr['last_name']) if 'last_name' in fr.keys() else ''))
 
 
 def proceed_time(chat_id, fr, text):
