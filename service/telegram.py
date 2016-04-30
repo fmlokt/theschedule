@@ -86,7 +86,7 @@ def proceed_weather(chat_id, fr, text):
     max_temp = root[0][0][0][2].attrib['max']
     min_temp = root[0][0][0][2].attrib['min']
     cloud = root[0][0][0][0].attrib['cloudiness']
-    reply(chat_id, u'Погода на ' + hour + u' час(а) ' + day  + u'.' + month  + u'.' + year + '\n' + u'От ' + min_temp + u' до ' + max_temp + u'градусов по Цельсию' +'\n' + u'Облачность ' + cloud + u'/3')
+    reply(chat_id, u'Погода на ' + hour + u' час(а) ' + day  + u'.' + month  + u'.' + year + '\n' + u'От ' + min_temp + u' до ' + max_temp + u' градусов по Цельсию' +'\n' + u'Облачность ' + cloud + u'/3')
 
 
 def proceed_help(chat_id, fr, text):
@@ -118,6 +118,16 @@ def proceed_groupid(chat_id, fr, text):
         group = Group.query(Group.group_id == chat_settings.group_id).get()
         reply(chat_id, u'Id группы: \"' + chat_settings.group_id + '\" (' + group.name + ', ' + group.origin + ').')
 
+TYPES = {'exam':'экзамен',
+         'lect':'лекция',
+         'pract':'практика',
+         'cancel':'отменена'}
+
+def get_pair_type(type):
+    if type in TYPES.keys():
+        return ' (' + d[type] + ')'
+    else:
+        return ''
 
 def proceed_next(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))
@@ -130,7 +140,7 @@ def proceed_next(chat_id, fr, text):
             return
         text = u'Ближайшие события сегодня:\n\n'
         for event in event_list:
-            text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
+            text += event.classname + get_pair_type(event.pair_type) + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
         reply(chat_id, text)
 
 
@@ -145,7 +155,7 @@ def proceed_tomorrow(chat_id, fr, text):
             return
         text = u'Расписание на завтра:\n\n'
         for event in event_list:
-            text += event.classname + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
+            text += event.classname + get_pair_type(event.pair_type) + u'\nНачало в ' + event.start_time.strftime('%H:%M') + '.\n\n'
         reply(chat_id, text)
 
 
@@ -164,7 +174,7 @@ def proceed_task(chat_id, fr, text):
         text = u'Задания на завтра:\n\n'
         for event in event_list:
             if not (event.task == ''):
-                text += event.classname + u'\nЗадание:\n' + event.task + '.\n\n'
+                text += event.classname + get_pair_type(event.pair_type) + u'\nЗадание:\n' + event.task + '.\n\n'
         reply(chat_id, text)
 
 
