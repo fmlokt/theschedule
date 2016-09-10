@@ -2,6 +2,9 @@
 {% block top_left %}
     <span align="left">
         <div class="top_link_list">
+            <a href="https://telegram.me/theschedulebot">
+                <img src="https://telegram.org/img/t_logo.png" alt="Telegram bot" style="width:15px;height:15px;border:0;" align="bottom|left">
+            </a>
             <a href="/{{ group_id }}/">Актуальное расписание</a> 
             <a href="/{{ group_id }}/schedule">Регулярное расписание</a>
         </div>
@@ -13,6 +16,7 @@
             <a href="/{{ group_id }}/subjects">Предметы</a>
             <a href="/{{ group_id }}/schedule_settings">&#9881;</a>
             <a href="/{{ group_id }}/howto"><b>?</b></a>
+            
         </div>
     {% endif %}
     </span>
