@@ -308,7 +308,8 @@ class EditSettings(BaseLocalAdminHandler):
                     new_pair = DefaultPair(classname=pair.classname,
                                            start_time=pair.start_time,
                                            week_day=pair.week_day + 7,
-                                           group_id=pair.group_id)
+                                           group_id=pair.group_id,
+                                           pair_type=pair.pair_type)
                     new_pair.put()
         settings.schedule_period = period
         settings.first_week_begin = datetime.date(year, month, day)
