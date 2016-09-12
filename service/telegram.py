@@ -118,14 +118,14 @@ def proceed_groupid(chat_id, fr, text):
         group = Group.query(Group.group_id == chat_settings.group_id).get()
         reply(chat_id, u'Id группы: \"' + chat_settings.group_id + '\" (' + group.name + ', ' + group.origin + ').')
 
-TYPES = {'exam':'экзамен',
-         'lect':'лекция',
-         'pract':'практика',
-         'cancel':'отменена'}
+PAIR_TYPES = {'exam':'экзамен',
+         	  'lect':'лекция',
+         	  'pract':'практика',
+         	  'cancel':'отменена'}
 
-def get_pair_type(type):
-    if type in TYPES.keys():
-        return ' (' + d[type] + ')'
+def get_pair_type(pair_type):
+    if pair_type in TYPES.keys():
+        return ' (' + PAIR_TYPES[pair_type] + ')'
     else:
         return ''
 
