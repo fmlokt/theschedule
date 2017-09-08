@@ -7,6 +7,7 @@ import random
 import urllib
 import urllib2
 import datetime
+import string
 
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
@@ -19,6 +20,7 @@ from service import timezone
 from service.secret import *
 from objects.group import *
 from objects.pair import *
+from objects.quote import *
 
 
 BASE_URL = 'https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/'
@@ -129,6 +131,7 @@ def get_pair_type(pair_type):
     else:
         return u''
 
+
 def proceed_next(chat_id, fr, text):
     chat_settings = ChatSettings.get_or_insert(str(chat_id))
     if chat_settings.group_id == '':
@@ -201,6 +204,45 @@ def proceed_delta(chat_id, fr, text):
             reply(chat_id, u'Данные введены некорректно.')
 
 
+def proceed_addquote(chat_id, fr, text):
+    chat_settings = ChatSettings.get_or_insert(str(chat_id))
+    if chat_settings.group_id == '':
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+    else:
+        parts = text.split('|')
+        quote_text = parts[0].strip()
+        quote_author = parts[1].strip() if len(parts) > 1 else u''
+        group = Group.query(Group.group_id == chat_settings.group_id).fetch(1)
+        if not group:
+            reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+        group = group[0]
+        quote_id = group.quotes_count
+        group.quotes_count += 1
+        group.put()
+        quote = Quote(group_id=chat_settings.group_id, text=quote_text, author=quote_author, quote_id=quote_id).put()
+        reply(chat_id, u'Спасибо, добавлено, всего ' + unicode(group.quotes_count) + u' цитат!')
+
+
+def proceed_quote(chat_id, fr, text):
+    chat_settings = ChatSettings.get_or_insert(str(chat_id))
+    if chat_settings.group_id == '':
+        reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+    else:
+        group = Group.query(Group.group_id == chat_settings.group_id).fetch(1)
+        if not group:
+            reply(chat_id, u'Чат не привязан ни к какой группе. Чтобы привязать, наберите /setgroup <id группы>.')
+            return
+        group = group[0]
+        if group.quotes_count == 0:
+            reply(chat_id, u'Сначала добавьте цитаты!')
+            return
+        quote_id = random.randint(0, group.quotes_count - 1)
+        quote = Quote.query(Quote.group_id == chat_settings.group_id, Quote.quote_id >= quote_id).order(Quote.quote_id).fetch(1)
+        if not quote:
+            reply(chat_id, u'Что-то пошло не так!')
+            return
+        quote = quote[0]
+        reply(chat_id, quote.text + (u'\n\n' + quote.author if quote.author else u''))
 
 
 COMMANDS = [
@@ -213,7 +255,9 @@ COMMANDS = [
     ['/tomorrow', proceed_tomorrow, u'показать расписание на завтра'],
     ['/help', proceed_help, u'показать данную справку'],
     ['/task', proceed_task, u'показать задания на завтра'],
-    ['/delta', proceed_delta, u'показать на n дней вперед']
+    ['/delta', proceed_delta, u'показать на n дней вперед'],
+    ['/addquote', proceed_addquote, u'добавить цитату'],
+    ['/quote', proceed_quote, u'озвучить случайную цитату']
 ]
 
 

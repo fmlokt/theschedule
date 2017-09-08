@@ -144,6 +144,7 @@ class ShowRequests(BaseAdminHandler):
             self.render_data['groups'].append(group)
         self.response.write(template.render(self.render_data))
 
+
 class ApplyRequest(BaseAdminHandler):
     def get(self, *args, **kwargs):
         if not super(ApplyRequest, self).get(*args, **kwargs):
