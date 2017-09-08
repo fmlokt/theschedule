@@ -22,3 +22,6 @@ def gettimediff(time1, time2):
     return datetime.combine(today(), time1) - datetime.combine(today(), time2)
 
 
+def addtime(time, delta):
+    return (datetime.combine(today(), time) + delta).time()
+

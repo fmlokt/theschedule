@@ -26,6 +26,7 @@ class PairsTest(unittest2.TestCase):
         self.assertEqual(pair1.classname,  pair2.classname)
         self.assertEqual(pair1.date,       pair2.date)
         self.assertEqual(pair1.start_time, pair2.start_time)
+        self.assertEqual(pair1.duration,   pair2.duration)
         self.assertEqual(pair1.task,       pair2.task)
 
     def test_create_pair(self):
@@ -40,6 +41,7 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(9, 40),
+                              duration=90,
                               task='some task',
                               group_id='asgap')
         response = post_pair(pair1)
@@ -54,6 +56,7 @@ class PairsTest(unittest2.TestCase):
         pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
+                              duration=120,
                               task='some task',
                               group_id='asgap')
         response = post_pair(pair2)
@@ -80,6 +83,7 @@ class PairsTest(unittest2.TestCase):
         pair = ScheduledPair(classname='Math',
                              date=datetime.date(2015, 4, 14),
                              start_time=datetime.time(9, 40),
+                             duration=90,
                              task='some_task',
                              group_id='asgap')
         response = post_pair(pair)
@@ -91,6 +95,7 @@ class PairsTest(unittest2.TestCase):
         pair = ScheduledPair(classname='Math 1',
                              date=datetime.date(2016, 5, 15),
                              start_time=datetime.time(10, 41),
+                             duration=120,
                              task='some task\n1',
                              group_id='asgap')
         response = post_pair(pair, added_pair.key.urlsafe())
@@ -113,11 +118,13 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
+                              duration=90,
                               task='some_task',
                               group_id='asgap')
         pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
+                              duration=120,
                               task='some task',
                               group_id='asgap')
         post_pair(pair1)
@@ -148,16 +155,19 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
+                              duration=90,
                               task='some task',
                               group_id='asgap')
         pair2 = ScheduledPair(classname='Math 2',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(9, 40),
+                              duration=90,
                               task='some task',
                               group_id='asgap')
         pair3 = ScheduledPair(classname='Math 3',
                               date=datetime.date(2015, 4, 15),
                               start_time=datetime.time(10, 40),
+                              duration=120,
                               task='some task',
                               group_id='asgap')
         post_pair(pair2)
@@ -190,17 +200,20 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math 1',
                               date=today,
                               start_time=datetime.time(9, 10),
+                              duration=90,
                               task='some task',
                               group_id='asgap')
         pair2 = ScheduledPair(classname='Math 2',
                               date=today,
                               start_time=datetime.time(10, 40),
+                              duration=90,
                               task='some task',
                               group_id='asgap')
         pair3 = ScheduledPair(classname='Math 3',
                               date=today +
                               datetime.timedelta(days=1),
                               start_time=datetime.time(9, 40),
+                              duration=120,
                               task='some task',
                               group_id='asgap')
         simulate_login(self.testbed, 'a@b.com', '123', True)
@@ -233,29 +246,35 @@ class PairsTest(unittest2.TestCase):
         shift_out = today + datetime.timedelta(days=190)
         pair1 = DefaultPair(classname='Math 1',
                             start_time=datetime.time(9, 10),
+                            duration=90,
                             week_day=0,
                             group_id='asgap')
         pair2 = DefaultPair(classname='Math 2',
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             week_day=1,
                             group_id='asgap')
         pair3 = DefaultPair(classname='Math 3',
                             start_time=datetime.time(13, 00),
+                            duration=45,
                             week_day=2,
                             group_id='asgap')
         standard_pair1 = ScheduledPair(classname=pair1.classname,
                                        date=today,
                                        start_time=pair1.start_time,
+                                       duration=pair1.duration,
                                        task='',
                                        group_id='asgap')
         standard_pair2 = ScheduledPair(classname=pair2.classname,
                                        date=today + datetime.timedelta(days=1),
                                        start_time=pair2.start_time,
+                                       duration=pair2.duration,
                                        task='',
                                        group_id='asgap')
         standard_pair3 = ScheduledPair(classname=pair3.classname,
                                        date=today + datetime.timedelta(days=2),
                                        start_time=pair3.start_time,
+                                       duration=pair3.duration,
                                        task='',
                                        group_id='asgap')
         post_default_pair(pair1)
@@ -283,11 +302,13 @@ class PairsTest(unittest2.TestCase):
         added_pair3.key.delete()
         pair4 = DefaultPair(classname='Math 4',
                             start_time=datetime.time(12, 00),
+                            duration=200,
                             week_day=3,
                             group_id='asgap')
         standard_pair4 = ScheduledPair(classname=pair3.classname,
                                        date=today + datetime.timedelta(days=3),
                                        start_time=pair3.start_time,
+                                       duration=pair3.duration,
                                        task='',
                                        group_id='asgap')
         post_pair(standard_pair4)
@@ -348,6 +369,7 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
+                              duration=90,
                               task='some_task',
                               group_id='asgap')
         post_pair(pair1)
@@ -394,6 +416,7 @@ class PairsTest(unittest2.TestCase):
         pair1 = ScheduledPair(classname='Math 1',
                               date=datetime.date(2015, 4, 14),
                               start_time=datetime.time(10, 40),
+                              duration=90,
                               task='some_task',
                               group_id='asgap')
         post_pair(pair1)

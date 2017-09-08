@@ -25,6 +25,7 @@
                 <option {% if pair.week_day >= 7 %}selected{% endif %} value="1">Четная</option>
              </select></td></tr>
 		<tr><td class="name">Время</td><td><input type="time" name="time" required value='{{ pair.start_time|time}}'></td></tr>
+		<tr><td class="name">Длительность, минут</td><td><input type="text" name="duration" class="default" required value='{{ pair.duration }}'></td></tr>
         <tr><td class="name">Тип пары</td><td><select size="1" name="pair_type" class="default" >
             <option disabled>Тип пары</option>
             <option {% if pair.pair_type == '' %}selected{% endif %} value="">Стандартная пара</option>

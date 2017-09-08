@@ -24,6 +24,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(pair1.classname,  pair2.classname)
         self.assertEqual(pair1.week_day,   pair2.week_day)
         self.assertEqual(pair1.start_time, pair2.start_time)
+        self.assertEqual(pair1.duration, pair2.duration)
 
     def test_create_default_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
@@ -36,6 +37,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
         pair1 = DefaultPair(classname='Math', week_day=3,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id=group_id)
         response = post_default_pair(pair1)
         self.assertEqual(response.status_int, 302)
@@ -48,6 +50,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
         pair2 = DefaultPair(classname='Math 2', week_day=4,
                             start_time=datetime.time(9, 40),
+                            duration=120,
                             group_id='asgap')
         response = post_default_pair(pair2)
         self.assertEqual(response.status_int, 302)
@@ -72,6 +75,7 @@ class DefaultPairsTest(unittest2.TestCase):
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair = DefaultPair(classname='Math', week_day=3,
                            start_time=datetime.time(9, 40),
+                           duration=90,
                            group_id='asgap')
         response = post_default_pair(pair)
         added_pair = DefaultPair.query(DefaultPair.group_id ==
@@ -81,6 +85,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
         pair = DefaultPair(classname='Math 1', week_day=4,
                            start_time=datetime.time(10, 41),
+                           duration=120,
                            group_id='asgap')
         response = post_default_pair(pair, added_pair.key.urlsafe())
         self.assertEqual(response.status_int, 302)
@@ -101,9 +106,11 @@ class DefaultPairsTest(unittest2.TestCase):
         simulate_login(self.testbed, 'a@b.com', '123', True)
         pair1 = DefaultPair(classname='Math 1', week_day=3,
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             group_id='asgap')
         pair2 = DefaultPair(classname='Math 2', week_day=3,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id='asgap')
         post_default_pair(pair1)
         post_default_pair(pair2)
@@ -133,12 +140,15 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.body.count('</tr>'), 1)
         pair1 = DefaultPair(classname='Math 1', week_day=3,
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             group_id='asgap')
         pair2 = DefaultPair(classname='Math 2', week_day=4,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id='asgap')
         pair3 = DefaultPair(classname='Math 3', week_day=4,
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             group_id='asgap')
         post_default_pair(pair2)
         post_default_pair(pair3)
@@ -165,12 +175,15 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.body.count('<tr>'), 1)
         pair1 = DefaultPair(classname='Math 1', week_day=3,
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             group_id='asgap')
         pair2 = DefaultPair(classname='Math 2', week_day=4,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id='asgap')
         pair3 = DefaultPair(classname='Math 3', week_day=4,
                             start_time=datetime.time(10, 40),
+                            duration=120,
                             group_id='asgap')
         simulate_login(self.testbed, 'a@b.com', '123', True)
         post_default_pair(pair2)
@@ -200,6 +213,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 302)
         pair1 = DefaultPair(classname='Math', week_day=3,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id='asgap')
         response = post_default_pair(pair1)
         self.assertEqual(response.status_int, 403)
@@ -230,6 +244,7 @@ class DefaultPairsTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 403)
         pair1 = DefaultPair(classname='Math', week_day=3,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id='asgap')
         response = post_default_pair(pair1)
         self.assertEqual(response.status_int, 403)

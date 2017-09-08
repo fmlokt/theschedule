@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 class DefaultPair(ndb.Model):
     classname = ndb.StringProperty()
     start_time = ndb.TimeProperty()
+    duration = ndb.IntegerProperty()
     week_day = ndb.IntegerProperty()
     group_id = ndb.StringProperty()
     pair_type = ndb.StringProperty()

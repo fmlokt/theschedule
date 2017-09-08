@@ -28,7 +28,7 @@ class ShowSchedule(BaseHandler):
                 or (date_in_memcache != timezone.today()):
             schedule_to_render = [None] * 6
             min_start_time = timezone.timefromstr("23:59")
-            max_start_time = timezone.timefromstr("00:00")
+            max_end_time = timezone.timefromstr("00:00")
             for day in xrange(7):
                 today = timezone.today()
                 thatday = today + datetime.timedelta(days=day)
@@ -64,14 +64,15 @@ class ShowSchedule(BaseHandler):
                             '/subject?key=' + subject.key.urlsafe()
                     render_day['pairs'].append(pair_dict)
                     min_start_time = min(min_start_time, pair.start_time)
-                    max_start_time = max(max_start_time, pair.start_time)
+                    max_end_time = max(max_end_time,
+                                       timezone.addtime(pair.start_time, timezone.timedelta(minutes=pair.duration)))
                 schedule_to_render[thatday.weekday()] = render_day
             coef = 1.2 # mins per pixel
             for day in schedule_to_render:
                 for pair in day['pairs']:
                     pair['from_up'] = 40 + int(timezone.gettimediff(pair['start_time'], min_start_time).seconds / 60 / coef)
-                    pair['height'] = int(90 / coef)
-                day['height'] = 40 + int(timezone.gettimediff(max_start_time, min_start_time).seconds / 60 / coef) + 90 / coef + 40
+                    pair['height'] = int(pair['duration'] / coef)
+                day['height'] = 40 + int(timezone.gettimediff(max_end_time, min_start_time).seconds / 60 / coef) + 40
             memcache.set(key="schedule_to_render_" + group_id,
                          value=schedule_to_render)
             memcache.set(key="schedule_set_date_" + group_id,
@@ -108,6 +109,7 @@ class ShowPairs(BaseLocalAdminHandler):
             classname = other_classname
         date = timezone.datefromstr(self.request.get('date'))
         time = timezone.timefromstr(self.request.get('time'))
+        duration = int(self.request.get('duration'))
         task = self.request.get('task')
         url_key = self.request.get('key')
         replace = bool(self.request.get('replace'))
@@ -119,6 +121,7 @@ class ShowPairs(BaseLocalAdminHandler):
             pair.classname = classname
             pair.date = date
             pair.start_time = time
+            pair.duration = duration
             pair.task = task
             pair.replace = replace
             pair.group_id = group_id
@@ -127,6 +130,7 @@ class ShowPairs(BaseLocalAdminHandler):
             pair = ScheduledPair(classname=classname,
                                  date=date,
                                  start_time=time,
+                                 duration=duration,
                                  task=task,
                                  replace=replace,
                                  group_id=group_id,
@@ -152,6 +156,7 @@ class NewPair(BaseLocalAdminHandler):
         pair = ScheduledPair(classname='',
                              date=default_day,
                              start_time=datetime.time(9, 10),
+                             duration=90,
                              replace=True,
                              task='',
                              pair_type='')
@@ -185,6 +190,7 @@ class EditPair(BaseLocalAdminHandler):
         self.render_data['return_url'] = return_url
         self.response.write(template.render(self.render_data))
 
+
 ##\brief Удалить пару
 class DeletePair(BaseLocalAdminHandler):
     def get(self, *args, **kwargs):
@@ -199,6 +205,7 @@ class DeletePair(BaseLocalAdminHandler):
         key.delete()
         memcache.delete("schedule_to_render_" + group_id)
         self.redirect(return_url)
+
 
 class GetJSON(BaseHandler):
     def get(self, *args, **kwargs):
@@ -215,6 +222,7 @@ class GetJSON(BaseHandler):
             classname = pair.classname
             date = pair.date
             start_time = pair.start_time
+            duration = pair.duration
             task = pair.task
             replace = pair.replace
             pair_type = pair.pair_type
@@ -222,6 +230,7 @@ class GetJSON(BaseHandler):
             data['classname'] = classname
             data['date'] = date.strftime('%d.%m.%y')
             data['start_time'] = start_time.strftime('%H:%M')
+            data['duration'] = duration
             data['task'] = task
             data['replace'] = replace
             data['pair_type'] = pair_type

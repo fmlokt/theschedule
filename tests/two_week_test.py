@@ -25,6 +25,7 @@ class TwoWeekScheduleTest(unittest2.TestCase):
         self.assertEqual(pair1.classname,  pair2.classname)
         self.assertEqual(pair1.week_day,   pair2.week_day)
         self.assertEqual(pair1.start_time, pair2.start_time)
+        self.assertEqual(pair1.duration, pair2.duration)
 
     def test_create_2week_default_pair(self):
         simulate_login(self.testbed, 'a@b.com', '123', True)
@@ -37,6 +38,7 @@ class TwoWeekScheduleTest(unittest2.TestCase):
         self.assertEqual(response.status_int, 200)
         pair1 = DefaultPair(classname='Math', week_day=10,
                             start_time=datetime.time(9, 40),
+                            duration=90,
                             group_id=group_id)
         response = post_default_pair(pair1)
         self.assertEqual(response.status_int, 302)
