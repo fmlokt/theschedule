@@ -96,8 +96,7 @@ class BaseLocalAdminHandler(BaseHandler):
         if user_full is None:
             self.redirect(users.create_login_url(self.request.uri))
             return False
-        if not((str(user) in local_admin) or
-                users.is_current_user_admin()):
+        if not self.render_data['is_admin']:
             self.error(403)
             self.response.write('403 Forbidden\n')
             return False
@@ -111,8 +110,7 @@ class BaseLocalAdminHandler(BaseHandler):
         user  = str(users.get_current_user()).lower()
         local_admin = Group.query(Group.group_id ==
                                   kwargs.get('group_id')).get().admin
-        if (user is None) or (not ((str(user) in str(local_admin)) or
-                                   users.is_current_user_admin())):
+        if not self.render_data['is_admin']:
             self.error(403)
             self.response.write('403 Forbidden\n')
             return False
