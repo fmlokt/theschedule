@@ -94,9 +94,7 @@ application = webapp2.WSGIApplication([
 ], debug=True)
 
 
-@app.route("/")
-def home():
-    return "Hello, Flask!" 
+app.add_url_rule("/","Home",groups.ChooseGroup)  
 
 if __name__ =="__main__":  
     app.run(debug = True) 
