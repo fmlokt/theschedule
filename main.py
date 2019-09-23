@@ -5,9 +5,6 @@ import os
 
 import jinja2
 import webapp2
-from flask import Flask
-
-app = Flask(__name__) 
 
 import environment
 from handlers import pairs
@@ -92,9 +89,3 @@ application = webapp2.WSGIApplication([
                   handler=pairs.GetJSON,
                   name='get json list')
 ], debug=True)
-
-
-app.add_url_rule("/","Home",groups.ChooseGroup)  
-
-if __name__ =="__main__":  
-    app.run(debug = True) 
